@@ -42,8 +42,8 @@ class ImagePickerModal extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        _createTile('Take a photo', Icons.receipt, _takePhoto),
-        _createTile('Select a photo', Icons.camera, _selectPhoto),
+        _createTile('Take a photo', Icons.camera, _takePhoto),
+        _createTile('Select a photo', Icons.photo, _selectPhoto),
         _createTile('Enter manually', Icons.keyboard, _manualEntry)
       ],
     );
