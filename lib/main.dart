@@ -19,17 +19,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        iconTheme: IconThemeData(
-
-            color: Colors.green.shade500,
-            
-          ), 
-        
-        buttonTheme: ButtonThemeData(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
-        ),
-        
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
 
       ),
       home: MyHomePage(title: 'Receipt Scanner'),
