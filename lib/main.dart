@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'modal.dart';
+import 'package:receipt/ImagePickerModal.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,8 +28,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Modal modal = new Modal();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => modal.mainBottomSheet(context),
+        onPressed: () => showModalBottomSheet(context: context, builder: (BuildContext context) => ImagePickerModal(),),
         child: Icon(Icons.add),
       ),
     );
