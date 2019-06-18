@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
       title: 'Receipt Scanner',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-
       ),
       home: MyHomePage(title: 'Receipt Scanner'),
     );
@@ -19,7 +18,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
 
   final String title;
 
@@ -36,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       drawer: Drawer(
         child: ListView(
-          children: <Widget> [
+          children: <Widget>[
             ListTile(
               title: Text("First Menu Item"),
               trailing: Icon(Icons.arrow_forward),
@@ -44,19 +42,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => Icon(Icons.cake))
-                  );
-              }
+                    builder: (BuildContext context) => Icon(Icons.cake),
+                  ),
+                );
+              },
             ),
             ListTile(
               title: Text("Another Menu Item"),
               trailing: Icon(Icons.arrow_forward),
               onTap: () {
                 Navigator.of(context).pop();
-              }
+              },
             )
-          ]
-        )
+          ],
+        ),
       ),
       body: Center(
         child: Column(
@@ -65,7 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showModalBottomSheet(context: context, builder: (BuildContext context) => ImagePickerModal(),),
+        onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) => ImagePickerModal(),
+            ),
         child: Icon(Icons.add),
       ),
     );
