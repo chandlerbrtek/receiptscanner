@@ -34,10 +34,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(
-        //   icon: Icon(Icons.menu),
-        //   onPressed: () => modal.mainFlyoutMenu(context),
-        // ),
         title: Text(widget.title),
       ),
       drawer: Drawer(
