@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Receipt Scanner',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,8 +20,9 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Receipt Scanner'),
     );
   }
 }
@@ -57,9 +58,37 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
+        // leading: IconButton(
+        //   icon: Icon(Icons.menu),
+        //   onPressed: () => modal.mainFlyoutMenu(context),
+        // ),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget> [
+            ListTile(
+              title: Text("First Menu Item"),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Icon(Icons.cake))
+                  );
+              }
+            ),
+            ListTile(
+              title: Text("Another Menu Item"),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () {
+                Navigator.of(context).pop();
+              }
+            )
+          ]
+        )
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -85,7 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => modal.mainBottomSheet(context),
-        tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
