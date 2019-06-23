@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receipt/ImagePickerModal.dart';
+import './pages/other_pages.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,22 +39,18 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text("First Menu Item"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Icon(Icons.cake),
-                  ),
-                );
-              },
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage("First Page")))
             ),
             ListTile(
               title: Text("Another Menu Item"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            )
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage("Second Page")))
+            ),
+            ListTile(
+              title: Text("Another Menu Item"),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage("Third Page")))
+            ),
           ],
         ),
       ),
