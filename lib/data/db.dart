@@ -28,41 +28,50 @@ class ReceiptDatabaseProvider {
       path,
       version: 1,
       onCreate: (Database db, int version) async {
-        await db.execute("CREATE TABLE "
-            + ReceiptConstants.RECEIPT_TABLE + " ("
-            + ReceiptConstants.RECEIPT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + ReceiptConstants.RECEIPT_TOTAL + " INTEGER,"
-            + ReceiptConstants.RECEIPT_DATE + "receiptDate INTEGER"
+        await db.execute("CREATE TABLE $table ("
+            "$id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "$total INTEGER, "
+            "$date INTEGER"
             // "createDate INTEGER,"
             // "modificationDate INTEGER"
-            ")");
+            ");"
+        );
       },
     );
   }
+
+  static String table = ReceiptConstants.RECEIPT_TABLE;
+  static String id = ReceiptConstants.RECEIPT_ID;
+  static String total = ReceiptConstants.RECEIPT_TOTAL;
+  static String date = ReceiptConstants.RECEIPT_DATE;
+
 }
 
 class DatabaseController {
 
-  static final DatabaseController instance = DatabaseController.internal();
-  factory DatabaseController() => instance;
+  static Database connection;
 
-  DatabaseController.internal() {
-    ReceiptDatabaseProvider.getDatabaseInstance().then((value) {
-      connection = value;
-    });
+  static checkConnection() {
+    // If we don't have a connection
+    if (connection == null) {
+      ReceiptDatabaseProvider.db.database.then((value) {
+        connection = value;
+      });
+    }
   }
-  
-  Database connection;
 
   /// Insert a new receipt into the database.
   /// 
   /// The database will automatically assign the receipt a new id, then return that value as an integer.
   ///   
   /// **return** the id of the new receipt
-  insertReceipt(Receipt receipt) {
-    instance.connection.insert(ReceiptConstants.RECEIPT_TABLE, receipt.toMap()).then((value) {
-      return value;  
-    });
+  static insertReceipt(Receipt receipt) {
+    checkConnection();
+    connection.insert(
+      ReceiptConstants.RECEIPT_TABLE, receipt.toMap()).then((value) {
+        return value;  
+      }
+    );
   }
 
   /// Delete a receipt from the database.
@@ -73,13 +82,16 @@ class DatabaseController {
   /// **return** the number of deleted receipts
   /// 
   /// **throws** REceiptDatabaseException when more than one Receipt is deleted.
-  deleteReceipt(int index) {
-    instance.connection.delete(ReceiptConstants.RECEIPT_TABLE,
-      where: ReceiptConstants.RECEIPT_ID + " = " + index.toString()).then((value) { 
+  static deleteReceipt(int index) {
+    checkConnection();
+    ReceiptDatabaseProvider.db._database.delete(
+      ReceiptConstants.RECEIPT_TABLE, where:
+      ReceiptConstants.RECEIPT_ID + " = " + index.toString()).then((value) { 
         if (value > 1) throw new ReceiptDatabaseException(
           "More than one receipt deleted for the " + ReceiptConstants.RECEIPT_ID + " " + index.toString());
         return value;
-      });
+      }
+    );
   }
 
   /// Retrive a receipt from the database.
@@ -89,9 +101,11 @@ class DatabaseController {
   /// **returns** The receipt found at the given index, if there was one.
   /// 
   /// **throws**  ReceiptDatabaseException when more than one Receipt is found for the given index.
-  retrieveReceipt(int index) {
-    instance.connection.query(ReceiptConstants.RECEIPT_TABLE,
-      where: ReceiptConstants.RECEIPT_ID + " = " + index.toString()).then((value) {
+  static retrieveReceipt(int index) {
+    checkConnection();
+    ReceiptDatabaseProvider.db._database.query(
+      ReceiptConstants.RECEIPT_TABLE, where:
+      ReceiptConstants.RECEIPT_ID + " = " + index.toString()).then((value) {
         List<Receipt> results = new List<Receipt>();
         for (Map<String, dynamic> result in value) {
           results.add(Receipt.fromMap(result));
@@ -100,7 +114,8 @@ class DatabaseController {
           "Multiple records found for the " + ReceiptConstants.RECEIPT_ID + " " + index.toString()
           );
         return results;
-      });
+      }
+    );
   }
 
   /// Retrieve all receipts that match the given receipt.
@@ -109,8 +124,10 @@ class DatabaseController {
   /// receipt's populted fields, then return them as a list of Receipts.
   /// 
   /// **returns** List<Receipt> the matching receipts.
-  retrieveReceiptByFields(Receipt receipt) {
-    instance.connection.query(ReceiptConstants.RECEIPT_TABLE, where:
+  static retrieveReceiptByFields(Receipt receipt) {
+    checkConnection();
+    ReceiptDatabaseProvider.db._database.query(
+      ReceiptConstants.RECEIPT_TABLE, where:
       ReceiptConstants.RECEIPT_TOTAL + " = '" + receipt.total.toString() + "' AND " +
       ReceiptConstants.RECEIPT_DATE + " = " + receipt.receiptDate.toString() + ""
     ).then((value) {
@@ -125,17 +142,15 @@ class DatabaseController {
   /// Update the receipt at the given index.
   /// 
   /// This method updates receipts that match the given index to hold the give values.
-  updateReceipt(int index, Receipt receipt) {
-    instance.connection.update(ReceiptConstants.RECEIPT_TABLE, receipt.toMap(),
-      where: ReceiptConstants.RECEIPT_ID + " = " + index.toString()
+  static updateReceipt(int index, Receipt receipt) {
+    checkConnection();
+    ReceiptDatabaseProvider.db._database.update(
+      ReceiptConstants.RECEIPT_TABLE, receipt.toMap(), where:
+      ReceiptConstants.RECEIPT_ID + " = " + index.toString()
     ).then((value) {
       return value;
     });
   }
-}
-
-class DBCHelper {
-    
 }
 
 /// Exception caused by database communication issues or general misbehavior.
