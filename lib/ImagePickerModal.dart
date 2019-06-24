@@ -1,9 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:receipt/ManualEntry.dart';
 
 class ImagePickerModal extends StatelessWidget {
+  BuildContext manual;
+
   Future _getImage(ImageSource src) async {
     final File image = await ImagePicker.pickImage(source: src);
 
@@ -24,11 +26,13 @@ class ImagePickerModal extends StatelessWidget {
   }
 
   void _manualEntry() {
-    print('manual entry???');
+    ManualEntryPage manualEntryPage = new ManualEntryPage();
+    Navigator.push(manual, MaterialPageRoute(builder: (manual) => manualEntryPage.entryPage(manual)));
   }
 
   @override
   Widget build(BuildContext context) {
+    manual = context;
     ListTile _createTile(String name, IconData icon, Function action) {
       return ListTile(
           leading: Icon(icon),
