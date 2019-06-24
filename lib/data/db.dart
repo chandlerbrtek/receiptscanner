@@ -43,35 +43,24 @@ class ReceiptDatabaseProvider {
 
 class DatabaseController {
 
-  /// This field holds the Database for the controller.
-  /// 
-  /// This connection is populated at instantiation and should be treated as a singleton.
-  static Database connection;
+  static final DatabaseController instance = DatabaseController.internal();
+  factory DatabaseController() => instance;
 
-
-  /// This field holds the singleton instace of the controller.
-  /// 
-  /// All database interactions should be handled by this instance.
-  static final DatabaseController instance = new DatabaseController();
-
-  /// Constructor for the Database Controller.
-  /// 
-  /// This should only be used within the Database Controller itself. All external
-  /// references to the database should be handled either by the API, or, if necessary,
-  /// through the controller's singleton instance.
-  DatabaseController() {
+  DatabaseController.internal() {
     ReceiptDatabaseProvider.getDatabaseInstance().then((value) {
-      connection=value;
+      connection = value;
     });
   }
   
+  Database connection;
+
   /// Insert a new receipt into the database.
   /// 
   /// The database will automatically assign the receipt a new id, then return that value as an integer.
   ///   
   /// **return** the id of the new receipt
   insertReceipt(Receipt receipt) {
-    connection.insert(ReceiptConstants.RECEIPT_TABLE, receipt.toMap()).then((value) {
+    instance.connection.insert(ReceiptConstants.RECEIPT_TABLE, receipt.toMap()).then((value) {
       return value;  
     });
   }
@@ -85,7 +74,7 @@ class DatabaseController {
   /// 
   /// **throws** REceiptDatabaseException when more than one Receipt is deleted.
   deleteReceipt(int index) {
-    connection.delete(ReceiptConstants.RECEIPT_TABLE,
+    instance.connection.delete(ReceiptConstants.RECEIPT_TABLE,
       where: ReceiptConstants.RECEIPT_ID + " = " + index.toString()).then((value) { 
         if (value > 1) throw new ReceiptDatabaseException(
           "More than one receipt deleted for the " + ReceiptConstants.RECEIPT_ID + " " + index.toString());
@@ -101,7 +90,7 @@ class DatabaseController {
   /// 
   /// **throws**  ReceiptDatabaseException when more than one Receipt is found for the given index.
   retrieveReceipt(int index) {
-    connection.query(ReceiptConstants.RECEIPT_TABLE,
+    instance.connection.query(ReceiptConstants.RECEIPT_TABLE,
       where: ReceiptConstants.RECEIPT_ID + " = " + index.toString()).then((value) {
         List<Receipt> results = new List<Receipt>();
         for (Map<String, dynamic> result in value) {
@@ -121,7 +110,7 @@ class DatabaseController {
   /// 
   /// **returns** List<Receipt> the matching receipts.
   retrieveReceiptByFields(Receipt receipt) {
-    connection.query(ReceiptConstants.RECEIPT_TABLE, where:
+    instance.connection.query(ReceiptConstants.RECEIPT_TABLE, where:
       ReceiptConstants.RECEIPT_TOTAL + " = '" + receipt.total.toString() + "' AND " +
       ReceiptConstants.RECEIPT_DATE + " = " + receipt.receiptDate.toString() + ""
     ).then((value) {
@@ -137,12 +126,16 @@ class DatabaseController {
   /// 
   /// This method updates receipts that match the given index to hold the give values.
   updateReceipt(int index, Receipt receipt) {
-    connection.update(ReceiptConstants.RECEIPT_TABLE, receipt.toMap(),
+    instance.connection.update(ReceiptConstants.RECEIPT_TABLE, receipt.toMap(),
       where: ReceiptConstants.RECEIPT_ID + " = " + index.toString()
     ).then((value) {
       return value;
     });
   }
+}
+
+class DBCHelper {
+    
 }
 
 /// Exception caused by database communication issues or general misbehavior.
