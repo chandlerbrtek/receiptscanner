@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receipt/ImagePickerModal.dart';
+import './pages/other_pages.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,24 +36,32 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            ListTile(
-              title: Text("First Menu Item"),
+            ExpansionTile(title: Text("Reports"),
+            children: <Widget>[            
+              ListTile(
+              title: Text("Recent Receipts"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Icon(Icons.cake),
-                  ),
-                );
-              },
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new FirstPage("First Page")))
             ),
             ListTile(
-              title: Text("Another Menu Item"),
+              title: Text("Month"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SecondPage("Second Page")))
+            ),
+            ListTile(
+              title: Text("Year"),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ThirdPage("Third")))
+              ),
+            ],
+            ),
+            ExpansionTile(title: Text("Budgeting"),
+            children: <Widget>[            
+              ListTile(
+              title: Text("Placeholder"),
+              trailing: Icon(Icons.arrow_forward),
+              ),
+            ],
             )
           ],
         ),
