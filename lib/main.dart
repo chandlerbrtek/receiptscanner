@@ -36,21 +36,33 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            ListTile(
-              title: Text("First Menu Item"),
+            ExpansionTile(title: Text("Reports"),
+            children: <Widget>[            
+              ListTile(
+              title: Text("Recent Receipts"),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new FirstPage("First Page")))
             ),
             ListTile(
-              title: Text("Another Menu Item"),
+              title: Text("Month"),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SecondPage("Second Page")))
             ),
             ListTile(
-              title: Text("Another Menu Item"),
+              title: Text("Year"),
               trailing: Icon(Icons.arrow_forward),
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ThirdPage("Third")))
+              ),
+            ],
             ),
+            ExpansionTile(title: Text("Budgeting"),
+            children: <Widget>[            
+              ListTile(
+              title: Text("Placeholder"),
+              trailing: Icon(Icons.arrow_forward),
+              ),
+            ],
+            )
           ],
         ),
       ),
