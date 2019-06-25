@@ -13,5 +13,5 @@ class ReceiptConstants {
   static const String RECEIPT_TOTAL = "total";
 
   /// The date label for a receipt within the receipt table.
-  static const String RECEIPT_DATE = "receipt-date";
+  static const String RECEIPT_DATE = "receiptDate";
 }
