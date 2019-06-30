@@ -2,6 +2,51 @@
 
 A mobile application for scanning receipts and storing financial data.
 
+Last Updated: June 30, 2019
+
+## Quick Start
+
+Regardless of whether this is your first time working with a mobile application from a repository, your first time working with the receipt scanner application, or if you are a returning viewer or user of the receipt scanner application, start here if you want to run the application on an android device.
+
+1. Download the APK
+
+Choose which release and version you would like to install for the receipt scanner application. We recommend grabbing the latest [release](https://github.com/chandlerbrtek/receiptscanner/releases). 
+
+2. Prepare your Android device
+
+There are two types of Android devices you can use. You can plug your phone into your computer and move the APK onto the phone, or you can use an emulator. If you decide to use an emulator, you'll want to use [Android Studio](https://developer.android.com/studio) to create and start one. Once you have one running, move the APK onto the emulator.
+
+3. Install the applicaiton from the APK
+
+Installing the application from the APK is incredibly simple. Just find the APK on the device's file system, then tap and select install. If play protect warns you about the app, choose to install anyway. There's no way to avoid this issue. If play protect doesn't warn you and the application fails to install, you'll need to disable play protect to install the application. Once installed, we recommend re-enabling play protect settings on the play store.
+
+4. Run the application!
+
+Now that you've installed the application, just find it in the app drawer or search for it on the device and tap it to run. Congratulations, you can now use the receipt scanner appliation!
+
+## Project Information
+
+The receipt scanner application is the result of a group project course. The goal of the project is to create an application which scans receipts from images to generate financial data insights for the user.
+
+### Course Information
+
+Course Number - CSCI4830
+
+Course Name - Software Engineering
+
+University - University of Nebraska Omaha
+
+Instructor - Harvey Siy
+
+### Team Members
+
+Joseph Ralston - Project Manager and Developer
+
+Luke Moorhous - Software Architect and Developer
+
+Chandler Brtek - Lead QA Engineer and Developer
+
+Savon Philips - Lead Support Engineer and Developer
 
 ## Releases
 
@@ -37,16 +82,6 @@ View the [demo](https://youtu.be/Djsdb5ymcoo)
 [Issue #14](https://github.com/chandlerbrtek/receiptscanner/issues/14) - Added the manual entry page, which allows the user to enter a total and date from their receipt and then submit that to the database.
 
 [Issue #15](https://github.com/chandlerbrtek/receiptscanner/issues/15) - Implemented Flutter’s [image_picker](https://pub.dev/packages/image_picker) plugin to allow the application to use the device’s native gallery functionality.
-
-## Team Members
-
-Joseph Ralston - Project Manager and Developer
-
-Luke Moorhous - Software Architect and Developer
-
-Chandler Brtek - Lead QA Engineer and Developer
-
-Savon Philips - Lead Support Engineer and Developer
 
 ## Resources Used
 
