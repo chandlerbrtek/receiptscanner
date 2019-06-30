@@ -8,19 +8,19 @@ Last Updated: June 30, 2019
 
 Regardless of whether this is your first time working with a mobile application from a repository, your first time working with the receipt scanner application, or if you are a returning viewer or user of the receipt scanner application, start here if you want to run the application on an android device.
 
-1. Download the APK
+### 1. Download the APK
 
 Choose which release and version you would like to install for the receipt scanner application. We recommend grabbing the latest [release](https://github.com/chandlerbrtek/receiptscanner/releases). 
 
-2. Prepare your Android device
+### 2. Prepare your Android device
 
 There are two types of Android devices you can use. You can plug your phone into your computer and move the APK onto the phone, or you can use an emulator. If you decide to use an emulator, you'll want to use [Android Studio](https://developer.android.com/studio) to create and start one. Once you have one running, move the APK onto the emulator.
 
-3. Install the applicaiton from the APK
+### 3. Install the applicaiton from the APK
 
 Installing the application from the APK is incredibly simple. Just find the APK on the device's file system, then tap and select install. If play protect warns you about the app, choose to install anyway. There's no way to avoid this issue. If play protect doesn't warn you and the application fails to install, you'll need to disable play protect to install the application. Once installed, we recommend re-enabling play protect settings on the play store.
 
-4. Run the application!
+### 4. Run the application!
 
 Now that you've installed the application, just find it in the app drawer or search for it on the device and tap it to run. Congratulations, you can now use the receipt scanner appliation!
 
