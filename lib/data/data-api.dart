@@ -15,7 +15,7 @@ class ReceiptAPI {
 
   /// Remove a receipt from the database.
   static delete(int index) {
-    Receipt receipt = get(index);
+    Receipt receipt = retrieve(index);
     DatabaseController.deleteReceipt(index);
     return receipt;
   }
@@ -26,7 +26,7 @@ class ReceiptAPI {
   }
 
   /// Retrieve a receipt from the database.
-  static get(int index) {
+  static retrieve(int index) {
     return DatabaseController.retrieveReceipt(index);
   }
 

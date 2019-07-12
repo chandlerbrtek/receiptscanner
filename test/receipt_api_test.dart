@@ -15,7 +15,7 @@ void main() {
   test('Retrieve Receipt', () {
       Receipt receipt = new Receipt(receiptDate: 1021, total: 100);
       int index = ReceiptAPI.add(receipt);
-      Receipt resp = ReceiptAPI.get(index);
+      Receipt resp = ReceiptAPI.retrieve(index);
       expect(resp.total, receipt.total);
       expect(resp.receiptDate, receipt.receiptDate);
     }
@@ -29,7 +29,7 @@ void main() {
 
       ReceiptAPI.update(index, update);
       
-      Receipt resp = ReceiptAPI.get(index);
+      Receipt resp = ReceiptAPI.retrieve(index);
       
       expect(resp.total, update.total);
       expect(resp.receiptDate, update.receiptDate);
@@ -55,7 +55,7 @@ void main() {
       Receipt receipt = new Receipt(receiptDate: 1221, total: 100);
       int index = ReceiptAPI.add(receipt);
       ReceiptAPI.delete(index);
-      expect(ReceiptAPI.get(index), new List<Receipt>());
+      expect(ReceiptAPI.retrieve(index), new List<Receipt>());
     }
   );
 }
