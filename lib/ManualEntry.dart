@@ -45,7 +45,7 @@ class ManualEntryPage {
     );
   }
 
-  Widget entryPage(BuildContext context, Receipt receipt) {
+  Widget entryPage(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text("Manual Entry"),

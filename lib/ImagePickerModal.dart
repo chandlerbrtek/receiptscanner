@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:receipt/ManualEntry.dart';
-import 'package:receipt/data/receipt.dart';
 
 class ImagePickerModal extends StatelessWidget {
   BuildContext manual;
@@ -28,8 +27,7 @@ class ImagePickerModal extends StatelessWidget {
 
   void _manualEntry() {
     ManualEntryPage manualEntryPage = new ManualEntryPage();
-    Receipt newR = new Receipt();
-    Navigator.push(manual, MaterialPageRoute(builder: (manual) => manualEntryPage.entryPage(manual, newR)));
+    Navigator.push(manual, MaterialPageRoute(builder: (manual) => manualEntryPage.entryPage(manual)));
   }
 
   Widget build(BuildContext context) {
