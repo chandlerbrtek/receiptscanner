@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:receipt/data/receipt.dart';
 import 'package:receipt/data/data-api.dart';
 
-class ManualEntryPage {
+class EditEntryPage {
   final formKey = GlobalKey<FormState>();
   double _total;
   DateTime _date;
+  int _receiptId;
 
   final _controller = TextEditingController();
 
@@ -45,7 +46,9 @@ class ManualEntryPage {
     );
   }
 
-  Widget entryPage(BuildContext context, Receipt receipt) {
+  Widget entryPage(BuildContext context, int receiptId) {
+    _receiptId = receiptId;
+    Receipt toUpdate = ReceiptAPI.get(receiptId);
     return new Scaffold(
         appBar: new AppBar(
           title: new Text("Manual Entry"),
@@ -63,6 +66,7 @@ class ManualEntryPage {
                         labelText: 'Total:'
                     ),
                     autovalidate: true,
+                    initialValue: toUpdate.total.toString(),
                     validator: validateTotal,
                     onSaved: (input) => _total = double.parse(input),
                   ),
@@ -76,7 +80,10 @@ class ManualEntryPage {
                       _controller.text = _date.toString();
                     },
                     cursorWidth: 0,
-                    onTap: (){_selectDate(context);},
+                    onTap: (){
+                      _controller.text = toUpdate.receiptDate.toString();
+                      _selectDate(context);
+                      },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -111,7 +118,7 @@ class ManualEntryPage {
     if(formKey.currentState.validate()){
       formKey.currentState.save();
       Receipt receipt = new Receipt(total: (_total * 100).toInt(), receiptDate: _date.millisecondsSinceEpoch);
-      ReceiptAPI.add(receipt);
+      ReceiptAPI.update(_receiptId, receipt);
     }
   }
 }
