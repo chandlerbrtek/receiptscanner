@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:receipt/ImagePickerModal.dart';
 import 'package:receipt/data/receipt.dart';
 import 'package:receipt/data/data-api.dart';
 
 class ManualEntryPage {
-  final formKey = GlobalKey<FormState>();
+  static final formKey = GlobalKey<FormState>();
   double _total;
   DateTime _date;
 
@@ -46,6 +47,9 @@ class ManualEntryPage {
   }
 
   Widget entryPage(BuildContext context) {
+    final ManualEntryArgs args =
+        ModalRoute.of(context).settings.arguments;
+
     return new Scaffold(
         appBar: new AppBar(
           title: new Text("Manual Entry"),
@@ -59,6 +63,7 @@ class ManualEntryPage {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextFormField(
+                    initialValue: args.total,
                     decoration: InputDecoration(
                         labelText: 'Total:'
                     ),

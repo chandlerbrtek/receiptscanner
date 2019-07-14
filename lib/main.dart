@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receipt/ImagePickerModal.dart';
+import 'package:receipt/ManualEntry.dart';
 import './pages/other_pages.dart';
 
 void main() => runApp(MyApp());
@@ -12,7 +13,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Receipt Scanner'),
+      // home: MyHomePage(title: 'Receipt Scanner'),
+      routes: {
+        '/': (context) => MyHomePage(title: 'Receipt Scanner'),
+        '/parsePreview': (context) => ParsePreview(),
+        '/manualEntry': (context) => ManualEntryPage().entryPage(context),
+      },
     );
   }
 }
@@ -36,32 +42,40 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            ExpansionTile(title: Text("Reports"),
-            children: <Widget>[            
-              ListTile(
-              title: Text("Recent Receipts"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new FirstPage("First Page")))
+            ExpansionTile(
+              title: Text("Reports"),
+              children: <Widget>[
+                ListTile(
+                    title: Text("Recent Receipts"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new FirstPage("First Page")))),
+                ListTile(
+                    title: Text("Month"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new SecondPage("Second Page")))),
+                ListTile(
+                    title: Text("Year"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new ThirdPage("Third")))),
+              ],
             ),
-            ListTile(
-              title: Text("Month"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SecondPage("Second Page")))
-            ),
-            ListTile(
-              title: Text("Year"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ThirdPage("Third")))
-              ),
-            ],
-            ),
-            ExpansionTile(title: Text("Budgeting"),
-            children: <Widget>[            
-              ListTile(
-              title: Text("Placeholder"),
-              trailing: Icon(Icons.arrow_forward),
-              ),
-            ],
+            ExpansionTile(
+              title: Text("Budgeting"),
+              children: <Widget>[
+                ListTile(
+                  title: Text("Placeholder"),
+                  trailing: Icon(Icons.arrow_forward),
+                ),
+              ],
             )
           ],
         ),
@@ -74,9 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) => ImagePickerModal(),
-            ),
+          context: context,
+          builder: (BuildContext context) => ImagePickerModal(),
+        ),
         child: Icon(Icons.add),
       ),
     );
