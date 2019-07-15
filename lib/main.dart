@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:receipt/ImagePickerModal.dart';
-import './pages/other_pages.dart';
 import './pages/first_page.dart';
+import './pages/other_pages.dart';
+
 
 void main() => runApp(MyApp());
 

@@ -14,6 +14,7 @@ class First extends StatelessWidget {
     return Material(
         type: MaterialType.transparency,
         child: new Container(
+          decoration: new BoxDecoration(color: Colors.white),
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
       alignment: Alignment.topCenter,
       child: ListView(
@@ -32,14 +33,14 @@ class First extends StatelessWidget {
                         color: _fontColor,
                       )),
                   SizedBox(height: 10),
-                  Text("6.45h",
+                  Text("Sum",
                       style: TextStyle(
                         fontWeight: _valFontWeight,
                         fontSize: _valFontSize,
                         color: _fontColor,
                       )),
                   SizedBox(height: 30),
-                  Text("NUMBER OF ENTRIES",
+                  Text("Count of entries",
                       style: TextStyle(
                         fontWeight: _smallFontWeight,
                         fontSize: _smallFontSize,
@@ -121,6 +122,18 @@ class First extends StatelessWidget {
               smallFontSpacing: _smallFontSpacing,
               day: "FRIDAY"),
           RecordItem(
+              fontColor: _fontColor,
+              smallFontSpacing: _smallFontSpacing,
+              day: "SATURDAY"),
+          RecordItem(
+              fontColor: _fontColor,
+              smallFontSpacing: _smallFontSpacing,
+              day: "SATURDAY"),
+              RecordItem(
+              fontColor: _fontColor,
+              smallFontSpacing: _smallFontSpacing,
+              day: "SATURDAY"),
+              RecordItem(
               fontColor: _fontColor,
               smallFontSpacing: _smallFontSpacing,
               day: "SATURDAY"),
