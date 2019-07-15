@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => MyHomePage(title: 'Receipt Scanner'),
         '/parsePreview': (context) => ParsePreview(),
-        '/manualEntry': (context) => ManualEntryPage().entryPage(context),
+        '/manualEntry': (context) => ManualEntryPage(),
       },
     );
   }

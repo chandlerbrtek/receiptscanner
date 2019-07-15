@@ -2,121 +2,129 @@ import 'package:flutter/material.dart';
 import 'package:receipt/ImagePickerModal.dart';
 import 'package:receipt/data/receipt.dart';
 import 'package:receipt/data/data-api.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
-class ManualEntryPage {
-  static final formKey = GlobalKey<FormState>();
-  double _total;
-  DateTime _date;
+class ManualEntryPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final ManualEntryArgs args = ModalRoute.of(context).settings.arguments;
 
-  final _controller = TextEditingController();
-
-  DateTime selectedDate = DateTime.now();
-
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2020));
-    if (picked != null && picked != selectedDate) {
-      selectedDate = picked;
-      _date = selectedDate;
-      _controller.text = _date.toString();
-    }
-  }
-
-  pickDate(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("date picker"),
+        title: Text("Manual Entry"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("${selectedDate.toLocal()}"),
-            SizedBox(height: 20.0,),
-            RaisedButton(
-              onPressed: () => _selectDate(context),
-              child: Text('Select date'),
-            ),
-          ],
+      body: Card(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: DateForm(
+            total: args.total,
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget entryPage(BuildContext context) {
-    final ManualEntryArgs args =
-        ModalRoute.of(context).settings.arguments;
+class DateForm extends StatefulWidget {
+  DateForm({Key key, this.total, this.date}) : super(key: key);
 
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Manual Entry"),
-        ),
-        body: Card(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  TextFormField(
-                    initialValue: args.total,
-                    decoration: InputDecoration(
-                        labelText: 'Total:'
-                    ),
-                    autovalidate: true,
-                    validator: validateTotal,
-                    onSaved: (input) => _total = double.parse(input),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        labelText: 'Date:'
-                    ),
-                    controller: _controller,
-                    enabled: true,
-                    onChanged: (text) {
-                      _controller.text = _date.toString();
-                    },
-                    cursorWidth: 0,
-                    onTap: (){_selectDate(context);},
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          onPressed: _submit,
-                          child: Text('Submit Receipt'),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        ));
+  final total, date;
+
+  @override
+  _DateFormState createState() => _DateFormState();
+}
+
+class _DateFormState extends State<DateForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
+  final TextEditingController _controller = TextEditingController();
+
+  DateTime _date = DateTime.now();
+  double _total;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.text = dateFormat.format(_date);
   }
 
-  String validateTotal(String value) {
-    Pattern pattern =
-        r'^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?$';
-    RegExp regex = new RegExp(pattern);
+  Future<Null> _selectDate(BuildContext context) async {
+    //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
+    //https://stackoverflow.com/a/44991969
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _date,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2020));
+
+    if (picked != null && picked != _date) {
+      print('date selected: $picked');
+
+      setState(() => _date = picked);
+      _controller.text = dateFormat.format(_date);
+    }
+  }
+
+  String _validateTotal(String value) {
+    Pattern pattern = r'^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?$';
+    RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(value))
       return 'Enter valid total';
     else
       return null;
   }
 
-  void _submit(){
-    if(formKey.currentState.validate()){
-      formKey.currentState.save();
-      Receipt receipt = new Receipt(total: (_total * 100).toInt(), receiptDate: _date.millisecondsSinceEpoch);
+  void _submit() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      Receipt receipt = Receipt(
+          total: (_total * 100).toInt(),
+          receiptDate: _date.millisecondsSinceEpoch);
       ReceiptAPI.add(receipt);
+    } else {
+      print('Not submitted...');
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TextFormField(
+            initialValue: widget.total,
+            decoration: InputDecoration(labelText: 'Total:'),
+            autovalidate: true,
+            validator: _validateTotal,
+            onSaved: (input) => setState(() => _total = double.parse(input)),
+          ),
+          TextField(
+            decoration: InputDecoration(labelText: 'Date:'),
+            controller: _controller,
+            enabled: true,
+            cursorWidth: 0,
+            onTap: () => _selectDate(context),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  onPressed: _submit,
+                  child: Text('Submit Receipt'),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
