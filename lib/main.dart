@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:receipt/ImagePickerModal.dart';
 import './pages/other_pages.dart';
+import './pages/first_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -41,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ListTile(
               title: Text("Recent Receipts"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new FirstPage("First Page")))
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new First()))
             ),
             ListTile(
               title: Text("Month"),
