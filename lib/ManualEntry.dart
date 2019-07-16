@@ -1,8 +1,9 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+
 import 'package:receipt/ImagePickerModal.dart';
 import 'package:receipt/data/receipt.dart';
-import 'package:receipt/data/data-api.dart';
-import 'package:intl/intl.dart' show DateFormat;
+import 'package:receipt/data/db.dart';
 
 class ManualEntryPage extends StatelessWidget {
   @override
@@ -39,7 +40,7 @@ class DateForm extends StatefulWidget {
 class _DateFormState extends State<DateForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
+  static final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
   final TextEditingController _controller = TextEditingController();
 
   DateTime _date;
@@ -93,7 +94,9 @@ class _DateFormState extends State<DateForm> {
 
       print('Receipt generated:');
       print(receipt.toMap());
-      ReceiptAPI.add(receipt);
+      receiptAPI.addReceipt(receipt);
+
+      Navigator.pop(context);
     } else {
       print('Not submitted...');
     }

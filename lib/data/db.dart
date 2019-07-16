@@ -6,10 +6,22 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:receipt/data/receipt.dart';
-import 'package:receipt/data/data-constants.dart';
 
+final receiptAPI = ReceiptDatabaseProvider.db;
 
 class ReceiptDatabaseProvider {
+  /// The label for the receipt table in the database.
+  static const String table = "Receipt";
+
+  /// The id label for a receipt within the receipt table.
+  static const String id = "id";
+
+  /// The total label for a receipt within the receipt table.
+  static const String total = "total";
+
+  /// The date label for a receipt within the receipt table.
+  static const String date = "receiptDate";
+
   ReceiptDatabaseProvider._();
 
   static final ReceiptDatabaseProvider db = ReceiptDatabaseProvider._();
@@ -34,124 +46,60 @@ class ReceiptDatabaseProvider {
             "$date INTEGER"
             // "createDate INTEGER,"
             // "modificationDate INTEGER"
-            ");"
-        );
+            ");");
       },
     );
   }
 
-  static String table = ReceiptConstants.RECEIPT_TABLE;
-  static String id = ReceiptConstants.RECEIPT_ID;
-  static String total = ReceiptConstants.RECEIPT_TOTAL;
-  static String date = ReceiptConstants.RECEIPT_DATE;
-
-}
-
-class DatabaseController {
-
-  /// Insert a new receipt into the database.
-  /// 
-  /// The database will automatically assign the receipt a new id, then return that value as an integer.
-  ///   
-  /// **return** the id of the new receipt
-  static insertReceipt(Receipt receipt) {
-    ReceiptDatabaseProvider.db.database.then((value) {
-      value.insert(
-        ReceiptConstants.RECEIPT_TABLE, receipt.toMap()).then((value) {
-          return value;  
-        }
-      );
-    });
+  Future<Receipt> addReceipt(Receipt receipt) async {
+    final db = await database;
+    receipt.id = await db.insert(
+      table,
+      receipt.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return receipt;
   }
 
-  /// Delete a receipt from the database.
-  /// 
-  /// Deletes the receipt found at the given index.
-  /// If more than one receipt was deleted at the given index, this method will throw an exception.
-  /// 
-  /// **return** the number of deleted receipts
-  /// 
-  /// **throws** REceiptDatabaseException when more than one Receipt is deleted.
-  static deleteReceipt(int index) {
-    Future<int> i;
-    ReceiptDatabaseProvider.db.database.then((value) {
-        i = value.delete(
-          ReceiptConstants.RECEIPT_TABLE, where:
-          ReceiptConstants.RECEIPT_ID + " = " + index.toString());
-        
-    });
-    i.then((value) {
-      return value;
-    });
+  Future<int> updateReceipt(Receipt receipt) async {
+    final db = await database;
+    return await db.update(
+      table,
+      receipt.toMap(),
+      where: "$id = ?",
+      whereArgs: [receipt.id],
+    );
   }
 
-  /// Retrive a receipt from the database.
-  /// 
-  /// Find a receipt with the given index (id) within the database and return it.
-  /// 
-  /// **returns** The receipt found at the given index, if there was one.
-  /// 
-  /// **throws**  ReceiptDatabaseException when more than one Receipt is found for the given index.
-  static retrieveReceipt(int index) {
-    Future<List<Map<String, dynamic>>> i;
-    ReceiptDatabaseProvider.db.database.then((value) {
-      i = value.query(
-        ReceiptConstants.RECEIPT_TABLE, where:
-        ReceiptConstants.RECEIPT_ID + " = " + index.toString());
-        
-    });
-    i.then((value) {
-          List<Receipt> results = new List<Receipt>();
-          for (Map<String, dynamic> result in value) {
-            results.add(Receipt.fromMap(result));
-          }
-          if (results.length > 1) throw new ReceiptDatabaseException(
-            "Multiple records found for the " + ReceiptConstants.RECEIPT_ID + " " + index.toString()
-            );
-          return results;
-        }
-      );
+  Future<Receipt> getReceipt(int id) async {
+    final db = await database;
+    final response = await db.query(
+      table,
+      where: "$id = ?",
+      whereArgs: [id],
+    );
+    return response.isNotEmpty ? Receipt.fromMap(response.first) : null;
   }
 
-  /// Retrieve all receipts that match the given receipt.
-  /// 
-  /// This method will search the database for receipts that match all of the provided
-  /// receipt's populted fields, then return them as a list of Receipts.
-  /// 
-  /// **returns** List<Receipt> the matching receipts.
-  static retrieveReceiptByFields(Receipt receipt) {
-    Future<List<Map<String, dynamic>>> i;
-    ReceiptDatabaseProvider.db.database.then((value) {
-      i = value.query(
-        ReceiptConstants.RECEIPT_TABLE, where:
-        ReceiptConstants.RECEIPT_TOTAL + " = '" + receipt.total.toString() + "' AND " +
-        ReceiptConstants.RECEIPT_DATE + " = " + receipt.receiptDate.toString() + ""
-      );
-    });
-    i.then((value) {
-        List<Receipt> results = new List<Receipt>();
-        for (Map<String, dynamic> result in value) {
-          results.add(Receipt.fromMap(result));
-        }
-        return results;
-      });
+  Future<List<Receipt>> getAllReceipts() async {
+    final db = await database;
+    final response = await db.query(table);
+    List<Receipt> list = response.map((c) => Receipt.fromMap(c)).toList();
+    list.sort((a, b) => b.receiptDate - a.receiptDate);
+    return list;
   }
 
-  /// Update the receipt at the given index.
-  /// 
-  /// This method updates receipts that match the given index to hold the give values.
-  static updateReceipt(int index, Receipt receipt) {
-    ReceiptDatabaseProvider.db.database.then((value) {
-      value.update(
-        ReceiptConstants.RECEIPT_TABLE, receipt.toMap(), where:
-        ReceiptConstants.RECEIPT_ID + " = " + index.toString()
-      ).then((value) {
-        return value;
-      });
-    });
+  Future<int> deleteReceipt(int id) async {
+    final db = await database;
+    return db.delete(
+      table,
+      where: "$id = ?",
+      whereArgs: [id],
+    );
   }
-}
-/// Exception caused by database communication issues or general misbehavior.
-class ReceiptDatabaseException extends DatabaseException {
-  ReceiptDatabaseException(String message) : super(message);
+
+  Future<int> deleteAllReceipts() async {
+    final db = await database;
+    return db.delete(table);
+  }
 }
