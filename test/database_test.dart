@@ -4,11 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/receipt.dart';
 
-import 'dart:io';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
-
 /// **Receipt Database Test Suite**
 /// 
 /// This program runs all database tests for the Receipt Scanner application. To run
@@ -24,16 +19,7 @@ void main() {
     print('Database cleared');
   }
 
-  deleteDB() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    String path = join(directory.path, "receipt.db");
-    deleteDatabase(path);
-    print('Database Deleted!');
-  }
-
-  // deleteDB();
   clearDatabase();
-
 
   test('Add Receipt Test - Auto ID', () async {
     Receipt receipt = new Receipt(total: 101, receiptDate: 10001);
@@ -42,7 +28,7 @@ void main() {
     expect(addResponse.total, receipt.total, reason: 'Response total does not match argued total');
     expect(addResponse.receiptDate, receipt.receiptDate, reason: 'Response date does not match aruged date');
 
-    if (addResponse.id <= 0) fail('Receipt id is negative');
+    expect(addResponse.id, greaterThan(0), reason: 'Receipt id is negative');
   });
 
   test('Add Receipt - Defined ID', () async {
@@ -64,7 +50,7 @@ void main() {
   });
 
   test('Get Receipt - Defined ID', () async {
-    Receipt receipt = new Receipt(id: 3, receiptDate: 10004, total: 104);
+    Receipt receipt = new Receipt(id: 4, receiptDate: 10004, total: 104);
     await receiptAPI.addReceipt(receipt);
     Receipt retrieve = await receiptAPI.getReceipt(receipt.id);
 
@@ -76,6 +62,25 @@ void main() {
     Receipt response = await receiptAPI.getReceipt(-101);
 
     expect(response, null, reason: 'Found receipt with negative id');
+  });
+
+  test('Get All Receipts', () async {
+    int existingReceipts = (await receiptAPI.getAllReceipts()).length;
+    await receiptAPI.addReceipt(new Receipt(receiptDate: 10011, total: 111));
+    await receiptAPI.addReceipt(new Receipt(receiptDate: 10012, total: 112));
+    List<Receipt> receipts = await receiptAPI.getAllReceipts();
+    expect(receipts.length, existingReceipts + 2, reason: 'Total number of receipts in database doesn\'t match the expected value');
+  });
+
+  test('Get All Receipts - Order', () async {
+    await receiptAPI.addReceipt(new Receipt(receiptDate: 10011, total: 111));
+    await receiptAPI.addReceipt(new Receipt(receiptDate: 10012, total: 112));
+    List<Receipt> receipts = await receiptAPI.getAllReceipts();
+    int lastDate = receipts.first.receiptDate;
+
+    for (Receipt receipt in receipts) {
+      expect(receipt.receiptDate, lessThanOrEqualTo(lastDate), reason: 'Next receipt should have an date');
+    }
   });
 
   test('Update Receipt - Auto ID', () async {
@@ -121,11 +126,19 @@ void main() {
     expect(numDeleted, 1, reason: 'There should only be one receipt with ID = ' + receipt.id.toString() );
   });
 
+  test('Delete Receipt - Bad ID', () async {
+    int numDeleted = await receiptAPI.deleteReceipt(-1010);
+    expect(numDeleted, 0, reason: 'There should not be a receipt with a negative ID');
+  });
+
   test('Delete All Receipts', () async {
-    await receiptAPI.deleteAllReceipts();
+    int numRemoved = await receiptAPI.deleteAllReceipts();
+    expect(numRemoved, greaterThanOrEqualTo(0), reason: 'Removed less than 0 receipts');
+
     receiptAPI.addReceipt(new Receipt(receiptDate: 10009, total: 109));
     receiptAPI.addReceipt(new Receipt(receiptDate: 10010, total: 110));
-    int numRemoved = await receiptAPI.deleteAllReceipts();
+    numRemoved = await receiptAPI.deleteAllReceipts();
+    
     expect(numRemoved, 2, reason: 'Failed to remove all receipts');
     expect(await receiptAPI.deleteAllReceipts(), 0, reason: 'Database should be empty');
   });
