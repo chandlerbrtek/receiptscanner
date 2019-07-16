@@ -2,8 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:intl/intl.dart';
 
 class ImagePickerModal extends StatelessWidget {
+  static final dateFormats = [DateFormat("M/d/y"), DateFormat("MMM d y")];
+
   Future _getImage(ImageSource src) async {
     final File image = await ImagePicker.pickImage(source: src);
 
@@ -45,7 +48,7 @@ class ImagePickerModal extends StatelessWidget {
         leading: Icon(icon),
         title: Text(name),
         onTap: () async {
-          var total;
+          ManualEntryArgs args = ManualEntryArgs();
 
           // img entry
           if (pickImage != null) {
@@ -64,7 +67,7 @@ class ImagePickerModal extends StatelessWidget {
             // For ex. '4',  '4.00-' and '4,000.00' are rejected
 
             List<String> prices = [];
-            RegExp exp = new RegExp(r"\d+\.\d{2}[^\S]");
+            RegExp exp = RegExp(r"\b\d+\.\d{2}\b");
             Iterable<Match> matches = exp.allMatches(text);
             for (Match m in matches) {
               String match = m.group(0).trim();
@@ -86,16 +89,43 @@ class ImagePickerModal extends StatelessWidget {
               print('Prices found (asc):');
               print(prices);
 
-              //TODO: include a preview of parsed results?
+              //preview prices found
               // Navigator.popAndPushNamed(context, '/parsePreview',
               //     arguments: ParsePreviewArguments(prices.toString(), text));
 
-              total = prices.last;
+              args.setTotal(prices.last);
+            }
+
+            List<DateTime> dates = [];
+            RegExp dateRegex =
+                RegExp(r"\b(\d{1,2}(\/|\-)){2}(\d{4}|\d{2})\b");
+            Iterable<Match> datesMatched = dateRegex.allMatches(text);
+            for (Match m in datesMatched) {
+              String match = m.group(0).trim().replaceAll('-', '/');
+              dates.add(dateFormats[0].parse(match));
+            }
+
+            if (dates.length == 0) {
+              dateRegex =
+                  RegExp(r"\b\w{3,9}\s\d{1,2}(\,?)\s(\d{4}|\d{2})\b");
+              datesMatched = dateRegex.allMatches(text);
+              for (Match m in datesMatched) {
+                String match = m.group(0).trim().replaceAll(',', '');
+                dates.add(dateFormats[1].parse(match));
+              }
+            }
+
+            if (dates.length != 0) {
+              //preview dates found
+              // Navigator.popAndPushNamed(context, '/parsePreview',
+              //     arguments: ParsePreviewArguments(dates.toString(), text));
+
+              args.setDate(dates.first);
             }
           }
 
-          Navigator.popAndPushNamed(context, '/manualEntry',
-              arguments: ManualEntryArgs(total));
+          //TODO: should each option go to the exact same page?
+          Navigator.popAndPushNamed(context, '/manualEntry', arguments: args);
         },
       );
     }
@@ -112,9 +142,15 @@ class ImagePickerModal extends StatelessWidget {
 }
 
 class ManualEntryArgs {
-  final String total;
+  String total;
+  DateTime date;
 
-  ManualEntryArgs(this.total);
+  ManualEntryArgs()
+      : this.total = null,
+        this.date = null;
+
+  setTotal(String total) => this.total = total;
+  setDate(DateTime date) => this.date = date;
 }
 
 class ParsePreviewArguments {
@@ -173,7 +209,9 @@ class PaddedCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: alignment,
             children: <Widget>[
-              Text(text),
+              Flexible(
+                child: Text(text),
+              ),
             ],
           ),
         ),

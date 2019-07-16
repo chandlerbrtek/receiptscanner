@@ -18,6 +18,7 @@ class ManualEntryPage extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: DateForm(
             total: args.total,
+            date: args.date,
           ),
         ),
       ),
@@ -28,7 +29,8 @@ class ManualEntryPage extends StatelessWidget {
 class DateForm extends StatefulWidget {
   DateForm({Key key, this.total, this.date}) : super(key: key);
 
-  final total, date;
+  final String total;
+  final DateTime date;
 
   @override
   _DateFormState createState() => _DateFormState();
@@ -40,13 +42,17 @@ class _DateFormState extends State<DateForm> {
   final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
   final TextEditingController _controller = TextEditingController();
 
-  DateTime _date = DateTime.now();
+  DateTime _date;
   double _total;
 
   @override
   void initState() {
     super.initState();
 
+    print('init:');
+    print(widget.date);
+
+    _date = widget.date ?? DateTime.now();
     _controller.text = dateFormat.format(_date);
   }
 
@@ -84,6 +90,9 @@ class _DateFormState extends State<DateForm> {
       Receipt receipt = Receipt(
           total: (_total * 100).toInt(),
           receiptDate: _date.millisecondsSinceEpoch);
+
+      print('Receipt generated:');
+      print(receipt.toMap());
       ReceiptAPI.add(receipt);
     } else {
       print('Not submitted...');
