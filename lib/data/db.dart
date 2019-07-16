@@ -71,12 +71,12 @@ class ReceiptDatabaseProvider {
     );
   }
 
-  Future<Receipt> getReceipt(int id) async {
+  Future<Receipt> getReceipt(int getId) async {
     final db = await database;
     final response = await db.query(
       table,
       where: "$id = ?",
-      whereArgs: [id],
+      whereArgs: [getId],
     );
     return response.isNotEmpty ? Receipt.fromMap(response.first) : null;
   }
@@ -89,12 +89,12 @@ class ReceiptDatabaseProvider {
     return list;
   }
 
-  Future<int> deleteReceipt(int id) async {
+  Future<int> deleteReceipt(int deleteId) async {
     final db = await database;
     return db.delete(
       table,
       where: "$id = ?",
-      whereArgs: [id],
+      whereArgs: [deleteId],
     );
   }
 
