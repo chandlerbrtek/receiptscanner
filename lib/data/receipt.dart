@@ -1,4 +1,4 @@
-import 'package:receipt/data/data-constants.dart';
+import 'package:receipt/data/db.dart';
 
 class Receipt {
   int id;
@@ -16,17 +16,17 @@ class Receipt {
   });
 
   factory Receipt.fromMap(Map<String, dynamic> json) => new Receipt(
-        id: json[ReceiptConstants.RECEIPT_ID],
-        total: json[ReceiptConstants.RECEIPT_TOTAL],
-        receiptDate: json[ReceiptConstants.RECEIPT_DATE],
+        id: json[ReceiptDatabaseProvider.id],
+        total: json[ReceiptDatabaseProvider.total],
+        receiptDate: json[ReceiptDatabaseProvider.date],
         // createDate: json["createDate"],
         // modificationDate: json["modificationDate"],
       );
 
   Map<String, dynamic> toMap() => {
-        ReceiptConstants.RECEIPT_ID: id,
-        ReceiptConstants.RECEIPT_TOTAL: total,
-        ReceiptConstants.RECEIPT_DATE: receiptDate,
+        ReceiptDatabaseProvider.id: id,
+        ReceiptDatabaseProvider.total: total,
+        ReceiptDatabaseProvider.date: receiptDate,
         // "createDate": createDate,
         // "modificationDate": modificationDate,
       };
