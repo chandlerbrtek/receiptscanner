@@ -1,8 +1,9 @@
 import 'dart:io';
+
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:intl/intl.dart';
 
 class ImagePickerModal extends StatelessWidget {
   static final dateFormats = [DateFormat("M/d/y"), DateFormat("MMM d y")];
@@ -97,8 +98,7 @@ class ImagePickerModal extends StatelessWidget {
             }
 
             List<DateTime> dates = [];
-            RegExp dateRegex =
-                RegExp(r"\b(\d{1,2}(\/|\-)){2}(\d{4}|\d{2})\b");
+            RegExp dateRegex = RegExp(r"\b(\d{1,2}(\/|\-)){2}(\d{4}|\d{2})\b");
             Iterable<Match> datesMatched = dateRegex.allMatches(text);
             for (Match m in datesMatched) {
               String match = m.group(0).trim().replaceAll('-', '/');
@@ -106,8 +106,7 @@ class ImagePickerModal extends StatelessWidget {
             }
 
             if (dates.length == 0) {
-              dateRegex =
-                  RegExp(r"\b\w{3,9}\s\d{1,2}(\,?)\s(\d{4}|\d{2})\b");
+              dateRegex = RegExp(r"\b\w{3,9}\s\d{1,2}(\,?)\s(\d{4}|\d{2})\b");
               datesMatched = dateRegex.allMatches(text);
               for (Match m in datesMatched) {
                 String match = m.group(0).trim().replaceAll(',', '');
