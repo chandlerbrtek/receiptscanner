@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:receipt/data/data-api.dart';
+import 'package:receipt/data/db.dart';
+import 'package:receipt/main.dart';
 
 
 class Report_pages extends StatelessWidget {
@@ -106,16 +107,26 @@ class Report_pages extends StatelessWidget {
           ///
           ///Recent will search within a weeks time
           if(state == "recent")
-          ReceiptAPI.get(1)
+          RecordItem(
+              fontColor: _fontColor,
+              smallFontSpacing: _smallFontSpacing,
+              day: "recent")
           ,
           ///Month will search within the month
           if(state == "month")
-          ReceiptAPI.get(1)
+          RecordItem(
+              fontColor: _fontColor,
+              smallFontSpacing: _smallFontSpacing,
+              day: "month")
           ,
           //Year will search within the year
           if(state == "year")
-          ReceiptAPI.get(1)
+          RecordItem(
+              fontColor: _fontColor,
+              smallFontSpacing: _smallFontSpacing,
+              day: "year")
           ,
+          
         ],
       ),
         ),

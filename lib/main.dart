@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/receipt.dart';
 import 'package:receipt/ImagePickerModal.dart';
-import './pages/first_page.dart';
+import './pages/report_pages.dart';
 import 'package:receipt/ManualEntry.dart';
 
 
