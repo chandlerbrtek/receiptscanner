@@ -43,18 +43,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ListTile(
               title: Text("Recent Receipts"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new First()))
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Report_pages("recent")))
             ),
             ListTile(
-              title: Text("Month"),
+              title: Text("This Month"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SecondPage("Second Page")))
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Report_pages("month")))
             ),
             ListTile(
-              title: Text("Year"),
+              title: Text("This Year"),
               trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ThirdPage("Third")))
-              ),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Report_pages("year")))
+            ),
             ],
             ),
             ExpansionTile(title: Text("Budgeting"),

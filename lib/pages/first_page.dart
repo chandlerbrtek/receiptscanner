@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 
-class First extends StatelessWidget {
+class Report_pages extends StatelessWidget {
   final double _smallFontSize = 12;
   final double _valFontSize = 30;
   final FontWeight _smallFontWeight = FontWeight.w500;
   final FontWeight _valFontWeight = FontWeight.w700;
   final Color _fontColor = Color(0xff5b6990);
   final double _smallFontSpacing = 1.3;
+  final String state;
+
+  Report_pages(this.state);
 
 @override
   Widget build(BuildContext context) {
@@ -97,10 +100,12 @@ class First extends StatelessWidget {
           SizedBox(
             height: 25,
           ),
-          RecordItem(
+          if(state == "recent")
+            RecordItem(
               fontColor: _fontColor,
               smallFontSpacing: _smallFontSpacing,
-              day: "SUNDAY"),
+              day: "recent")
+          ,
           RecordItem(
               fontColor: _fontColor,
               smallFontSpacing: _smallFontSpacing,
