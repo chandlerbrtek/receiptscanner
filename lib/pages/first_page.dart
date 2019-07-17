@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:receipt/data/data-api.dart';
 
 
 class Report_pages extends StatelessWidget {
@@ -100,48 +101,21 @@ class Report_pages extends StatelessWidget {
           SizedBox(
             height: 25,
           ),
+          
+          ///State will dictate type of database query
+          ///
+          ///Recent will search within a weeks time
           if(state == "recent")
-            RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "recent")
+          ReceiptAPI.get(1)
           ,
-          RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "MONDAY"),
-          RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "TUESDAY"),
-          RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "WEDNESDAY"),
-          RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "THURSDAY"),
-          RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "FRIDAY"),
-          RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "SATURDAY"),
-          RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "SATURDAY"),
-              RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "SATURDAY"),
-              RecordItem(
-              fontColor: _fontColor,
-              smallFontSpacing: _smallFontSpacing,
-              day: "SATURDAY"),
+          ///Month will search within the month
+          if(state == "month")
+          ReceiptAPI.get(1)
+          ,
+          //Year will search within the year
+          if(state == "year")
+          ReceiptAPI.get(1)
+          ,
         ],
       ),
         ),
@@ -149,6 +123,10 @@ class Report_pages extends StatelessWidget {
   }
 }
 
+
+
+///Legacy code
+///
 class RecordItem extends StatelessWidget {
   const RecordItem({
     Key key,
