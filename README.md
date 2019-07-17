@@ -2,7 +2,7 @@
 
 A mobile application for scanning receipts and storing financial data.
 
-Last Updated: June 30, 2019
+Last Updated: July 16, 2019
 
 ## Quick Start
 
@@ -50,6 +50,34 @@ Savon Philips - Lead Support Engineer and Developer
 
 ## Releases
 
+### Milestone 2
+
+Wednesday, July 17, 2019
+
+In Milestone 2 the Receipt Scanner Application team has implemented many desirable features of the application! You can now use the Scan Receipt and Add Receipt functions to read values from receipts and store them within the application, view recent receipts from the home page, and view recent receipts reports.
+
+View the [release](https://github.com/chandlerbrtek/receiptscanner/releases/tag/milestone_2)
+
+View the [demo]()
+
+#### Release Notes
+
+[Issue #17](https://github.com/chandlerbrtek/receiptscanner/issues/17) - Added functionality to read receipt data from a receipt image.
+
+[Issue #30](https://github.com/chandlerbrtek/receiptscanner/issues/30) - Integrated the Vision API from Flutter to read receipt images into useful data.
+
+[Issue #31](https://github.com/chandlerbrtek/receiptscanner/issues/31) - Added the ability to edit receipts that have already been added to the application.
+
+[Issue #32](https://github.com/chandlerbrtek/receiptscanner/issues/32) - Added recent receipts listing to the application home page.
+
+[Issue #33](https://github.com/chandlerbrtek/receiptscanner/issues/33) - Added reporting features for recent receipts.
+
+[Issue #34](https://github.com/chandlerbrtek/receiptscanner/issues/34) - Added testing for the Receipt Scanner database.
+
+[Issue #35](https://github.com/chandlerbrtek/receiptscanner/issues/35) - Improved documentation of the code base for the application.
+
+[Issue #37](https://github.com/chandlerbrtek/receiptscanner/issues/37) - Improved the documentation of the receipt scanner repository.
+
 ### Milestone 1
 
 Monday, June 24, 2019
@@ -69,7 +97,7 @@ View the [demo](https://youtu.be/Djsdb5ymcoo)
 
 [Issue #8](https://github.com/chandlerbrtek/receiptscanner/issues/8) - Created a Receipt database table using Flutter’s [sqflite](https://pub.dev/packages/sqflite) plugin to store receipts on the user’s device.
 
-[Issue #9](https://github.com/chandlerbrtek/receiptscanner/issues/9) - Created flyout bar (drawer) with selectable options for reports. Expanded placeholder for budgeting feature if we have time to implement this in Milestone 3
+[Issue #9](https://github.com/chandlerbrtek/receiptscanner/issues/9) - Created flyout bar (drawer) with selectable options for reports. Expanded placeholder for budgeting feature if we have time to implement this in Milestone 3.
 
 [Issue #10](https://github.com/chandlerbrtek/receiptscanner/issues/10) - Added a modal to the main page that allows the user to select whether they want to add receipt data via a picture, a saved image or via manual entry.
 
