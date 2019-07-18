@@ -74,8 +74,6 @@ View the [demo]()
 
 [Issue #34](https://github.com/chandlerbrtek/receiptscanner/issues/34) - Added testing for the Receipt Scanner database.
 
-[Issue #35](https://github.com/chandlerbrtek/receiptscanner/issues/35) - Improved documentation of the code base for the application.
-
 [Issue #37](https://github.com/chandlerbrtek/receiptscanner/issues/37) - Improved the documentation of the receipt scanner repository.
 
 ### Milestone 1

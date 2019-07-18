@@ -57,7 +57,6 @@ class ImagePickerModal extends StatelessWidget {
     return _getImage(ImageSource.gallery);
   }
 
-  @override
   Widget build(BuildContext context) {
     ListTile _createTile(String name, IconData icon, [Function pickImage]) {
       return ListTile(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:receipt/EditEntry.dart';
 
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/receipt.dart';
@@ -123,31 +124,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
                 final formatCurrency = new NumberFormat.simpleCurrency();
 
-                return Card(
+                return
+                RaisedButton(
+                  onPressed: () => Navigator.of(context).push(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        new EditEntryPage(receipt: item))),
+                  child:
+                  Card(
                   child: Container(
-                    height: 55,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(fontSize: 18),
-                            ),
+                  height: 55,
+                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 18),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(Icons.more_vert),
-                          )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
+                ),
                 );
               },
             );
