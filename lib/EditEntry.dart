@@ -1,25 +1,29 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import 'package:receipt/ImagePickerModal.dart';
 import 'package:receipt/data/receipt.dart';
 import 'package:receipt/data/db.dart';
 
-class ManualEntryPage extends StatelessWidget {
+class EditEntryPage extends StatelessWidget {
+  final Receipt receipt;
+  EditEntryPage({Key key, @required this.receipt}) : super(key: key);
+
+  final formatCurrency = new NumberFormat.simpleCurrency();
+
   @override
   Widget build(BuildContext context) {
-    final ManualEntryArgs args = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Manual Entry"),
+        title: Text("Edit Entry"),
       ),
       body: Card(
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: DateForm(
-            total: args.total,
-            date: args.date,
+            receipt: receipt,
+            total: formatCurrency.format(receipt.total / 100).replaceAll("\$", ""),
+            date: DateTime.fromMillisecondsSinceEpoch(receipt.receiptDate),
           ),
         ),
       ),
@@ -28,9 +32,10 @@ class ManualEntryPage extends StatelessWidget {
 }
 
 class DateForm extends StatefulWidget {
-  DateForm({Key key, this.total, this.date}) : super(key: key);
+  DateForm({Key key, this.total, this.date, this.receipt}) : super(key: key);
 
   final String total;
+  final Receipt receipt;
   final DateTime date;
 
   @override
@@ -85,20 +90,21 @@ class _DateFormState extends State<DateForm> {
       return null;
   }
 
-  void _submit() {
+  void _update() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       Receipt receipt = Receipt(
+          id: widget.receipt.id,
           total: (_total * 100).toInt(),
           receiptDate: _date.millisecondsSinceEpoch);
 
       print('Receipt generated:');
       print(receipt.toMap());
-      receiptAPI.addReceipt(receipt);
+      receiptAPI.updateReceipt(receipt);
 
       Navigator.pop(context);
     } else {
-      print('Not submitted...');
+      print('Not updated...');
     }
   }
 
@@ -129,8 +135,8 @@ class _DateFormState extends State<DateForm> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RaisedButton(
-                  onPressed: _submit,
-                  child: Text('Submit Receipt'),
+                  onPressed: _update,
+                  child: Text('Update Receipt'),
                 ),
               )
             ],

@@ -6,10 +6,26 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:receipt/data/receipt.dart';
-import 'package:receipt/data/data-constants.dart';
 
+/// **Receipt API**
+/// 
+/// The receiptAPI is the endpoint for interacting with the Receipt
+/// Scanner database. Use this object to modify any data with the application.
+final receiptAPI = ReceiptDatabaseProvider.db;
 
 class ReceiptDatabaseProvider {
+  /// The label for the receipt table in the database.
+  static const String table = "Receipt";
+
+  /// The id label for a receipt within the receipt table.
+  static const String id = "id";
+
+  /// The total label for a receipt within the receipt table.
+  static const String total = "total";
+
+  /// The date label for a receipt within the receipt table.
+  static const String date = "receiptDate";
+
   ReceiptDatabaseProvider._();
 
   static final ReceiptDatabaseProvider db = ReceiptDatabaseProvider._();
@@ -34,124 +50,139 @@ class ReceiptDatabaseProvider {
             "$date INTEGER"
             // "createDate INTEGER,"
             // "modificationDate INTEGER"
-            ");"
-        );
+            ");");
       },
     );
   }
 
-  static String table = ReceiptConstants.RECEIPT_TABLE;
-  static String id = ReceiptConstants.RECEIPT_ID;
-  static String total = ReceiptConstants.RECEIPT_TOTAL;
-  static String date = ReceiptConstants.RECEIPT_DATE;
-
-}
-
-class DatabaseController {
-
-  /// Insert a new receipt into the database.
+  /// **Add Receipt**
   /// 
-  /// The database will automatically assign the receipt a new id, then return that value as an integer.
-  ///   
-  /// **return** the id of the new receipt
-  static insertReceipt(Receipt receipt) {
-    ReceiptDatabaseProvider.db.database.then((value) {
-      value.insert(
-        ReceiptConstants.RECEIPT_TABLE, receipt.toMap()).then((value) {
-          return value;  
-        }
-      );
-    });
+  /// Use this method to add a new receipt to the database.
+  /// 
+  /// When adding a receipt, the database will automatically assign
+  /// a new id for the receipt. This id is returned on the response
+  /// receipt object.
+  /// 
+  /// ***Note***: If an id is specified and another receipt with the same
+  /// id is specified within the database, that receipt will be overwritten
+  /// by the new receipt. The update method should be used in such a scenario.
+  /// 
+  /// ***Example***
+  /// 
+  /// addReceipt ( {
+  ///   "total" : 508,
+  ///   "receiptDate" : 15003
+  /// }) 
+  /// 
+  /// Returns the receipt
+  /// 
+  /// {
+  ///   "id" : 37872,
+  ///   "total" : 508,
+  ///   "receiptDate" : 15003
+  /// }
+  /// 
+  /// Where the id is the next available id in the database.
+  Future<Receipt> addReceipt(Receipt receipt) async {
+    final db = await database;
+    receipt.id = await db.insert(
+      table,
+      receipt.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return receipt;
   }
 
-  /// Delete a receipt from the database.
+  /// **Update Receipt**
   /// 
-  /// Deletes the receipt found at the given index.
-  /// If more than one receipt was deleted at the given index, this method will throw an exception.
+  /// Use this method to update a receipt in the database.
   /// 
-  /// **return** the number of deleted receipts
+  /// To update a receipt, the receipt id in the argued receipt object
+  /// must match the id of the desired receipt to update. The target receipt
+  /// in the database will be updated to the exact values of the values of
+  /// the argued receipt object, inclusive of nulls.
   /// 
-  /// **throws** REceiptDatabaseException when more than one Receipt is deleted.
-  static deleteReceipt(int index) {
-    Future<int> i;
-    ReceiptDatabaseProvider.db.database.then((value) {
-        i = value.delete(
-          ReceiptConstants.RECEIPT_TABLE, where:
-          ReceiptConstants.RECEIPT_ID + " = " + index.toString());
-        
-    });
-    i.then((value) {
-      return value;
-    });
+  /// ***Example***
+  /// 
+  /// For an existing receipt {
+  ///   "id" : 101,
+  ///   "total" : 2800,
+  ///   "receiptDate" : 89000
+  /// }
+  /// 
+  /// When updateReceipt is called with the argument {
+  ///   "id" : 101,
+  ///   "total" 2799
+  /// }
+  /// 
+  /// The updated receipt in the database will be {
+  ///   "id" : 101,
+  ///   "total" : 2799,
+  ///   "receiptDate" : null
+  /// }
+  Future<int> updateReceipt(Receipt receipt) async {
+    final db = await database;
+    return await db.update(
+      table,
+      receipt.toMap(),
+      where: "$id = ?",
+      whereArgs: [receipt.id],
+    );
   }
 
-  /// Retrive a receipt from the database.
+  /// **Get Receipt**
   /// 
-  /// Find a receipt with the given index (id) within the database and return it.
+  /// Use this method to retrieve a receipt from the database.
   /// 
-  /// **returns** The receipt found at the given index, if there was one.
-  /// 
-  /// **throws**  ReceiptDatabaseException when more than one Receipt is found for the given index.
-  static retrieveReceipt(int index) {
-    Future<List<Map<String, dynamic>>> i;
-    ReceiptDatabaseProvider.db.database.then((value) {
-      i = value.query(
-        ReceiptConstants.RECEIPT_TABLE, where:
-        ReceiptConstants.RECEIPT_ID + " = " + index.toString());
-        
-    });
-    i.then((value) {
-          List<Receipt> results = new List<Receipt>();
-          for (Map<String, dynamic> result in value) {
-            results.add(Receipt.fromMap(result));
-          }
-          if (results.length > 1) throw new ReceiptDatabaseException(
-            "Multiple records found for the " + ReceiptConstants.RECEIPT_ID + " " + index.toString()
-            );
-          return results;
-        }
-      );
+  /// To retrieve a receipt from the database, you must specify
+  /// the id of the receipt.
+  Future<Receipt> getReceipt(int getId) async {
+    final db = await database;
+    final response = await db.query(
+      table,
+      where: "$id = ?",
+      whereArgs: [getId],
+    );
+    return response.isNotEmpty ? Receipt.fromMap(response.first) : null;
   }
 
-  /// Retrieve all receipts that match the given receipt.
+  /// **Get All Receipts**
   /// 
-  /// This method will search the database for receipts that match all of the provided
-  /// receipt's populted fields, then return them as a list of Receipts.
+  /// Use this method to retrieve a list of all receipts in the database.
   /// 
-  /// **returns** List<Receipt> the matching receipts.
-  static retrieveReceiptByFields(Receipt receipt) {
-    Future<List<Map<String, dynamic>>> i;
-    ReceiptDatabaseProvider.db.database.then((value) {
-      i = value.query(
-        ReceiptConstants.RECEIPT_TABLE, where:
-        ReceiptConstants.RECEIPT_TOTAL + " = '" + receipt.total.toString() + "' AND " +
-        ReceiptConstants.RECEIPT_DATE + " = " + receipt.receiptDate.toString() + ""
-      );
-    });
-    i.then((value) {
-        List<Receipt> results = new List<Receipt>();
-        for (Map<String, dynamic> result in value) {
-          results.add(Receipt.fromMap(result));
-        }
-        return results;
-      });
+  /// This method gathers the entire list of receipts found in the database and
+  /// returns them in a list ordered by the date of the receipt.
+  Future<List<Receipt>> getAllReceipts() async {
+    final db = await database;
+    final response = await db.query(table);
+    List<Receipt> list = response.map((c) => Receipt.fromMap(c)).toList();
+    list.sort((a, b) => b.receiptDate - a.receiptDate);
+    return list;
   }
 
-  /// Update the receipt at the given index.
+  /// **Delete Receipt**
   /// 
-  /// This method updates receipts that match the given index to hold the give values.
-  static updateReceipt(int index, Receipt receipt) {
-    ReceiptDatabaseProvider.db.database.then((value) {
-      value.update(
-        ReceiptConstants.RECEIPT_TABLE, receipt.toMap(), where:
-        ReceiptConstants.RECEIPT_ID + " = " + index.toString()
-      ).then((value) {
-        return value;
-      });
-    });
+  /// Use this method to delete a receipt from the database.
+  /// 
+  /// To delete a receipt from the database, you must specify the
+  /// id of the receipt.
+  Future<int> deleteReceipt(int deleteId) async {
+    final db = await database;
+    return db.delete(
+      table,
+      where: "$id = ?",
+      whereArgs: [deleteId],
+    );
   }
-}
-/// Exception caused by database communication issues or general misbehavior.
-class ReceiptDatabaseException extends DatabaseException {
-  ReceiptDatabaseException(String message) : super(message);
+
+  /// **Delete All Receipts**
+  ///
+  /// Use this method to delete all receipts in the database.
+  /// 
+  /// This method will remove every receipt from the database,
+  /// and therefore should only be done conscientiously.
+  Future<int> deleteAllReceipts() async {
+    final db = await database;
+    return db.delete(table);
+  }
 }
