@@ -274,7 +274,7 @@ class _Receipt extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              formatCurrency.format(receipt.total),
+              formatCurrency.format(receipt.total / 100),
               style: textStyle,
             ),
           )

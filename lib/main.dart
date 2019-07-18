@@ -115,27 +115,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 return Card(
                   child: Container(
-                    height: 55,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(fontSize: 18),
-                            ),
+                  height: 55,
+                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 18),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(Icons.more_vert),
-                          )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 );
