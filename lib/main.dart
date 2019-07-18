@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:receipt/EditEntry.dart';
 
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/receipt.dart';
@@ -113,7 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
                 final formatCurrency = new NumberFormat.simpleCurrency();
 
-                return Card(
+                return
+                RaisedButton(
+                  onPressed: () => Navigator.of(context).push(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        new EditEntryPage(receipt: item))),
+                  child:
+                  Card(
                   child: Container(
                   height: 55,
                     padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -132,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                   ),
+                ),
                 );
               },
             );
