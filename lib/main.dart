@@ -7,7 +7,6 @@ import 'package:receipt/ImagePickerModal.dart';
 import './pages/report_pages.dart';
 import 'package:receipt/ManualEntry.dart';
 
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -60,32 +59,40 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            ExpansionTile(title: Text("Reports"),
-            children: <Widget>[            
-              ListTile(
-              title: Text("Recent Receipts"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Report_pages("recent")))
+            ExpansionTile(
+              title: Text("Reports"),
+              children: <Widget>[
+                ListTile(
+                    title: Text("Recent Receipts"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new Report_pages("recent")))),
+                ListTile(
+                    title: Text("This Month"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new Report_pages("month")))),
+                ListTile(
+                    title: Text("This Year"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new Report_pages("year")))),
+              ],
             ),
-            ListTile(
-              title: Text("This Month"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Report_pages("month")))
-            ),
-            ListTile(
-              title: Text("This Year"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Report_pages("year")))
-            ),
-            ],
-            ),
-            ExpansionTile(title: Text("Budgeting"),
-            children: <Widget>[            
-              ListTile(
-              title: Text("Placeholder"),
-              trailing: Icon(Icons.arrow_forward),
-              ),
-            ],
+            ExpansionTile(
+              title: Text("Budgeting"),
+              children: <Widget>[
+                ListTile(
+                  title: Text("Placeholder"),
+                  trailing: Icon(Icons.arrow_forward),
+                ),
+              ],
             )
           ],
         ),
@@ -109,18 +116,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 return Card(
                   child: Container(
                     height: 55,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: Text(
-                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                            style: TextStyle(fontSize: 18),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(fontSize: 18),
+                            ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(Icons.more_vert),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
