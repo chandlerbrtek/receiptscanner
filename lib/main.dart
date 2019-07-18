@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:receipt/ImagePickerModal.dart';
 import './pages/other_pages.dart';
 
+/// Starts the Receipt Scanner Application.
 void main() => runApp(MyApp());
 
+/// Top level class for the Receipt Scanner Application.
+/// 
+/// Definition for the Receipt Scanner Application. This class defines the home page
+/// and the application information for use on the OS. The theme data is also defined
+/// within this class.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,6 +23,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Homepage for the Receipt Scanner Application. This page is the bottom layer of
+/// the Receipt Scanner's widget stack.
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -26,6 +34,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+/// The state of the home page. This state defines the layout and functionality of the
+/// application's home page.
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
