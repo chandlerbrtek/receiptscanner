@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "798640865685",
+    "firebase_url": "https://receiptscanner-90183.firebaseio.com",
+    "project_id": "receiptscanner-90183",
+    "storage_bucket": "receiptscanner-90183.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:798640865685:android:94ab719f563226e1",
+        "android_client_info": {
+          "package_name": "com.example.receipt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "798640865685-prc59s1s8cjmol9la2jpm6njehpmr7qv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyAkH1gr7e3u1gnH0BahF7sBBN1chrEnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "798640865685-prc59s1s8cjmol9la2jpm6njehpmr7qv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
