@@ -5,30 +5,48 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
 
-/// **Receipt API**
+/// **Database API**
 /// 
 /// The receiptAPI is the endpoint for interacting with the Receipt
-/// Scanner database. Use this object to modify any data with the application.
-final receiptAPI = ReceiptDatabaseProvider.db;
+/// Scanner database. Use this object to modify any data within the application.
+final databaseAPI = DatabaseProvider.db;
 
-class ReceiptDatabaseProvider {
-  /// The label for the receipt table in the database.
-  static const String table = "Receipt";
-
-  /// The id label for a receipt within the receipt table.
+class DatabaseProvider {
+  /// The id label for an entry within the database's tables.
   static const String id = "id";
 
+  /// The label for the receipt table in the database.
+  static const String receiptTable = "Receipt";
+
   /// The total label for a receipt within the receipt table.
-  static const String total = "total";
+  static const String receiptTotal = "total";
 
   /// The date label for a receipt within the receipt table.
-  static const String date = "receiptDate";
+  static const String receiptDate = "receiptDate";
 
-  ReceiptDatabaseProvider._();
+  /// The label for the budget table in the database.
+  static const String budgetTable = "budget";
 
-  static final ReceiptDatabaseProvider db = ReceiptDatabaseProvider._();
+  /// The label for the budget name in the database.
+  static const String budgetName = "name";
+
+  /// The label for the budget amount in the database.
+  static const String budgetAmount = "amount";
+
+  /// The label for the start date in the database.
+  static const String budgetStart = "start";
+
+  /// The label for the end date in the database.
+  static const String budgetEnd = "end";
+
+  /// The label for the budget progress in the database.
+  static const String budgetProgress = "progress";
+
+  DatabaseProvider._();
+
+  static final DatabaseProvider db = DatabaseProvider._();
   Database _database;
 
   Future<Database> get database async {
@@ -44,15 +62,36 @@ class ReceiptDatabaseProvider {
       path,
       version: 1,
       onCreate: (Database db, int version) async {
-        await db.execute("CREATE TABLE $table ("
+        await db.execute("CREATE TABLE $receiptTable ("
             "$id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            "$total INTEGER, "
-            "$date INTEGER"
+            "$receiptTotal INTEGER, "
+            "$receiptDate INTEGER"
             // "createDate INTEGER,"
             // "modificationDate INTEGER"
             ");");
+
+        await db.execute("CREATE TABLE $budgetTable ("
+            "$id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "$budgetName STRING NOT NULL, "
+            "$budgetAmount INTEGER NOT NULL, "
+            "$budgetStart INTEGER NOT NULL, "
+            "$budgetEnd INTEGER NOT NULL, "
+            "$budgetProgress INTEGER NOT NULL"
+            ");");
+        
+        _initDatabase();
       },
     );
+  }
+
+  static _initDatabase() async {
+    databaseAPI.addBudget(new Budget(
+      name: "Annual Budget",
+      amount: 100000,
+      progress: 0,
+      start: DateTime.january,
+      end: DateTime.december,
+    ));
   }
 
   /// **Add Receipt**
@@ -86,7 +125,7 @@ class ReceiptDatabaseProvider {
   Future<Receipt> addReceipt(Receipt receipt) async {
     final db = await database;
     receipt.id = await db.insert(
-      table,
+      receiptTable,
       receipt.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -123,7 +162,7 @@ class ReceiptDatabaseProvider {
   Future<int> updateReceipt(Receipt receipt) async {
     final db = await database;
     return await db.update(
-      table,
+      receiptTable,
       receipt.toMap(),
       where: "$id = ?",
       whereArgs: [receipt.id],
@@ -139,7 +178,7 @@ class ReceiptDatabaseProvider {
   Future<Receipt> getReceipt(int getId) async {
     final db = await database;
     final response = await db.query(
-      table,
+      receiptTable,
       where: "$id = ?",
       whereArgs: [getId],
     );
@@ -154,7 +193,7 @@ class ReceiptDatabaseProvider {
   /// returns them in a list ordered by the date of the receipt.
   Future<List<Receipt>> getAllReceipts() async {
     final db = await database;
-    final response = await db.query(table);
+    final response = await db.query(receiptTable);
     List<Receipt> list = response.map((c) => Receipt.fromMap(c)).toList();
     list.sort((a, b) => b.receiptDate - a.receiptDate);
     return list;
@@ -169,7 +208,7 @@ class ReceiptDatabaseProvider {
   Future<int> deleteReceipt(int deleteId) async {
     final db = await database;
     return db.delete(
-      table,
+      receiptTable,
       where: "$id = ?",
       whereArgs: [deleteId],
     );
@@ -183,6 +222,23 @@ class ReceiptDatabaseProvider {
   /// and therefore should only be done conscientiously.
   Future<int> deleteAllReceipts() async {
     final db = await database;
-    return db.delete(table);
+    return db.delete(receiptTable);
+  }
+
+  Future<int> addBudget(Budget budget) async {
+    final db = await database;
+    return db.insert(budgetTable, budget.toMap());
+  }
+
+  Future<int> updateBudget(Budget budget) async {
+    final db = await database;
+    return db.update(budgetTable, budget.toMap());
+  }
+
+  Future<List<Budget>> getAllBudgets() async {
+    final db = await database;
+    final response = await db.query(budgetTable, orderBy: id);
+    List<Budget> list = response.map((c) => Budget.fromMap(c)).toList();
+    return list;
   }
 }
