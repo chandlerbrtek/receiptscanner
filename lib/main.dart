@@ -114,33 +114,30 @@ class _MyHomePageState extends State<MyHomePage> {
                 final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
                 final formatCurrency = new NumberFormat.simpleCurrency();
 
-                return
-                RaisedButton(
-                  onPressed: () => Navigator.of(context).push(
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                        new EditEntryPage(receipt: item))),
-                  child:
-                  Card(
-                  child: Container(
-                  height: 55,
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 18),
+                return InkWell(
+                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          new EditEntryPage(receipt: item))),
+                  child: Card(
+                    child: Container(
+                      height: 55,
+                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              '${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(fontSize: 18),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 );
               },
             );
@@ -151,9 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showModalBottomSheet(
-          context: context,
-          builder: (BuildContext context) => ImagePickerModal(),
-        ),
+              context: context,
+              builder: (BuildContext context) => ImagePickerModal(),
+            ),
         child: Icon(Icons.add),
       ),
     );
