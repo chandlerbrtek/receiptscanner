@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 
 import 'package:receipt/data/db.dart';
@@ -66,64 +65,8 @@ class Budgets extends StatelessWidget {
             itemCount: length,
             itemBuilder: (BuildContext context, int index) {
               final Budget item = snapshot.data[index];
-              final formatCurrency = new NumberFormat.simpleCurrency();
-              return Container(
-                padding: EdgeInsets.all(15),
-                margin: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).backgroundColor,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          item.name,
-                          textScaleFactor: 1.36,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Text(
-                          formatCurrency.format(item.amount / 100),
-                          textScaleFactor: 1.36,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                          )
-                        ),
-                      ],
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      margin: EdgeInsets.only(top: 15),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: item.progress / item.amount,
-                            child: Text(''),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade600,
-                              border: Border(
-                                right: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).backgroundColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(formatCurrency.format(item.progress / 100)),
-                        ]
-                      )
-                    )
-                  ],
-                )
-              );
+              
+              return _budgetTile(context, item);
             },
           );
         } else {
@@ -131,5 +74,118 @@ class Budgets extends StatelessWidget {
         }
       },
     );
+  }
+
+  Widget _budgetTile(BuildContext context, Budget budget) {
+    final formatCurrency = new NumberFormat.simpleCurrency();
+
+    return Container(
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                budget.name,
+                textScaleFactor: 1.36,
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              Text(
+                formatCurrency.format(budget.amount / 100),
+                textScaleFactor: 1.36,
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                )
+              ),
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+            ),
+            child: LinearPercentIndicator(
+              percent: budget.progress / budget.amount,
+              isRTL: false,
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+              lineHeight: 24,
+              center: Text(
+                formatCurrency.format(budget.progress / 100),
+                textScaleFactor: 1.36,
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              progressColor: Theme.of(context).accentColor,
+              animation: true,
+              animationDuration: 1000,
+            )
+          ),
+        ],
+      ),
+    );
+
+    // return Container(
+    //   padding: EdgeInsets.all(15),
+    //   margin: EdgeInsets.all(15),
+    //   decoration: BoxDecoration(
+    //     color: Theme.of(context).backgroundColor,
+    //     borderRadius: BorderRadius.all(Radius.circular(15)),
+    //   ),
+    //   child: Column(
+    //     children: <Widget>[
+    //       Row(
+    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //         children: <Widget>[
+    //           Text(
+    //             budget.name,
+    //             textScaleFactor: 1.36,
+    //             style: TextStyle(
+    //               fontWeight: FontWeight.w300,
+    //             ),
+    //           ),
+    //           Text(
+    //             formatCurrency.format(budget.amount / 100),
+    //             textScaleFactor: 1.36,
+    //             style: TextStyle(
+    //               fontWeight: FontWeight.w300,
+    //             )
+    //           ),
+    //         ],
+    //       ),
+    //       Container(
+    //         alignment: Alignment.bottomCenter,
+    //         margin: EdgeInsets.only(top: 15),
+    //         decoration: BoxDecoration(
+    //           color: Theme.of(context).colorScheme.surface,
+    //         ),
+    //         child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.start,
+    //           children: <Widget>[
+    //             Container(
+    //               width: budget.progress / budget.amount,
+    //               child: Text(''),
+    //               decoration: BoxDecoration(
+    //                 color: Colors.green.shade600,
+    //                 border: Border(
+    //                   right: BorderSide(
+    //                     width: 1,
+    //                     color: Theme.of(context).backgroundColor,
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),
+    //             Text(formatCurrency.format(budget.progress / 100)),
+    //           ]
+    //         )
+    //       )
+    //     ],
+    //   )
+    // );
   }
 }
