@@ -239,7 +239,12 @@ class DatabaseProvider {
 
   Future<int> updateBudget(Budget budget) async {
     final db = await database;
-    return db.update(budgetTable, budget.toMap());
+    return db.update(
+      budgetTable,
+      budget.toMap(),
+      where: "$id = ?",
+      whereArgs: [budget.id],
+      );
   }
 
   Future<List<Budget>> getAllBudgets() async {
