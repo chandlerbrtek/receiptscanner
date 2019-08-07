@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:receipt/DateRangeSelection.dart';
 import 'package:receipt/EditEntry.dart';
 
 import 'package:receipt/data/db.dart';
@@ -69,21 +70,27 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () => Navigator.of(context).push(
                         new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                new Report_pages("recent")))),
+                                new Report_pages("recent", 0, 0)))),
                 ListTile(
                     title: Text("This Month"),
                     trailing: Icon(Icons.arrow_forward),
                     onTap: () => Navigator.of(context).push(
                         new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                new Report_pages("month")))),
+                                new Report_pages("month", 0, 0)))),
                 ListTile(
                     title: Text("This Year"),
                     trailing: Icon(Icons.arrow_forward),
                     onTap: () => Navigator.of(context).push(
                         new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                new Report_pages("year")))),
+                                new Report_pages("year", 0, 0)))),
+                ListTile(
+                    title: Text("Custom Range"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (context) => DateRangeSelection()))),
               ],
             ),
             ExpansionTile(
@@ -115,8 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 final formatCurrency = new NumberFormat.simpleCurrency();
 
                 return
-                RaisedButton(
-                  onPressed: () => Navigator.of(context).push(
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
                     new MaterialPageRoute(
                         builder: (BuildContext context) =>
                         new EditEntryPage(receipt: item))),
