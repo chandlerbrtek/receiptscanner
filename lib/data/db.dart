@@ -79,27 +79,41 @@ class DatabaseProvider {
             "$budgetProgress INTEGER NOT NULL"
             ");");
         
-        _initDatabase();
-      },
+        _initDatabase(db);
+      }
     );
   }
 
-  static _initDatabase() async {
-    databaseAPI.addBudget(new Budget(
-      name: "Annual Budget",
-      amount: 120000,
-      progress: 12000,
-      start: DateTime.january,
-      end: DateTime.december,
-    ));
-    databaseAPI.addBudget(new Budget(
-      name: "Monthly Budget",
-      amount: 10000,
-      progress: 1000,
-      start: DateTime.august,
-      end: DateTime.september,
-    ));
-  }
+  static _initDatabase(Database db) async {
+    DateTime startOfYear =  new DateTime(DateTime.now().year, 1, 1);
+    DateTime endOfYear = new DateTime(DateTime.now().year + 1, 1, 0);
+    DateTime startOfMonth = new DateTime(DateTime.now().year, DateTime.now().month, 1);
+    DateTime endOfMonth = new DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+    
+    await db.insert(
+        budgetTable,
+        new Budget(
+          name: "Annual Budget",
+          amount: 120000,
+          progress: 0,
+          start: startOfYear.millisecondsSinceEpoch,
+          end: endOfYear.millisecondsSinceEpoch,
+        ).toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace
+      );
+        
+    await db.insert(
+        budgetTable,
+        new Budget(
+          name: "Monthly Budget",
+          amount: 10000,
+          progress: 0,
+          start: startOfMonth.millisecondsSinceEpoch,
+          end: endOfMonth.millisecondsSinceEpoch,
+        ).toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace
+      );
+    }
 
   /// **Add Receipt**
   /// 
@@ -233,8 +247,12 @@ class DatabaseProvider {
   }
 
   Future<int> addBudget(Budget budget) async {
-    final db = await database;
-    return db.insert(budgetTable, budget.toMap());
+    final Database db = await database;
+    return db.insert(
+      budgetTable,
+      budget.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace
+    );
   }
 
   Future<int> updateBudget(Budget budget) async {
@@ -252,5 +270,14 @@ class DatabaseProvider {
     final response = await db.query(budgetTable, orderBy: id);
     List<Budget> list = response.map((c) => Budget.fromMap(c)).toList();
     return list;
+  }
+
+  Future<int> deleteBudget(int budgetId) async {
+    final db = await database;
+    return db.delete(
+      budgetTable,
+      where: "$id = ?",
+      whereArgs: [budgetId]
+    );
   }
 }
