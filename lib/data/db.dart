@@ -87,10 +87,17 @@ class DatabaseProvider {
   static _initDatabase() async {
     databaseAPI.addBudget(new Budget(
       name: "Annual Budget",
-      amount: 100000,
-      progress: 0,
+      amount: 120000,
+      progress: 12000,
       start: DateTime.january,
       end: DateTime.december,
+    ));
+    databaseAPI.addBudget(new Budget(
+      name: "Monthly Budget",
+      amount: 10000,
+      progress: 1000,
+      start: DateTime.august,
+      end: DateTime.september,
     ));
   }
 
