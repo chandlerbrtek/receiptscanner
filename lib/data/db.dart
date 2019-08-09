@@ -13,6 +13,11 @@ import 'package:receipt/data/models.dart';
 /// Scanner database. Use this object to modify any data within the application.
 final databaseAPI = DatabaseProvider.db;
 
+/// Handles all matters relevant to the database. Creating and
+/// accessing the database are handled by the provider. Names
+/// for the tables and their fields are also available within the
+/// provider. To access the databse, use the [databaseAPI] available
+/// within the [db] package.
 class DatabaseProvider {
   /// The id label for an entry within the database's tables.
   static const String id = "id";
@@ -44,17 +49,27 @@ class DatabaseProvider {
   /// The label for the budget progress in the database.
   static const String budgetProgress = "progress";
 
+  /// Method for singleton instatiation of the DatbaseProvider.
   DatabaseProvider._();
 
+  /// Singleton refernce of the DatabaseProvider for the application.
   static final DatabaseProvider db = DatabaseProvider._();
+
+  /// Private member for holding the database reference.
   Database _database;
 
+  /// Method for retrieving the database instance.
   Future<Database> get database async {
     if (_database != null) return _database;
     _database = await getDatabaseInstance();
     return _database;
   }
 
+  /// Provides the database for use within the application.
+  /// 
+  /// This method handles the connection with the database. It
+  /// creates the database when necessary and provides a connection
+  /// to an existing database whenever possible.
   static Future<Database> getDatabaseInstance() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, "receipt.db");
@@ -84,6 +99,7 @@ class DatabaseProvider {
     );
   }
 
+  /// This method fills the database with its initial, pre-loaded data.
   static _initDatabase(Database db) async {
     DateTime startOfYear =  new DateTime(DateTime.now().year, 1, 1);
     DateTime endOfYear = new DateTime(DateTime.now().year + 1, 1, 0);
@@ -246,6 +262,12 @@ class DatabaseProvider {
     return db.delete(receiptTable);
   }
 
+  /// **Add Budget**
+  /// 
+  /// Use this method to add a new budget to the database.
+  /// 
+  /// The ID will be automatically generated for the budget. If you provide
+  /// an id within the [budget], that ID will be used by the database.
   Future<int> addBudget(Budget budget) async {
     final Database db = await database;
     return db.insert(
@@ -255,6 +277,14 @@ class DatabaseProvider {
     );
   }
 
+  /// **Update A Budget**
+  /// 
+  /// Use this method to update an existing budget within the database.
+  /// 
+  /// The [budget] needs to contain the id of an existing budget within
+  /// the database. Furthermore, the budget in the database with the given
+  /// id will be overwritten with all values found on the budget object,
+  /// inclusive of null and empty values.
   Future<int> updateBudget(Budget budget) async {
     final db = await database;
     return db.update(
@@ -265,6 +295,12 @@ class DatabaseProvider {
       );
   }
 
+  /// **Get All Budgets**
+  /// 
+  /// Use this method to retrieve all budgets from the database.
+  /// 
+  /// This method queries the budgets table for all budgets and then returns
+  /// them in a list sorted by their IDs.
   Future<List<Budget>> getAllBudgets() async {
     final db = await database;
     final response = await db.query(budgetTable, orderBy: id);
@@ -272,6 +308,12 @@ class DatabaseProvider {
     return list;
   }
 
+  /// **Delete Budget**
+  /// 
+  /// Use this method to delete a budget from the database.
+  /// 
+  /// The [budgetId] must reference the ID of the budget you wish to delete
+  /// from the database.
   Future<int> deleteBudget(int budgetId) async {
     final db = await database;
     return db.delete(
