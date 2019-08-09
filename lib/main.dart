@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Receipt Scanner',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
       ),
       // home: MyHomePage(title: 'Receipt Scanner'),
       routes: {
