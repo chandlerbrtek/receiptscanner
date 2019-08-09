@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(_receipts);
   }
 
+  /// Retrieves the receipts within the database.
   Future<List<Receipt>> _fetch() {
     return databaseAPI.getAllReceipts();
   }
@@ -60,56 +61,48 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            ExpansionTile(
-              title: Text("Reports"),
-              children: <Widget>[
-                ListTile(
-                    title: Text("Recent Receipts"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new Report_pages("recent", 0, 0)))),
-                ListTile(
-                    title: Text("This Month"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new Report_pages("month", 0, 0)))),
-                ListTile(
-                    title: Text("This Year"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new Report_pages("year", 0, 0)))),
-                ListTile(
-                    title: Text("Custom Range"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (context) => DateRangeSelection()))),
-              ],
-            ),
-            ExpansionTile(
-              title: Text("Budgeting"),
-              children: <Widget>[
-                ListTile(
-                  title: Text("Placeholder"),
-                  trailing: Icon(Icons.arrow_forward),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
+      body: _receiptList(),
+      drawer: _navDrawer(),
     );
   }
 
+  /// Builds the navigation drawer.
+  ExpansionTile _navDrawer() {
+    return ExpansionTile(
+      title: Text("Reports"),
+      children: <Widget>[
+        ListTile(
+            title: Text("Recent Receipts"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        new Report_pages("recent", 0, 0)))),
+        ListTile(
+            title: Text("This Month"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        new Report_pages("month", 0, 0)))),
+        ListTile(
+            title: Text("This Year"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        new Report_pages("year", 0, 0)))),
+        ListTile(
+            title: Text("Custom Range"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (context) => DateRangeSelection()))),
+      ],
+    );
+  }
+
+  /// Builds the receipt list for the home page.
   FutureBuilder<List<Receipt>> _receiptList() {
     return FutureBuilder<List<Receipt>>(
       future: _fetch(),
@@ -164,6 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// Builds the add new receipt button for the home page.
   FloatingActionButton _addButton() {
     return FloatingActionButton(
       onPressed: () => showModalBottomSheet(
