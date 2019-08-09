@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: _receiptList(),
       drawer: _navDrawer(),
+      floatingActionButton: _addButton(),
     );
   }
 
