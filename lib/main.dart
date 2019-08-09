@@ -62,13 +62,28 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: _receiptList(),
-      drawer: _navDrawer(),
+      drawer: _drawer(),
       floatingActionButton: _addButton(),
     );
   }
 
-  /// Builds the navigation drawer.
-  ExpansionTile _navDrawer() {
+  /// Builds & returns the application's navigation drawer.
+  Drawer _drawer() {
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          _reports(),
+          ListTile(
+            title: Text("Budgets"),
+            trailing: Icon(Icons.assessment),
+            onTap: () => Budgets.view(context),
+          )
+        ],
+      ),
+    );
+  }
+  /// Builds the reports section of the navigation drawer.
+  ExpansionTile _reports() {
     return ExpansionTile(
       title: Text("Reports"),
       children: <Widget>[
