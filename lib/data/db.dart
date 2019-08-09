@@ -166,6 +166,7 @@ class DatabaseProvider {
       receipt.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    updateBudgetsProgress();
     return receipt;
   }
 
@@ -198,12 +199,14 @@ class DatabaseProvider {
   /// }
   Future<int> updateReceipt(Receipt receipt) async {
     final db = await database;
-    return await db.update(
+    int resp = await db.update(
       receiptTable,
       receipt.toMap(),
       where: "$id = ?",
       whereArgs: [receipt.id],
     );
+    updateBudgetsProgress();
+    return resp;
   }
 
   /// **Get Receipt**
@@ -323,6 +326,9 @@ class DatabaseProvider {
     final db = await database;
     final response = await db.query(budgetTable, orderBy: id);
     List<Budget> list = response.map((c) => Budget.fromMap(c)).toList();
+    // for (Budget budget in list) {
+    //   budget.progress = progressOfBudget(budget);
+    // }
     return list;
   }
 
@@ -339,5 +345,30 @@ class DatabaseProvider {
       where: "$id = ?",
       whereArgs: [budgetId]
     );
+  }
+
+  /// Updates the progress of all budgets.
+  /// 
+  /// TODO make this process not as taxing. Probably will need a
+  /// better design than using these methods.
+  updateBudgetsProgress() async {
+    for (Budget budget in await databaseAPI.getAllBudgets()) {
+      updateBudgetProgress(budget);
+    }
+  }
+
+  /// Updates the progress of a specific budget.
+  updateBudgetProgress(Budget budget) async {
+    budget.progress = await progressOfBudget(budget);
+    databaseAPI.updateBudget(budget);
+  }
+
+  /// Calculates the current progress of a budget.
+  Future<int> progressOfBudget(Budget budget) async {
+    int sum = 0;
+    for (Receipt receipt in await databaseAPI.getReceiptsInRange(budget.start, budget.end)) {
+      sum += receipt.total;
+    }
+    return sum;
   }
 }

@@ -109,7 +109,9 @@ class _BudgetListState extends State<Budgets> {
               decoration: BoxDecoration(
               ),
               child: LinearPercentIndicator(
-                percent: budget.progress / budget.amount,
+                percent: (budget.progress / budget.amount) <= 1 &&
+                  (budget.progress / budget.amount) >= 0 ?
+                  (budget.progress / budget.amount) : 1,
                 isRTL: false,
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
                 lineHeight: 24,
@@ -120,7 +122,9 @@ class _BudgetListState extends State<Budgets> {
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                progressColor: Theme.of(context).accentColor,
+                progressColor: (budget.progress / budget.amount) < 0.8 ? 
+                  Theme.of(context).accentColor : (budget.progress / budget.amount) 
+                  < 1.0 ? Colors.yellow.shade800 : Colors.red.shade400,
                 animation: true,
                 animationDuration: 1000,
               )
