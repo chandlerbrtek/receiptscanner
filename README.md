@@ -58,7 +58,7 @@ In Milestone 2 the Receipt Scanner Application team has implemented many desirab
 
 View the [release](https://github.com/chandlerbrtek/receiptscanner/releases/tag/milestone_2)
 
-View the [demo]()
+View the [demo](https://app.vidgrid.com/view/iPWydvakB1MU)
 
 #### Release Notes
 

@@ -45,15 +45,15 @@ class _DateFormState extends State<DateForm> {
 
   DateTime _date;
   double _total;
+  String help;
 
   @override
   void initState() {
     super.initState();
 
     print('init:');
-    print(widget.date);
 
-    _date = widget.date ?? DateTime.now();
+    _date = DateTime.parse(DateTime.now().toString().substring(0, 10));
     _controller.text = dateFormat.format(_date);
   }
 

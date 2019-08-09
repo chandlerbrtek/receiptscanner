@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:receipt/DateRangeSelection.dart';
 import 'package:receipt/EditEntry.dart';
 
 import 'package:receipt/data/db.dart';
@@ -59,54 +60,53 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: _drawer(),
-      body: _receiptList(),
-      floatingActionButton: _addButton(),
-    );
-  }
-
-  /// Builds & returns the application's navigation drawer.
-  Drawer _drawer() {
-    return Drawer(
-      child: ListView(
-        children: <Widget>[
-          _reports(),
-          ListTile(
-            title: Text("Budgets"),
-            trailing: Icon(Icons.assessment),
-            onTap: () => Budgets.view(context),
-          )
-        ],
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ExpansionTile(
+              title: Text("Reports"),
+              children: <Widget>[
+                ListTile(
+                    title: Text("Recent Receipts"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new Report_pages("recent", 0, 0)))),
+                ListTile(
+                    title: Text("This Month"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new Report_pages("month", 0, 0)))),
+                ListTile(
+                    title: Text("This Year"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new Report_pages("year", 0, 0)))),
+                ListTile(
+                    title: Text("Custom Range"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (context) => DateRangeSelection()))),
+              ],
+            ),
+            ExpansionTile(
+              title: Text("Budgeting"),
+              children: <Widget>[
+                ListTile(
+                  title: Text("Placeholder"),
+                  trailing: Icon(Icons.arrow_forward),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
-    );
-  }
-  /// Builds the reports section of the navigation drawer.
-  ExpansionTile _reports() {
-    return ExpansionTile(
-      title: Text("Reports"),
-      children: <Widget>[
-        ListTile(
-            title: Text("Recent Receipts"),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages("recent")))),
-        ListTile(
-            title: Text("This Month"),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages("month")))),
-        ListTile(
-            title: Text("This Year"),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages("year")))),
-      ],
     );
   }
 
@@ -127,40 +127,40 @@ class _MyHomePageState extends State<MyHomePage> {
               final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
               final formatCurrency = new NumberFormat.simpleCurrency();
 
-              return
-              RaisedButton(
-                onPressed: () => Navigator.of(context).push(
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      new EditEntryPage(receipt: item))),
-                child:
-                Card(
-                child: Container(
-                height: 55,
-                  padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Flexible(
-                        child: Text(
-                          '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(fontSize: 18),
+                return
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        new EditEntryPage(receipt: item))),
+                  child:
+                  Card(
+                  child: Container(
+                  height: 55,
+                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               );
             },
           );
         } else {
           return Center(child: CircularProgressIndicator());
         }
-      },
+      }
     );
   }
 
