@@ -160,6 +160,24 @@ class ReceiptDatabaseProvider {
     return list;
   }
 
+  /// **Get All Receipts in date range**
+  ///
+  /// Use this method to retrieve a list of all receipts in the database.
+  ///
+  /// This method gathers the entire list of receipts found in the database and
+  /// returns them in a list ordered by the date of the receipt.
+  Future<List<Receipt>> getReceiptsInRange(int start, int end) async {
+    final db = await database;
+    final response = await db.query(
+      table,
+       where: "$date >= ? AND $date <= ?",
+      whereArgs: [start, end],
+    );
+    List<Receipt> list = response.map((c) => Receipt.fromMap(c)).toList();
+    list.sort((a, b) => b.receiptDate - a.receiptDate);
+    return list;
+  }
+
   /// **Delete Receipt**
   /// 
   /// Use this method to delete a receipt from the database.
