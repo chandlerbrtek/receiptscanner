@@ -24,6 +24,9 @@ class Budgets extends StatefulWidget {
   createState() => _BudgetListState();
 }
 
+/// State for the Budget Listing Page. The use of the state
+/// allows for the page to update to reflect dynamic changes
+/// to the budgets.
 class _BudgetListState extends State<Budgets> {
 
   @override
@@ -128,6 +131,7 @@ class _BudgetListState extends State<Budgets> {
     );
   }
 
+  /// Builds an add button for adding a new Budget.
   FloatingActionButton _addButton() {
     return FloatingActionButton(
       onPressed: () => Navigator.of(context).push(
@@ -146,8 +150,10 @@ class _BudgetListState extends State<Budgets> {
 /// Page for adding a new budget to the system.
 class AddBudget extends StatefulWidget {
 
+  /// Creates an AddBudget page.
   AddBudget({Key key}) : super(key: key);
 
+  /// The budget associated with this add budget page.
   final Budget budget = new Budget();
 
   @override
@@ -158,8 +164,10 @@ class AddBudget extends StatefulWidget {
 /// Page for editing an existing budget within the system.
 class EditBudget extends StatefulWidget {
 
+  /// The budget being edited by the page.
   final Budget budget;  
 
+  /// Constructor for the Edit Budget page. The [budget] is required.
   EditBudget({Key key, @required this.budget}) : super(key: key);
 
   @override
@@ -170,13 +178,33 @@ class EditBudget extends StatefulWidget {
 /// State for adding a new budget to the system.
 class _AddBudgetState extends State<AddBudget> {
 
+  /// The key for the budget state.
   final _formKey = GlobalKey<FormState>();
 
+  /// The date format for the start and end dates of the budget.
+  /// 
+  /// This format affects the display value of the date, not its
+  /// store value in the database.
   static final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
+
+  /// The controller for the start date of the budget.
+  /// 
+  /// This controller observes changes to the date value and
+  /// can be used to update the screen.
   final TextEditingController _startController = TextEditingController();
+
+  /// The controller for the end date of the budget.
+  /// 
+  /// This controller observes changes to the date value and
+  /// can be used to update the screen.
   final TextEditingController _endController = TextEditingController();
 
+  /// The budget's start date. This member holds the DateTime
+  /// reference for processing.
   DateTime _startDate;
+
+  /// The budget's end date. This member holds the DateTIme
+  /// reference for processing.
   DateTime _endDate;
 
   @override
@@ -250,6 +278,7 @@ class _AddBudgetState extends State<AddBudget> {
     );
   }
 
+  /// Creates a date picker pop-up and observes the selected date.
   Future<Null> _selectStartDate(BuildContext context) async {
     //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
     //https://stackoverflow.com/a/44991969
@@ -269,6 +298,7 @@ class _AddBudgetState extends State<AddBudget> {
     }
   }
 
+  /// Creates a date picker pop-up and observes the selected date.
   Future<Null> _selectEndDate(BuildContext context) async {
     //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
     //https://stackoverflow.com/a/44991969
@@ -288,6 +318,7 @@ class _AddBudgetState extends State<AddBudget> {
     }
   }
 
+  /// Sends the budget associated with the widget to the database.
   void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -308,14 +339,37 @@ class _AddBudgetState extends State<AddBudget> {
 /// State for editing an existing budget within the system.
 class _EditBudgetState extends State<EditBudget> {
 
+  /// The key for the budget state.
   final _formKey = GlobalKey<FormState>();
 
+  /// The date format for the start and end dates of the budget.
+  /// 
+  /// This format affects the display value of the date, not its
+  /// store value in the database.
   static final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
+
+  /// The controller for the start date of the budget.
+  /// 
+  /// This controller observes changes to the date value and
+  /// can be used to update the screen.
   final TextEditingController _startController = TextEditingController();
+
+  /// The controller for the end date of the budget.
+  /// 
+  /// This controller observes changes to the date value and
+  /// can be used to update the screen.
   final TextEditingController _endController = TextEditingController();
+
+  /// The number format for the total. This format interprets
+  /// the total from the database and prepares it for display.
   final formatCurrency = new NumberFormat.simpleCurrency();
 
+  /// The budget's start date. This member holds the DateTime
+  /// reference for processing.
   DateTime _startDate;
+
+  /// The budget's end date. This member holds the DateTIme
+  /// reference for processing.
   DateTime _endDate;
 
   @override
@@ -398,6 +452,7 @@ class _EditBudgetState extends State<EditBudget> {
     
   }
 
+  /// Validates that the amount provided by the user is a valid amount.
   String _validateAmount(String value) {
     Pattern pattern = r'^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?$';
     RegExp regex = RegExp(pattern);
@@ -407,6 +462,7 @@ class _EditBudgetState extends State<EditBudget> {
       return null;
   }
 
+  /// Creates a date picker pop-up and observes the selected date.
   Future<Null> _selectStartDate(BuildContext context) async {
     //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
     //https://stackoverflow.com/a/44991969
@@ -426,6 +482,7 @@ class _EditBudgetState extends State<EditBudget> {
     }
   }
 
+  /// Creates a date picker pop-up and observes the selected date.
   Future<Null> _selectEndDate(BuildContext context) async {
     //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
     //https://stackoverflow.com/a/44991969
@@ -445,6 +502,8 @@ class _EditBudgetState extends State<EditBudget> {
     }
   }
 
+  /// Send the updated budget associated with the widget to
+  /// the database.
   void _update() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -458,6 +517,8 @@ class _EditBudgetState extends State<EditBudget> {
     }
   }
 
+  /// Delete the budget associated with the widget from the
+  /// database.
   void _delete() {
     databaseAPI.deleteBudget(widget.budget.id);
   }
