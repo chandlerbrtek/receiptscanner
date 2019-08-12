@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import 'package:receipt/ImagePickerModal.dart';
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
 import 'package:receipt/data/db.dart';
 
 class ManualEntryPage extends StatelessWidget {
@@ -18,7 +18,7 @@ class ManualEntryPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: DateForm(
-            total: args.total,
+            prices: args.prices,
             date: args.date,
           ),
         ),
@@ -28,9 +28,9 @@ class ManualEntryPage extends StatelessWidget {
 }
 
 class DateForm extends StatefulWidget {
-  DateForm({Key key, this.total, this.date}) : super(key: key);
+  DateForm({Key key, this.prices, this.date}) : super(key: key);
 
-  final String total;
+  final List<String> prices;
   final DateTime date;
 
   @override
@@ -45,14 +45,25 @@ class _DateFormState extends State<DateForm> {
 
   DateTime _date;
   double _total;
+  String selectedPrice;
+  List<Widget> dropdownOptions;
+  String help;
 
   @override
   void initState() {
     super.initState();
 
     print('init:');
-    print(widget.date);
 
+    if (widget.prices != null) {
+      this.selectedPrice = widget.prices.last;
+      this.dropdownOptions = widget.prices
+          .map((label) => DropdownMenuItem(
+                child: Text(label),
+                value: label,
+              ))
+          .toList();
+    }
     _date = widget.date ?? DateTime.now();
     _controller.text = dateFormat.format(_date);
   }
@@ -94,12 +105,35 @@ class _DateFormState extends State<DateForm> {
 
       print('Receipt generated:');
       print(receipt.toMap());
-      receiptAPI.addReceipt(receipt);
+      databaseAPI.addReceipt(receipt);
 
       Navigator.pop(context);
     } else {
       print('Not submitted...');
     }
+  }
+
+  Widget totalWidget() {
+    if (widget.prices == null)
+      return TextFormField(
+        decoration: InputDecoration(labelText: 'Total:'),
+        autovalidate: true,
+        validator: _validateTotal,
+        onSaved: (input) => setState(() => _total = double.parse(input)),
+      );
+    return ButtonTheme(
+      alignedDropdown: true,
+      child: DropdownButtonFormField(
+        decoration: InputDecoration(
+          labelText: 'Total',
+          prefixText: '\$',
+        ),
+        value: this.selectedPrice,
+        items: dropdownOptions,
+        onChanged: (input) => setState(() => this.selectedPrice = input),
+        onSaved: (input) => setState(() => _total = double.parse(input)),
+      ),
+    );
   }
 
   @override
@@ -109,13 +143,7 @@ class _DateFormState extends State<DateForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          TextFormField(
-            initialValue: widget.total,
-            decoration: InputDecoration(labelText: 'Total:'),
-            autovalidate: true,
-            validator: _validateTotal,
-            onSaved: (input) => setState(() => _total = double.parse(input)),
-          ),
+          totalWidget(),
           TextField(
             decoration: InputDecoration(labelText: 'Date:'),
             controller: _controller,

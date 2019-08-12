@@ -66,16 +66,16 @@ class ImagePickerModal extends StatelessWidget {
             // It does not accomodate for thousands separators.
             // For ex. '4',  '4.00-' and '4,000.00' are rejected
 
-            List<String> prices = [];
+            Set<String> _prices = new Set();
             RegExp exp = RegExp(r"\b\d+\.\d{2}\b");
             Iterable<Match> matches = exp.allMatches(text);
             for (Match m in matches) {
               String match = m.group(0).trim();
-              prices.add(match);
+              _prices.add(match);
             }
 
             //price found
-            if (prices.length != 0) {
+            if (_prices.length != 0) {
               //PROBLEMS:
               // Some scans confuse periods for commas or insert random spaces
               // Also had some '$' signs confused for a 9
@@ -85,6 +85,7 @@ class ImagePickerModal extends StatelessWidget {
                 return int.parse(str.replaceAll('.', ''));
               }
 
+              List<String> prices = _prices.toList();
               prices.sort((a, b) => parseInt(a) - parseInt(b));
               print('Prices found (asc):');
               print(prices);
@@ -93,7 +94,7 @@ class ImagePickerModal extends StatelessWidget {
               // Navigator.popAndPushNamed(context, '/parsePreview',
               //     arguments: ParsePreviewArguments(prices.toString(), text));
 
-              args.setTotal(prices.last);
+              args.setPrices(prices);
             }
 
             List<DateTime> dates = [];
@@ -140,14 +141,14 @@ class ImagePickerModal extends StatelessWidget {
 }
 
 class ManualEntryArgs {
-  String total;
+  List<String> prices;
   DateTime date;
 
   ManualEntryArgs()
-      : this.total = null,
+      : this.prices = null,
         this.date = null;
 
-  setTotal(String total) => this.total = total;
+  setPrices(List<String> prices) => this.prices = prices;
   setDate(DateTime date) => this.date = date;
 }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
 import 'package:receipt/main.dart';
 
 class Report_pages extends StatelessWidget {
@@ -12,12 +12,20 @@ class Report_pages extends StatelessWidget {
   final Color _fontColor = Color(0xffffffff);
   final double _smallFontSpacing = 1.3;
   final Color _backgroundColor = Color(0xff303030);
+  static final DateTime _dateTime = DateTime.now();
+  static final List<int> finalDayOfMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  final int _beginYear = DateTime(_dateTime.year, 1, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+  final int _endYear = DateTime(_dateTime.year + 1, 1, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+  final int _beginMonth = DateTime(_dateTime.year, _dateTime.month, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+  final int _endMonth = DateTime(_dateTime.year, _dateTime.month, finalDayOfMonth[_dateTime.month - 1], 0, 0, 0, 0, 0).millisecondsSinceEpoch;
   final headerStyle = TextStyle(
       fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xffffffff));
 
   final String state;
+  final int customStart;
+  final int customEnd;
 
-  Report_pages(this.state);
+  Report_pages(this.state, this.customStart, this.customEnd);
 
   @override
   Widget build(BuildContext context) {
@@ -128,16 +136,51 @@ class Report_pages extends StatelessWidget {
 
             ///Month will search within the month
             if (state == "month")
-              RecordItem(
-                  fontColor: _fontColor,
-                  smallFontSpacing: _smallFontSpacing,
-                  day: "month"),
-            //Year will search within the year
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[Text('month', style: headerStyle)],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginMonth, end: _endMonth))],
+                  ),
+                ],
+              ),
+
+              ///Year will search within the year
             if (state == "year")
-              RecordItem(
-                  fontColor: _fontColor,
-                  smallFontSpacing: _smallFontSpacing,
-                  day: "year"),
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[Text('year', style: headerStyle)],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginYear, end: _endYear))],
+                  ),
+                ],
+              ),
+
+            ///Year will search within a custom range
+            if (state == "custom")
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[Text('custom', style: headerStyle)],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: <Widget>[Expanded(child: ReceiptsInRange(start: customStart, end: customEnd))],
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -153,7 +196,38 @@ class RecentReceipts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Receipt>>(
-        future: receiptAPI.getAllReceipts(),
+        future: databaseAPI.getAllReceipts(),
+        builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    _Receipt(receipt: snapshot.data[index]));
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
+  }
+}
+
+class ReceiptsInRange extends StatelessWidget {
+  const ReceiptsInRange({
+    Key key,
+    int start,
+    int end
+  }) : _start = start,
+        _end = end,
+        super(key: key);
+
+  final int _start;
+  final int _end;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Receipt>>(
+        future: databaseAPI.getReceiptsInRange(_start, _end),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
