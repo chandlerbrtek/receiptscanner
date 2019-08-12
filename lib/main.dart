@@ -27,6 +27,10 @@ class MyApp extends StatelessWidget {
         '/parsePreview': (context) => ParsePreview(),
         '/manualEntry': (context) => ManualEntryPage(),
         Budgets.ROUTE: (context) => Budgets(),
+        '/reports/recent': (context) => Report_pages("recent", 0, 0),
+        '/reports/month': (context) => Report_pages("month", 0, 0),
+        '/reports/year' : (context) => Report_pages("year", 0, 0),
+        '/reports/custom' : (context) => DateRangeSelection(),
       },
     );
   }
@@ -91,30 +95,23 @@ class _MyHomePageState extends State<MyHomePage> {
         ListTile(
             title: Text("Recent Receipts"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages("recent", 0, 0)))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/reports/recent'),
+        ),
         ListTile(
             title: Text("This Month"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages("month", 0, 0)))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/reports/month'),
+        ),
         ListTile(
             title: Text("This Year"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages("year", 0, 0)))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/reports/year'),
+        ),
         ListTile(
             title: Text("Custom Range"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (context) => DateRangeSelection()))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/repots/custom')
+          ),
       ],
     );
   }
@@ -142,29 +139,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () => Navigator.of(context).push(
                     new MaterialPageRoute(
                         builder: (BuildContext context) =>
-                        new EditEntryPage(receipt: item))),
-                  child:
-                  Card(
-                  child: Container(
-                  height: 55,
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
+                        new EditEntryPage(receipt: item))
                     ),
-                  ),
-                ),
-              );
+                  child:
+                    Card(
+                      child: Container(
+                        height: 55,
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 18),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                      ),
+                  );
+              
             },
           );
         } else {
