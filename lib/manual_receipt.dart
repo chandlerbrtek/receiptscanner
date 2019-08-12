@@ -68,6 +68,8 @@ class _DateFormState extends State<DateForm> {
     _controller.text = dateFormat.format(_date);
   }
 
+  /// This method handles the logic of selecting a date, displaying a date
+  /// selection tool and recording the selection with the manual entry page.
   Future<Null> _selectDate(BuildContext context) async {
     //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
     //https://stackoverflow.com/a/44991969
@@ -96,6 +98,7 @@ class _DateFormState extends State<DateForm> {
       return null;
   }
 
+  /// Add the receipt to the database.
   void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();

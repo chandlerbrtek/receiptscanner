@@ -5,9 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 
+/// The modal for entering a new receipt in the application. This
+/// modal appears on the bottom of the screen and provides three
+/// options for adding a new receipt:
+/// 
+/// - Take Photo
+/// 
+/// - Use Photo
+/// 
+/// - Enter Manually
 class ImagePickerModal extends StatelessWidget {
   static final dateFormats = [DateFormat("M/d/y"), DateFormat("MMM d y")];
 
+  /// The implementing logic for retrieving an image either from
+  /// the device's camera or its file system.
   Future _getImage(ImageSource src) async {
     final File image = await ImagePicker.pickImage(source: src);
 
@@ -32,11 +43,15 @@ class ImagePickerModal extends StatelessWidget {
     return text;
   }
 
+  /// The take new photo option. This method implements the logic for
+  /// taking a new photo of a receipt.
   Future _takePhoto() async {
     print('take picture');
     return _getImage(ImageSource.camera);
   }
 
+  /// The use existing photo option. This method implements the logic
+  /// for using a photo existing on the device's file system.
   Future _selectPhoto() async {
     print('select picture');
     return _getImage(ImageSource.gallery);
