@@ -15,6 +15,8 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 /// 
 /// - Enter Manually
 class ImagePickerModal extends StatelessWidget {
+
+  /// Date Formats for the image picker.
   static final dateFormats = [DateFormat("M/d/y"), DateFormat("MMM d y")];
 
   /// The implementing logic for retrieving an image either from
@@ -31,6 +33,8 @@ class ImagePickerModal extends StatelessWidget {
     }
   }
 
+  /// Function for parsing an image. Takes image selected by the user and scans
+  /// it using Firebase Vision.
   Future _parseImage(File img) async {
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(img);
     final TextRecognizer textRecognizer =
@@ -155,6 +159,8 @@ class ImagePickerModal extends StatelessWidget {
   }
 }
 
+/// Arguments used to populate the manual entry page. These values populate
+/// the manual entry page when it's invoked.
 class ManualEntryArgs {
   List<String> prices;
   DateTime date;
@@ -163,17 +169,27 @@ class ManualEntryArgs {
       : this.prices = null,
         this.date = null;
 
+  /// Setter for the prices list.
   setPrices(List<String> prices) => this.prices = prices;
+
+  /// Setter for the date.
   setDate(DateTime date) => this.date = date;
 }
 
+/// The preview arguments for the prices.
 class ParsePreviewArguments {
+  
+  /// The prices.
   final String prices;
+
+  /// The text for the preview.
   final String text;
 
+  /// Standard construtor for the arguments object.
   ParsePreviewArguments(this.prices, this.text);
 }
 
+/// Parse Preview object for viewing the parsed totals.
 class ParsePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -204,14 +220,20 @@ class ParsePreview extends StatelessWidget {
   }
 }
 
+/// Padded card containing text.
 class PaddedCard extends StatelessWidget {
+
+  /// Constructor for setting the card's text and alignment.
   const PaddedCard({
     Key key,
     @required this.text,
     this.alignment,
   }) : super(key: key);
 
+  /// The text to hold within the padded card.
   final String text;
+
+  /// The alignment of the card.
   final MainAxisAlignment alignment;
 
   @override
