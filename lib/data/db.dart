@@ -5,38 +5,71 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
 
-/// **Receipt API**
+/// **Database API**
 /// 
 /// The receiptAPI is the endpoint for interacting with the Receipt
-/// Scanner database. Use this object to modify any data with the application.
-final receiptAPI = ReceiptDatabaseProvider.db;
+/// Scanner database. Use this object to modify any data within the application.
+final databaseAPI = DatabaseProvider.db;
 
-class ReceiptDatabaseProvider {
-  /// The label for the receipt table in the database.
-  static const String table = "Receipt";
-
-  /// The id label for a receipt within the receipt table.
+/// Handles all matters relevant to the database. Creating and
+/// accessing the database are handled by the provider. Names
+/// for the tables and their fields are also available within the
+/// provider. To access the databse, use the [databaseAPI] available
+/// within the [db] package.
+class DatabaseProvider {
+  /// The id label for an entry within the database's tables.
   static const String id = "id";
 
+  /// The label for the receipt table in the database.
+  static const String receiptTable = "Receipt";
+
   /// The total label for a receipt within the receipt table.
-  static const String total = "total";
+  static const String receiptTotal = "total";
 
   /// The date label for a receipt within the receipt table.
-  static const String date = "receiptDate";
+  static const String receiptDate = "receiptDate";
 
-  ReceiptDatabaseProvider._();
+  /// The label for the budget table in the database.
+  static const String budgetTable = "budget";
 
-  static final ReceiptDatabaseProvider db = ReceiptDatabaseProvider._();
+  /// The label for the budget name in the database.
+  static const String budgetName = "name";
+
+  /// The label for the budget amount in the database.
+  static const String budgetAmount = "amount";
+
+  /// The label for the start date in the database.
+  static const String budgetStart = "start";
+
+  /// The label for the end date in the database.
+  static const String budgetEnd = "end";
+
+  /// The label for the budget progress in the database.
+  static const String budgetProgress = "progress";
+
+  /// Method for singleton instatiation of the DatbaseProvider.
+  DatabaseProvider._();
+
+  /// Singleton refernce of the DatabaseProvider for the application.
+  static final DatabaseProvider db = DatabaseProvider._();
+
+  /// Private member for holding the database reference.
   Database _database;
 
+  /// Method for retrieving the database instance.
   Future<Database> get database async {
     if (_database != null) return _database;
     _database = await getDatabaseInstance();
     return _database;
   }
 
+  /// Provides the database for use within the application.
+  /// 
+  /// This method handles the connection with the database. It
+  /// creates the database when necessary and provides a connection
+  /// to an existing database whenever possible.
   static Future<Database> getDatabaseInstance() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, "receipt.db");
@@ -44,16 +77,59 @@ class ReceiptDatabaseProvider {
       path,
       version: 1,
       onCreate: (Database db, int version) async {
-        await db.execute("CREATE TABLE $table ("
+        await db.execute("CREATE TABLE $receiptTable ("
             "$id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            "$total INTEGER, "
-            "$date INTEGER"
+            "$receiptTotal INTEGER, "
+            "$receiptDate INTEGER"
             // "createDate INTEGER,"
             // "modificationDate INTEGER"
             ");");
-      },
+
+        await db.execute("CREATE TABLE $budgetTable ("
+            "$id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "$budgetName STRING NOT NULL, "
+            "$budgetAmount INTEGER NOT NULL, "
+            "$budgetStart INTEGER NOT NULL, "
+            "$budgetEnd INTEGER NOT NULL, "
+            "$budgetProgress INTEGER NOT NULL"
+            ");");
+        
+        _initDatabase(db);
+      }
     );
   }
+
+  /// This method fills the database with its initial, pre-loaded data.
+  static _initDatabase(Database db) async {
+    DateTime startOfYear =  new DateTime(DateTime.now().year, 1, 1);
+    DateTime endOfYear = new DateTime(DateTime.now().year + 1, 1, 0);
+    DateTime startOfMonth = new DateTime(DateTime.now().year, DateTime.now().month, 1);
+    DateTime endOfMonth = new DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+    
+    await db.insert(
+        budgetTable,
+        new Budget(
+          name: "Annual Budget",
+          amount: 120000,
+          progress: 0,
+          start: startOfYear.millisecondsSinceEpoch,
+          end: endOfYear.millisecondsSinceEpoch,
+        ).toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace
+      );
+        
+    await db.insert(
+        budgetTable,
+        new Budget(
+          name: "Monthly Budget",
+          amount: 10000,
+          progress: 0,
+          start: startOfMonth.millisecondsSinceEpoch,
+          end: endOfMonth.millisecondsSinceEpoch,
+        ).toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace
+      );
+    }
 
   /// **Add Receipt**
   /// 
@@ -86,10 +162,11 @@ class ReceiptDatabaseProvider {
   Future<Receipt> addReceipt(Receipt receipt) async {
     final db = await database;
     receipt.id = await db.insert(
-      table,
+      receiptTable,
       receipt.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    updateBudgetsProgress();
     return receipt;
   }
 
@@ -122,12 +199,14 @@ class ReceiptDatabaseProvider {
   /// }
   Future<int> updateReceipt(Receipt receipt) async {
     final db = await database;
-    return await db.update(
-      table,
+    int resp = await db.update(
+      receiptTable,
       receipt.toMap(),
       where: "$id = ?",
       whereArgs: [receipt.id],
     );
+    updateBudgetsProgress();
+    return resp;
   }
 
   /// **Get Receipt**
@@ -139,7 +218,7 @@ class ReceiptDatabaseProvider {
   Future<Receipt> getReceipt(int getId) async {
     final db = await database;
     final response = await db.query(
-      table,
+      receiptTable,
       where: "$id = ?",
       whereArgs: [getId],
     );
@@ -154,7 +233,7 @@ class ReceiptDatabaseProvider {
   /// returns them in a list ordered by the date of the receipt.
   Future<List<Receipt>> getAllReceipts() async {
     final db = await database;
-    final response = await db.query(table);
+    final response = await db.query(receiptTable);
     List<Receipt> list = response.map((c) => Receipt.fromMap(c)).toList();
     list.sort((a, b) => b.receiptDate - a.receiptDate);
     return list;
@@ -169,8 +248,8 @@ class ReceiptDatabaseProvider {
   Future<List<Receipt>> getReceiptsInRange(int start, int end) async {
     final db = await database;
     final response = await db.query(
-      table,
-       where: "$date >= ? AND $date <= ?",
+      receiptTable,
+      where: "$receiptDate >= ? AND $receiptDate <= ?",
       whereArgs: [start, end],
     );
     List<Receipt> list = response.map((c) => Receipt.fromMap(c)).toList();
@@ -187,7 +266,7 @@ class ReceiptDatabaseProvider {
   Future<int> deleteReceipt(int deleteId) async {
     final db = await database;
     return db.delete(
-      table,
+      receiptTable,
       where: "$id = ?",
       whereArgs: [deleteId],
     );
@@ -201,6 +280,95 @@ class ReceiptDatabaseProvider {
   /// and therefore should only be done conscientiously.
   Future<int> deleteAllReceipts() async {
     final db = await database;
-    return db.delete(table);
+    return db.delete(receiptTable);
+  }
+
+  /// **Add Budget**
+  /// 
+  /// Use this method to add a new budget to the database.
+  /// 
+  /// The ID will be automatically generated for the budget. If you provide
+  /// an id within the [budget], that ID will be used by the database.
+  Future<int> addBudget(Budget budget) async {
+    final Database db = await database;
+    return db.insert(
+      budgetTable,
+      budget.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace
+    );
+  }
+
+  /// **Update A Budget**
+  /// 
+  /// Use this method to update an existing budget within the database.
+  /// 
+  /// The [budget] needs to contain the id of an existing budget within
+  /// the database. Furthermore, the budget in the database with the given
+  /// id will be overwritten with all values found on the budget object,
+  /// inclusive of null and empty values.
+  Future<int> updateBudget(Budget budget) async {
+    final db = await database;
+    return db.update(
+      budgetTable,
+      budget.toMap(),
+      where: "$id = ?",
+      whereArgs: [budget.id],
+      );
+  }
+
+  /// **Get All Budgets**
+  /// 
+  /// Use this method to retrieve all budgets from the database.
+  /// 
+  /// This method queries the budgets table for all budgets and then returns
+  /// them in a list sorted by their IDs.
+  Future<List<Budget>> getAllBudgets() async {
+    final db = await database;
+    final response = await db.query(budgetTable, orderBy: id);
+    List<Budget> list = response.map((c) => Budget.fromMap(c)).toList();
+    // for (Budget budget in list) {
+    //   budget.progress = progressOfBudget(budget);
+    // }
+    return list;
+  }
+
+  /// **Delete Budget**
+  /// 
+  /// Use this method to delete a budget from the database.
+  /// 
+  /// The [budgetId] must reference the ID of the budget you wish to delete
+  /// from the database.
+  Future<int> deleteBudget(int budgetId) async {
+    final db = await database;
+    return db.delete(
+      budgetTable,
+      where: "$id = ?",
+      whereArgs: [budgetId]
+    );
+  }
+
+  /// Updates the progress of all budgets.
+  /// 
+  /// TODO make this process not as taxing. Probably will need a
+  /// better design than using these methods.
+  updateBudgetsProgress() async {
+    for (Budget budget in await databaseAPI.getAllBudgets()) {
+      updateBudgetProgress(budget);
+    }
+  }
+
+  /// Updates the progress of a specific budget.
+  updateBudgetProgress(Budget budget) async {
+    budget.progress = await progressOfBudget(budget);
+    databaseAPI.updateBudget(budget);
+  }
+
+  /// Calculates the current progress of a budget.
+  Future<int> progressOfBudget(Budget budget) async {
+    int sum = 0;
+    for (Receipt receipt in await databaseAPI.getReceiptsInRange(budget.start, budget.end)) {
+      sum += receipt.total;
+    }
+    return sum;
   }
 }

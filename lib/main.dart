@@ -4,10 +4,11 @@ import 'package:receipt/DateRangeSelection.dart';
 import 'package:receipt/EditEntry.dart';
 
 import 'package:receipt/data/db.dart';
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
 import 'package:receipt/ImagePickerModal.dart';
 import './pages/report_pages.dart';
 import 'package:receipt/ManualEntry.dart';
+import 'package:receipt/pages/budget_pages.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => MyHomePage(title: 'Receipt Scanner'),
         '/parsePreview': (context) => ParsePreview(),
         '/manualEntry': (context) => ManualEntryPage(),
+        Budgets.ROUTE: (context) => Budgets(),
       },
     );
   }
@@ -48,8 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
     print(_receipts);
   }
 
+  /// Retrieves the receipts within the database.
   Future<List<Receipt>> _fetch() {
-    return receiptAPI.getAllReceipts();
+    return databaseAPI.getAllReceipts();
   }
 
   @override
@@ -58,68 +61,80 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            ExpansionTile(
-              title: Text("Reports"),
-              children: <Widget>[
-                ListTile(
-                    title: Text("Recent Receipts"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new Report_pages("recent", 0, 0)))),
-                ListTile(
-                    title: Text("This Month"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new Report_pages("month", 0, 0)))),
-                ListTile(
-                    title: Text("This Year"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new Report_pages("year", 0, 0)))),
-                ListTile(
-                    title: Text("Custom Range"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (context) => DateRangeSelection()))),
-              ],
-            ),
-            ExpansionTile(
-              title: Text("Budgeting"),
-              children: <Widget>[
-                ListTile(
-                  title: Text("Placeholder"),
-                  trailing: Icon(Icons.arrow_forward),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-      body: FutureBuilder<List<Receipt>>(
-        future: _fetch(),
-        builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
-          if (snapshot.hasData) {
-            final length = snapshot.data.length;
-            return ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: length,
-              itemBuilder: (BuildContext context, int index) {
-                final Receipt item = snapshot.data[index];
+      body: _receiptList(),
+      drawer: _drawer(),
+      floatingActionButton: _addButton(),
+    );
+  }
 
-                final DateTime date =
-                    DateTime.fromMillisecondsSinceEpoch(item.receiptDate);
-                final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
-                final formatCurrency = new NumberFormat.simpleCurrency();
+  /// Builds & returns the application's navigation drawer.
+  Drawer _drawer() {
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          _reports(),
+          ListTile(
+            title: Text("Budgets"),
+            trailing: Icon(Icons.assessment),
+            onTap: () => Budgets.view(context),
+          )
+        ],
+      ),
+    );
+  }
+  /// Builds the reports section of the navigation drawer.
+  ExpansionTile _reports() {
+    return ExpansionTile(
+      title: Text("Reports"),
+      children: <Widget>[
+        ListTile(
+            title: Text("Recent Receipts"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        new Report_pages("recent", 0, 0)))),
+        ListTile(
+            title: Text("This Month"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        new Report_pages("month", 0, 0)))),
+        ListTile(
+            title: Text("This Year"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        new Report_pages("year", 0, 0)))),
+        ListTile(
+            title: Text("Custom Range"),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () => Navigator.of(context).push(
+                new MaterialPageRoute(
+                    builder: (context) => DateRangeSelection()))),
+      ],
+    );
+  }
+
+  /// Builds the receipt list for the home page.
+  FutureBuilder<List<Receipt>> _receiptList() {
+    return FutureBuilder<List<Receipt>>(
+      future: _fetch(),
+      builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
+        if (snapshot.hasData) {
+          final length = snapshot.data.length;
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            itemCount: length,
+            itemBuilder: (BuildContext context, int index) {
+              final Receipt item = snapshot.data[index];
+
+              final DateTime date =
+                  DateTime.fromMillisecondsSinceEpoch(item.receiptDate);
+              final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
+              final formatCurrency = new NumberFormat.simpleCurrency();
 
                 return
                 InkWell(
@@ -148,21 +163,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                );
-              },
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+              );
+            },
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      }
+    );
+  }
+
+  /// Builds the add new receipt button for the home page.
+  FloatingActionButton _addButton() {
+    return FloatingActionButton(
+      onPressed: () => showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) => ImagePickerModal(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showModalBottomSheet(
-          context: context,
-          builder: (BuildContext context) => ImagePickerModal(),
-        ),
-        child: Icon(Icons.add),
-      ),
+      child: Icon(Icons.add),
     );
   }
 }

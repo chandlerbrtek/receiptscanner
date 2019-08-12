@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
+import 'package:receipt/main.dart';
 
 class Report_pages extends StatelessWidget {
   final double _smallFontSize = 12;
@@ -194,7 +195,7 @@ class RecentReceipts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Receipt>>(
-        future: receiptAPI.getAllReceipts(),
+        future: databaseAPI.getAllReceipts(),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -225,7 +226,7 @@ class ReceiptsInRange extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Receipt>>(
-        future: receiptAPI.getReceiptsInRange(_start, _end),
+        future: databaseAPI.getReceiptsInRange(_start, _end),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
