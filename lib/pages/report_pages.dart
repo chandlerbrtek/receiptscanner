@@ -9,8 +9,9 @@ class Report_pages extends StatelessWidget {
   final double _valFontSize = 30;
   final FontWeight _smallFontWeight = FontWeight.w500;
   final FontWeight _valFontWeight = FontWeight.w700;
-  final Color _fontColor = Color(0xff5b6990);
+  final Color _fontColor = Color(0xffffffff);
   final double _smallFontSpacing = 1.3;
+  final Color _backgroundColor = Color(0xff303030);
   static final DateTime _dateTime = DateTime.now();
   static final List<int> finalDayOfMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   final int _beginYear = DateTime(_dateTime.year, 1, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
@@ -18,7 +19,7 @@ class Report_pages extends StatelessWidget {
   final int _beginMonth = DateTime(_dateTime.year, _dateTime.month, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
   final int _endMonth = DateTime(_dateTime.year, _dateTime.month, finalDayOfMonth[_dateTime.month - 1], 0, 0, 0, 0, 0).millisecondsSinceEpoch;
   final headerStyle = TextStyle(
-      fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xff5b6990));
+      fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xffffffff));
 
   final String state;
   final int customStart;
@@ -31,7 +32,7 @@ class Report_pages extends StatelessWidget {
     return Material(
       type: MaterialType.transparency,
       child: new Container(
-        decoration: new BoxDecoration(color: Colors.white),
+        decoration: new BoxDecoration(color: _backgroundColor),
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
         alignment: Alignment.topCenter,
         child: ListView(
@@ -77,7 +78,7 @@ class Report_pages extends StatelessWidget {
                   height: 200,
                   width: 200,
                   decoration: BoxDecoration(
-                      color: Color(0xfff0f5fb),
+                      color: Color(0xff525252),
                       border: Border.all(
                         width: 8,
                         color: Color(0xffd3e1ed),
