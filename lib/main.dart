@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:receipt/EditEntry.dart';
+
+import 'package:receipt/edit_receipt.dart';
+import 'package:receipt/scan_receipt.dart';
+import 'package:receipt/manual_receipt.dart';
 
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
-import 'package:receipt/ImagePickerModal.dart';
-import './pages/report_pages.dart';
-import 'package:receipt/ManualEntry.dart';
+
+import 'package:receipt/pages/report_pages.dart';
 import 'package:receipt/pages/budget_pages.dart';
 
+/// Entry endpoint for the application. Launches the
+/// app.
 void main() => runApp(MyApp());
 
+/// Entry class for the receipt scanner application.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Home Page class for the application.
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -40,6 +46,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+/// Default state for the home page on the app.
 class _MyHomePageState extends State<MyHomePage> {
   Future<List<Receipt>> _receipts;
 
