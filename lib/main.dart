@@ -11,22 +11,11 @@ import 'package:receipt/data/models.dart';
 import 'package:receipt/pages/report_pages.dart';
 import 'package:receipt/pages/budget_pages.dart';
 
-<<<<<<< HEAD
 /// Entry endpoint for the application. Launches the
 /// app.
 void main() => runApp(MyApp());
 
 /// Entry class for the receipt scanner application.
-=======
-/// Starts the Receipt Scanner Application.
-void main() => runApp(MyApp());
-
-/// Top level class for the Receipt Scanner Application.
-/// 
-/// Definition for the Receipt Scanner Application. This class defines the home page
-/// and the application information for use on the OS. The theme data is also defined
-/// within this class.
->>>>>>> 1caee3c7e1ed2440a2cc37a64045b35f969ddcd8
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -47,12 +36,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-<<<<<<< HEAD
 /// Home Page class for the application.
-=======
-/// Homepage for the Receipt Scanner Application. This page is the bottom layer of
-/// the Receipt Scanner's widget stack.
->>>>>>> 1caee3c7e1ed2440a2cc37a64045b35f969ddcd8
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -62,12 +46,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-<<<<<<< HEAD
 /// Default state for the home page on the app.
-=======
-/// The state of the home page. This state defines the layout and functionality of the
-/// application's home page.
->>>>>>> 1caee3c7e1ed2440a2cc37a64045b35f969ddcd8
 class _MyHomePageState extends State<MyHomePage> {
   Future<List<Receipt>> _receipts;
 
