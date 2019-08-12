@@ -52,6 +52,8 @@
     <h5>report_pages library</h5>
     <ol>
       <li class="section-title"><a href="pages_report_pages/pages_report_pages-library.html#classes">Classes</a></li>
+      <li><a href="pages_report_pages/DateForm-class.html">DateForm</a></li>
+      <li><a href="pages_report_pages/DateRangeSelection-class.html">DateRangeSelection</a></li>
       <li><a href="pages_report_pages/GraphPainter-class.html">GraphPainter</a></li>
       <li><a href="pages_report_pages/ReceiptsInRange-class.html">ReceiptsInRange</a></li>
       <li><a href="pages_report_pages/RecentReceipts-class.html">RecentReceipts</a></li>
@@ -70,8 +72,8 @@
       <div><h1><span class="kind-class">Report_pages</span> class </h1></div>
 
     <section class="desc markdown">
-      <p>All Report Pages are configured with this view object. The
-argued data will determine the view of the screen.</p>
+      <p>The Report_pages serve as the view model for reports. All
+report types are displayed using the this model.</p>
     </section>
     
 
@@ -83,7 +85,7 @@ argued data will determine the view of the screen.</p>
           <span class="name"><a href="pages_report_pages/Report_pages/Report_pages.html">Report_pages</a></span><span class="signature">(<span class="parameter" id="-param-state"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">state</span>, </span> <span class="parameter" id="-param-customStart"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">customStart</span>, </span> <span class="parameter" id="-param-customEnd"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">customEnd</span></span>)</span>
         </dt>
         <dd>
-          
+          Constructor for creating the report page.
         </dd>
       </dl>
     </section>
@@ -97,7 +99,7 @@ argued data will determine the view of the screen.</p>
           <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>         
         </dt>
         <dd>
-          
+          The value for the report end range.
                   <div class="features">final</div>
 </dd>
         <dt id="customStart" class="property">
@@ -105,7 +107,7 @@ argued data will determine the view of the screen.</p>
           <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>         
         </dt>
         <dd>
-          
+          The value for the report start range.
                   <div class="features">final</div>
 </dd>
         <dt id="headerStyle" class="property">
@@ -113,7 +115,7 @@ argued data will determine the view of the screen.</p>
           <span class="signature">&#8594; TextStyle</span>         
         </dt>
         <dd>
-          
+          The style for the report page header.
                   <div class="features">final</div>
 </dd>
         <dt id="state" class="property">
@@ -121,7 +123,7 @@ argued data will determine the view of the screen.</p>
           <span class="signature">&#8594; <a href="dart-core/String-class.html">String</a></span>         
         </dt>
         <dd>
-          
+          The name of the page state.
                   <div class="features">final</div>
 </dd>
         <dt id="hashCode" class="property inherited">
@@ -273,7 +275,7 @@ tools and by <a href="pages_report_pages/Report_pages/toStringDeep.html">Diagnos
           <span class="signature">&#8594; <a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span>         
         </dt>
         <dd>
-          
+          The last day of each month.
                   <div class="features">final</div>
 </dd>
       </dl>

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the ReceiptsInRange class from the report_pages library, for the Dart programming language.">
-  <title>ReceiptsInRange class - report_pages library - Dart API</title>
+  <meta name="description" content="API docs for the DateForm class from the report_pages library, for the Dart programming language.">
+  <title>DateForm class - report_pages library - Dart API</title>
   <!-- required because all the links are pseudo-absolute -->
   <base href="..">
 
@@ -26,9 +26,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="index.html">receipt</a></li>
     <li><a href="pages_report_pages/pages_report_pages-library.html">report_pages</a></li>
-    <li class="self-crumb">ReceiptsInRange class</li>
+    <li class="self-crumb">DateForm class</li>
   </ol>
-  <div class="self-name">ReceiptsInRange</div>
+  <div class="self-name">DateForm</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,7 +46,7 @@
     <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
       <li><a href="index.html">receipt</a></li>
       <li><a href="pages_report_pages/pages_report_pages-library.html">report_pages</a></li>
-      <li class="self-crumb">ReceiptsInRange class</li>
+      <li class="self-crumb">DateForm class</li>
     </ol>
     
     <h5>report_pages library</h5>
@@ -69,10 +69,10 @@
   </div>
 
   <div id="dartdoc-main-content" class="col-xs-12 col-sm-9 col-md-8 main-content">
-      <div><h1><span class="kind-class">ReceiptsInRange</span> class </h1></div>
+      <div><h1><span class="kind-class">DateForm</span> class </h1></div>
 
     <section class="desc markdown">
-      <p>View model for a list of receipts within a report range.</p>
+      <p>Object model for handling the start and end dates for a custom report.</p>
     </section>
     
 
@@ -80,20 +80,35 @@
       <h2>Constructors</h2>
 
       <dl class="constructor-summary-list">
-        <dt id="ReceiptsInRange" class="callable">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/ReceiptsInRange.html">ReceiptsInRange</a></span><span class="signature">({<span class="parameter" id="-param-key"><span class="type-annotation">Key</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="-param-start"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">start</span>, </span> <span class="parameter" id="-param-end"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">end</span></span> })</span>
+        <dt id="DateForm" class="callable">
+          <span class="name"><a href="pages_report_pages/DateForm/DateForm.html">DateForm</a></span><span class="signature">({<span class="parameter" id="-param-key"><span class="type-annotation">Key</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="-param-startDate"><span class="type-annotation"><a href="dart-core/DateTime-class.html">DateTime</a></span> <span class="parameter-name">startDate</span>, </span> <span class="parameter" id="-param-endDate"><span class="type-annotation"><a href="dart-core/DateTime-class.html">DateTime</a></span> <span class="parameter-name">endDate</span></span> })</span>
         </dt>
         <dd>
-          
-          <div class="constructor-modifier features">const</div>
+          Standard constructor for the date form model.
         </dd>
       </dl>
     </section>
 
-    <section class="summary offset-anchor inherited" id="instance-properties">
+    <section class="summary offset-anchor" id="instance-properties">
       <h2>Properties</h2>
 
       <dl class="properties">
+        <dt id="endDate" class="property">
+          <span class="name"><a href="pages_report_pages/DateForm/endDate.html">endDate</a></span>
+          <span class="signature">&#8594; <a href="dart-core/DateTime-class.html">DateTime</a></span>         
+        </dt>
+        <dd>
+          The end date for the form.
+                  <div class="features">final</div>
+</dd>
+        <dt id="startDate" class="property">
+          <span class="name"><a href="pages_report_pages/DateForm/startDate.html">startDate</a></span>
+          <span class="signature">&#8594; <a href="dart-core/DateTime-class.html">DateTime</a></span>         
+        </dt>
+        <dd>
+          The start date for the form.
+                  <div class="features">final</div>
+</dd>
         <dt id="hashCode" class="property inherited">
           <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
           <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>         
@@ -103,11 +118,11 @@
                   <div class="features">read-only, inherited</div>
 </dd>
         <dt id="key" class="property inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/key.html">key</a></span>
+          <span class="name"><a href="pages_report_pages/DateForm/key.html">key</a></span>
           <span class="signature">&#8594; Key</span>         
         </dt>
         <dd class="inherited">
-          Controls how one widget replaces another widget in the tree. <a href="pages_report_pages/ReceiptsInRange/key.html">[...]</a>
+          Controls how one widget replaces another widget in the tree. <a href="pages_report_pages/DateForm/key.html">[...]</a>
                   <div class="features">final, inherited</div>
 </dd>
         <dt id="runtimeType" class="property inherited">
@@ -124,41 +139,41 @@
     <section class="summary offset-anchor" id="instance-methods">
       <h2>Methods</h2>
       <dl class="callables">
-        <dt id="build" class="callable">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/build.html">build</a></span><span class="signature">(<wbr><span class="parameter" id="build-param-context"><span class="type-annotation">BuildContext</span> <span class="parameter-name">context</span></span>)
-            <span class="returntype parameter">&#8594; Widget</span>
+        <dt id="createState" class="callable">
+          <span class="name"><a href="pages_report_pages/DateForm/createState.html">createState</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; _DateFormState</span>
           </span>
                   </dt>
         <dd>
-          Describes the part of the user interface represented by this widget. <a href="pages_report_pages/ReceiptsInRange/build.html">[...]</a>
+          Creates the mutable state for this widget at a given location in the tree. <a href="pages_report_pages/DateForm/createState.html">[...]</a>
                   
 </dd>
         <dt id="createElement" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/createElement.html">createElement</a></span><span class="signature">(<wbr>)
-            <span class="returntype parameter">&#8594; StatelessElement</span>
+          <span class="name"><a href="pages_report_pages/DateForm/createElement.html">createElement</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; StatefulElement</span>
           </span>
                   </dt>
         <dd class="inherited">
-          Creates a <code>StatelessElement</code> to manage this widget's location in the tree. <a href="pages_report_pages/ReceiptsInRange/createElement.html">[...]</a>
+          Creates a <code>StatefulElement</code> to manage this widget's location in the tree. <a href="pages_report_pages/DateForm/createElement.html">[...]</a>
                   <div class="features">inherited</div>
 </dd>
         <dt id="debugDescribeChildren" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/debugDescribeChildren.html">debugDescribeChildren</a></span><span class="signature">(<wbr>)
+          <span class="name"><a href="pages_report_pages/DateForm/debugDescribeChildren.html">debugDescribeChildren</a></span><span class="signature">(<wbr>)
             <span class="returntype parameter">&#8594; <a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">DiagnosticsNode</span>&gt;</span></span>
           </span>
                   </dt>
         <dd class="inherited">
           Returns a list of <code>DiagnosticsNode</code> objects describing this node's
-children. <a href="pages_report_pages/ReceiptsInRange/debugDescribeChildren.html">[...]</a>
+children. <a href="pages_report_pages/DateForm/debugDescribeChildren.html">[...]</a>
                   <div class="features">@protected, inherited</div>
 </dd>
         <dt id="debugFillProperties" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/debugFillProperties.html">debugFillProperties</a></span><span class="signature">(<wbr><span class="parameter" id="debugFillProperties-param-properties"><span class="type-annotation">DiagnosticPropertiesBuilder</span> <span class="parameter-name">properties</span></span>)
+          <span class="name"><a href="pages_report_pages/DateForm/debugFillProperties.html">debugFillProperties</a></span><span class="signature">(<wbr><span class="parameter" id="debugFillProperties-param-properties"><span class="type-annotation">DiagnosticPropertiesBuilder</span> <span class="parameter-name">properties</span></span>)
             <span class="returntype parameter">&#8594; void</span>
           </span>
                   </dt>
         <dd class="inherited">
-          Add additional properties associated with the node. <a href="pages_report_pages/ReceiptsInRange/debugFillProperties.html">[...]</a>
+          Add additional properties associated with the node. <a href="pages_report_pages/DateForm/debugFillProperties.html">[...]</a>
                   <div class="features">inherited</div>
 </dd>
         <dt id="noSuchMethod" class="callable inherited">
@@ -171,17 +186,17 @@ children. <a href="pages_report_pages/ReceiptsInRange/debugDescribeChildren.html
                   <div class="features">inherited</div>
 </dd>
         <dt id="toDiagnosticsNode" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/toDiagnosticsNode.html">toDiagnosticsNode</a></span><span class="signature">(<wbr>{<span class="parameter" id="toDiagnosticsNode-param-name"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span> <span class="parameter" id="toDiagnosticsNode-param-style"><span class="type-annotation">DiagnosticsTreeStyle</span> <span class="parameter-name">style</span></span> })
+          <span class="name"><a href="pages_report_pages/DateForm/toDiagnosticsNode.html">toDiagnosticsNode</a></span><span class="signature">(<wbr>{<span class="parameter" id="toDiagnosticsNode-param-name"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span> <span class="parameter" id="toDiagnosticsNode-param-style"><span class="type-annotation">DiagnosticsTreeStyle</span> <span class="parameter-name">style</span></span> })
             <span class="returntype parameter">&#8594; DiagnosticsNode</span>
           </span>
                   </dt>
         <dd class="inherited">
           Returns a debug representation of the object that is used by debugging
-tools and by <a href="pages_report_pages/ReceiptsInRange/toStringDeep.html">DiagnosticsNode.toStringDeep</a>. <a href="pages_report_pages/ReceiptsInRange/toDiagnosticsNode.html">[...]</a>
+tools and by <a href="pages_report_pages/DateForm/toStringDeep.html">DiagnosticsNode.toStringDeep</a>. <a href="pages_report_pages/DateForm/toDiagnosticsNode.html">[...]</a>
                   <div class="features">inherited</div>
 </dd>
         <dt id="toString" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/toString.html">toString</a></span><span class="signature">(<wbr>{<span class="parameter" id="toString-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
+          <span class="name"><a href="pages_report_pages/DateForm/toString.html">toString</a></span><span class="signature">(<wbr>{<span class="parameter" id="toString-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
             <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
           </span>
                   </dt>
@@ -190,25 +205,25 @@ tools and by <a href="pages_report_pages/ReceiptsInRange/toStringDeep.html">Diag
                   <div class="features">inherited</div>
 </dd>
         <dt id="toStringDeep" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/toStringDeep.html">toStringDeep</a></span><span class="signature">(<wbr>{<span class="parameter" id="toStringDeep-param-prefixLineOne"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">prefixLineOne</span>: <span class="default-value">''</span>, </span> <span class="parameter" id="toStringDeep-param-prefixOtherLines"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">prefixOtherLines</span>, </span> <span class="parameter" id="toStringDeep-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
+          <span class="name"><a href="pages_report_pages/DateForm/toStringDeep.html">toStringDeep</a></span><span class="signature">(<wbr>{<span class="parameter" id="toStringDeep-param-prefixLineOne"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">prefixLineOne</span>: <span class="default-value">''</span>, </span> <span class="parameter" id="toStringDeep-param-prefixOtherLines"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">prefixOtherLines</span>, </span> <span class="parameter" id="toStringDeep-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
             <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
           </span>
                   </dt>
         <dd class="inherited">
-          Returns a string representation of this node and its descendants. <a href="pages_report_pages/ReceiptsInRange/toStringDeep.html">[...]</a>
+          Returns a string representation of this node and its descendants. <a href="pages_report_pages/DateForm/toStringDeep.html">[...]</a>
                   <div class="features">inherited</div>
 </dd>
         <dt id="toStringShallow" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/toStringShallow.html">toStringShallow</a></span><span class="signature">(<wbr>{<span class="parameter" id="toStringShallow-param-joiner"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">joiner</span>: <span class="default-value">', '</span>, </span> <span class="parameter" id="toStringShallow-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
+          <span class="name"><a href="pages_report_pages/DateForm/toStringShallow.html">toStringShallow</a></span><span class="signature">(<wbr>{<span class="parameter" id="toStringShallow-param-joiner"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">joiner</span>: <span class="default-value">', '</span>, </span> <span class="parameter" id="toStringShallow-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
             <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
           </span>
                   </dt>
         <dd class="inherited">
-          Returns a one-line detailed description of the object. <a href="pages_report_pages/ReceiptsInRange/toStringShallow.html">[...]</a>
+          Returns a one-line detailed description of the object. <a href="pages_report_pages/DateForm/toStringShallow.html">[...]</a>
                   <div class="features">inherited</div>
 </dd>
         <dt id="toStringShort" class="callable inherited">
-          <span class="name"><a href="pages_report_pages/ReceiptsInRange/toStringShort.html">toStringShort</a></span><span class="signature">(<wbr>)
+          <span class="name"><a href="pages_report_pages/DateForm/toStringShort.html">toStringShort</a></span><span class="signature">(<wbr>)
             <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
           </span>
                   </dt>
@@ -241,29 +256,31 @@ tools and by <a href="pages_report_pages/ReceiptsInRange/toStringDeep.html">Diag
 
   <div id="dartdoc-sidebar-right" class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
     <ol>
-      <li class="section-title"><a href="pages_report_pages/ReceiptsInRange-class.html#constructors">Constructors</a></li>
-      <li><a href="pages_report_pages/ReceiptsInRange/ReceiptsInRange.html">ReceiptsInRange</a></li>
+      <li class="section-title"><a href="pages_report_pages/DateForm-class.html#constructors">Constructors</a></li>
+      <li><a href="pages_report_pages/DateForm/DateForm.html">DateForm</a></li>
     
-      <li class="section-title inherited">
-        <a href="pages_report_pages/ReceiptsInRange-class.html#instance-properties">Properties</a>
+      <li class="section-title">
+        <a href="pages_report_pages/DateForm-class.html#instance-properties">Properties</a>
       </li>
+      <li><a href="pages_report_pages/DateForm/endDate.html">endDate</a></li>
+      <li><a href="pages_report_pages/DateForm/startDate.html">startDate</a></li>
       <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/key.html">key</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/key.html">key</a></li>
       <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
     
-      <li class="section-title"><a href="pages_report_pages/ReceiptsInRange-class.html#instance-methods">Methods</a></li>
-      <li><a href="pages_report_pages/ReceiptsInRange/build.html">build</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/createElement.html">createElement</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/debugDescribeChildren.html">debugDescribeChildren</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/debugFillProperties.html">debugFillProperties</a></li>
+      <li class="section-title"><a href="pages_report_pages/DateForm-class.html#instance-methods">Methods</a></li>
+      <li><a href="pages_report_pages/DateForm/createState.html">createState</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/createElement.html">createElement</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/debugDescribeChildren.html">debugDescribeChildren</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/debugFillProperties.html">debugFillProperties</a></li>
       <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/toDiagnosticsNode.html">toDiagnosticsNode</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/toString.html">toString</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/toStringDeep.html">toStringDeep</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/toStringShallow.html">toStringShallow</a></li>
-      <li class="inherited"><a href="pages_report_pages/ReceiptsInRange/toStringShort.html">toStringShort</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/toDiagnosticsNode.html">toDiagnosticsNode</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/toString.html">toString</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/toStringDeep.html">toStringDeep</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/toStringShallow.html">toStringShallow</a></li>
+      <li class="inherited"><a href="pages_report_pages/DateForm/toStringShort.html">toStringShort</a></li>
     
-      <li class="section-title inherited"><a href="pages_report_pages/ReceiptsInRange-class.html#operators">Operators</a></li>
+      <li class="section-title inherited"><a href="pages_report_pages/DateForm-class.html#operators">Operators</a></li>
       <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
     
     

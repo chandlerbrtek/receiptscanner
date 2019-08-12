@@ -47,7 +47,6 @@
     <h5 class="hidden-xs"><span class="package-name">receipt</span> <span class="package-kind">package</span></h5>
     <ol>
           <li class="section-title">Libraries</li>
-          <li><a href="DateRangeSelection/DateRangeSelection-library.html">DateRangeSelection</a></li>
           <li><a href="EditEntry/EditEntry-library.html">EditEntry</a></li>
           <li><a href="ImagePickerModal/ImagePickerModal-library.html">ImagePickerModal</a></li>
           <li><a href="ManualEntry/ManualEntry-library.html">ManualEntry</a></li>
@@ -55,7 +54,6 @@
           <li><a href="data_db/data_db-library.html">db</a></li>
           <li><a href="main/main-library.html">main</a></li>
           <li><a href="data_models/data_models-library.html">models</a></li>
-          <li><a href="pages_other_pages/pages_other_pages-library.html">other_pages</a></li>
           <li><a href="pages_report_pages/pages_report_pages-library.html">report_pages</a></li>
           <li class="section-title">Dart</li>
           <li><a href="dart-ui/dart-ui-library.html">dart:ui</a></li>
@@ -77,7 +75,7 @@
       <section class="desc markdown">
         <h1 id="receipt-scanner">Receipt Scanner</h1>
 <p>A mobile application for scanning receipts and storing financial data.</p>
-<p>Last Updated: July 16, 2019</p>
+<p>Last Updated: August 12, 2019</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>Regardless of whether this is your first time working with a mobile application from a repository, your first time working with the receipt scanner application, or if you are a returning viewer or user of the receipt scanner application, start here if you want to run the application on an android device.</p>
 <h3 id="1-download-the-apk">1. Download the APK</h3>
@@ -101,12 +99,33 @@
 <p>Chandler Brtek - Lead QA Engineer and Developer</p>
 <p>Savon Philips - Lead Support Engineer and Developer</p>
 <h2 id="releases">Releases</h2>
+<h3 id="milestone-3">Milestone 3</h3>
+<p>Monday, August 12, 2019</p>
+<p>In Milestone 3, the Receipt Scanner Application team is proud to announce our final product!
+We've given the application it's own icon and improved the look and feel of the app. We also
+added some new features for you to enjoy. Custom Reports are now available! Just select two
+enclosing dates and you can now see all the receipts within that range. Sometimes the scanner
+doesn't always grab the correct total. Now you can choose from different values grabbed by
+the scanner rather than having to type in the total yourself just by clicking on the total
+box and browsing for the correct amount. Lastly, we have added budgets to the application.
+You can find the budgets under the Budgets tab. The application comes pre-loaded with a
+monthly and annual budget, but all the budgets are fully customizable. Feel free to play
+around with them!</p>
+<h4 id="release-notes">Release Notes</h4>
+<p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/45">Issue #45</a> - Added custom reports
+to the applications report section.</p>
+<p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/46">Issue #46</a> - Added budgets for
+monthly and annual spending, as well as custom periods.</p>
+<p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/47">Issue #47</a> - Added dropdowns for
+selecting a proper amount when the scanner has a discrepency.</p>
+<p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/48">Issue #48</a> - Themed the application
+with new icon and a new, consistent look and feel.</p>
 <h3 id="milestone-2">Milestone 2</h3>
 <p>Wednesday, July 17, 2019</p>
 <p>In Milestone 2 the Receipt Scanner Application team has implemented many desirable features of the application! You can now use the Scan Receipt and Add Receipt functions to read values from receipts and store them within the application, view recent receipts from the home page, and view recent receipts reports.</p>
 <p>View the <a href="https://github.com/chandlerbrtek/receiptscanner/releases/tag/milestone_2">release</a></p>
 <p>View the <a href="https://app.vidgrid.com/view/iPWydvakB1MU">demo</a></p>
-<h4 id="release-notes">Release Notes</h4>
+<h4 id="release-notes-2">Release Notes</h4>
 <p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/17">Issue #17</a> - Added functionality to read receipt data from a receipt image.</p>
 <p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/30">Issue #30</a> - Integrated the Vision API from Flutter to read receipt images into useful data.</p>
 <p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/31">Issue #31</a> - Added the ability to edit receipts that have already been added to the application.</p>
@@ -119,7 +138,7 @@
 <p>In Milestone 1 the Receipt Scanner Application team is happy to release the initial state of the applicaiton's user interface and user experience flows as well as the initial database definitions and integrations. The application stores receipts and supports flows for reports, but scanning from a photo and generating dynamic reports have not yet been implemented. See the links below to view or download the application.</p>
 <p>View the <a href="https://github.com/chandlerbrtek/receiptscanner/releases/tag/milestone_1">release</a></p>
 <p>View the <a href="https://youtu.be/Djsdb5ymcoo">demo</a></p>
-<h4 id="release-notes-2">Release Notes</h4>
+<h4 id="release-notes-3">Release Notes</h4>
 <p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/4">Issue #4</a> - Created a Receipt class to store receipts and their properties in memory.</p>
 <p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/6">Issue #6</a> - Added an application home page with a navigation drawer to navigate to the application’s stored data.</p>
 <p><a href="https://github.com/chandlerbrtek/receiptscanner/issues/8">Issue #8</a> - Created a Receipt database table using Flutter’s <a href="https://pub.dev/packages/sqflite">sqflite</a> plugin to store receipts on the user’s device.</p>
@@ -141,12 +160,7 @@ samples, guidance on mobile development, and a full API reference.</p>
         <section class="summary">
             <h2>Libraries</h2>
           <dl>
-            <dt id="DateRangeSelection">
-              <span class="name"><a href="DateRangeSelection/DateRangeSelection-library.html">DateRangeSelection</a></span>             
-            </dt>
-            <dd>
-              
-            </dd>            <dt id="EditEntry">
+            <dt id="EditEntry">
               <span class="name"><a href="EditEntry/EditEntry-library.html">EditEntry</a></span>             
             </dt>
             <dd>
@@ -178,11 +192,6 @@ samples, guidance on mobile development, and a full API reference.</p>
               
             </dd>            <dt id="models">
               <span class="name"><a href="data_models/data_models-library.html">models</a></span>             
-            </dt>
-            <dd>
-              
-            </dd>            <dt id="other_pages">
-              <span class="name"><a href="pages_other_pages/pages_other_pages-library.html">other_pages</a></span>             
             </dt>
             <dd>
               
