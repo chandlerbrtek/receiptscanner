@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:receipt/DateRangeSelection.dart';
 import 'package:receipt/EditEntry.dart';
 
 import 'package:receipt/data/db.dart';
@@ -158,13 +157,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 18),
-                          ),
+                            ),
+                          )
                         ],
                       ),
                     ),
                   ),
-                ),
-              );
+                );
             },
           );
         } else {

@@ -2,29 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
-import 'package:receipt/main.dart';
 
+/// The Report_pages serve as the view model for reports. All
+/// report types are displayed using the this model.
 class Report_pages extends StatelessWidget {
+
+  /// The font size for small text.
   final double _smallFontSize = 12;
+
+  /// The font size for the value.
   final double _valFontSize = 30;
+
+  /// The font weight for the the small text.
   final FontWeight _smallFontWeight = FontWeight.w500;
+
+  /// The font weight for the value.
   final FontWeight _valFontWeight = FontWeight.w700;
+
+  /// The font color for the report.
   final Color _fontColor = Color(0xffffffff);
+
+  /// The spacing for the small text.
   final double _smallFontSpacing = 1.3;
+
+  /// The backgrouind color for the report page.
   final Color _backgroundColor = Color(0xff303030);
+
+  /// The current datetime.
   static final DateTime _dateTime = DateTime.now();
+
+  /// The last day of each month.
   static final List<int> finalDayOfMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  /// The first day of the  current year.
   final int _beginYear = DateTime(_dateTime.year, 1, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+
+  /// The last day of the current year.
   final int _endYear = DateTime(_dateTime.year + 1, 1, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+
+  /// The first day of the current month.
   final int _beginMonth = DateTime(_dateTime.year, _dateTime.month, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+
+  /// The last day of the current month.
   final int _endMonth = DateTime(_dateTime.year, _dateTime.month, finalDayOfMonth[_dateTime.month - 1], 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+  
+  /// The style for the report page header.
   final headerStyle = TextStyle(
       fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xffffffff));
 
+  /// The name of the page state.
   final String state;
+
+  /// The value for the report start range.
   final int customStart;
+
+  /// The value for the report end range.
   final int customEnd;
 
+  /// Constructor for creating the report page.
   Report_pages(this.state, this.customStart, this.customEnd);
 
   @override
@@ -188,7 +223,9 @@ class Report_pages extends StatelessWidget {
   }
 }
 
+/// View model for the recent receipts body.
 class RecentReceipts extends StatelessWidget {
+  
   const RecentReceipts({
     Key key,
   }) : super(key: key);
@@ -212,6 +249,7 @@ class RecentReceipts extends StatelessWidget {
   }
 }
 
+/// View model for a list of receipts within a report range.
 class ReceiptsInRange extends StatelessWidget {
   const ReceiptsInRange({
     Key key,
@@ -221,7 +259,10 @@ class ReceiptsInRange extends StatelessWidget {
         _end = end,
         super(key: key);
 
+  /// Report range start date.
   final int _start;
+
+  /// Report range end date.
   final int _end;
 
   @override
@@ -243,84 +284,27 @@ class ReceiptsInRange extends StatelessWidget {
   }
 }
 
-///Legacy code
-///
-class RecordItem extends StatelessWidget {
-  const RecordItem({
-    Key key,
-    @required Color fontColor,
-    @required double smallFontSpacing,
-    @required this.day,
-  })  : _fontColor = fontColor,
-        _smallFontSpacing = smallFontSpacing,
-        super(key: key);
-
-  final Color _fontColor;
-  final double _smallFontSpacing;
-  final String day;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-        color: Color(0xffdde9f7),
-        width: 1.5,
-      ))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            day,
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w700, color: _fontColor),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                "01/21/2019",
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: _smallFontSpacing,
-                    color: _fontColor),
-              ),
-              SizedBox(
-                width: 25,
-              ),
-              Expanded(
-                child: Text(
-                  "45.3 MINUTES",
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: _smallFontSpacing,
-                      color: _fontColor),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
+/// View model for a receipt in the report body.
 class _Receipt extends StatelessWidget {
+
+  /// The receipt data for this model.
   final Receipt receipt;
+
+  /// The text style for this model.
   final textStyle = TextStyle(
       fontSize: 13,
       fontWeight: FontWeight.w400,
       letterSpacing: 1.3,
       color: Color(0xff5b6990));
+
+  /// The formatting for the date of this model.
   final dateFormat = DateFormat("MM/dd/yyyy");
+
+  /// The formatting for thie currency of this model.
   final formatCurrency = new NumberFormat.simpleCurrency();
 
+  /// View model constructor. The receipt must be provided for
+  /// the model.
   _Receipt({Key key, @required this.receipt}) : super(key: key);
 
   @override
@@ -359,6 +343,7 @@ class _Receipt extends StatelessWidget {
   }
 }
 
+/// Graph painter for the cutstom graph on the report page.
 class GraphPainter extends CustomPainter {
   //the one in the foreground
   Paint trackBarPaint = Paint()
@@ -406,5 +391,156 @@ class GraphPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     // TODO: implement shouldRepaint
     return false;
+  }
+}
+
+/// Range selector for custom reports. This class handles selecting
+/// the custom start and end date for the report and then building
+/// the report page for those dates.
+class DateRangeSelection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Custom Date Range"),
+      ),
+      body: Card(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: DateForm(
+            startDate: DateTime.parse(DateTime.now().toString().substring(0, 10)),
+            endDate: DateTime.parse(DateTime.now().toString().substring(0, 10))
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Object model for handling the start and end dates for a custom report.
+class DateForm extends StatefulWidget {
+
+  /// Standard constructor for the date form model.
+  DateForm({Key key, this.startDate, this.endDate}) : super(key: key);
+
+  /// The start date for the form.
+  final DateTime startDate;
+
+  /// The end date for the form.
+  final DateTime endDate;
+
+  @override
+  _DateFormState createState() => _DateFormState();
+}
+
+class _DateFormState extends State<DateForm> {
+
+  /// Key for addressing the state.
+  final _formKey = GlobalKey<FormState>();
+
+  /// Formatter for the date to display on the form.
+  static final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
+
+  /// Controller for handling updates to the start date field.
+  final TextEditingController _startController = TextEditingController();
+
+  /// Controller for handling updates to the end date field.
+  final TextEditingController _endController = TextEditingController();
+
+  /// The selected start date.
+  DateTime _sDate;
+
+  /// The selected end date.
+  DateTime _eDate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _sDate = widget.startDate ?? DateTime.now();
+    _eDate = widget.endDate ?? DateTime.now();
+
+    _startController.text = dateFormat.format(_sDate);
+    _endController.text = dateFormat.format(_eDate);
+  }
+
+  /// Function for the user selecting a start date.
+  Future<Null> _selectSDate(BuildContext context) async {
+    //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
+    //https://stackoverflow.com/a/44991969
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _sDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2020));
+
+    if (picked != null && picked != _sDate) {
+      print('date selected: $picked');
+
+      setState(() => _sDate = picked);
+      _startController.text = dateFormat.format(_sDate);
+    }
+  }
+
+  /// Function for the user selecting an end date.
+  Future<Null> _selectEDate(BuildContext context) async {
+    //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
+    //https://stackoverflow.com/a/44991969
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _eDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2020));
+
+    if (picked != null && picked != _eDate) {
+      print('date selected: $picked');
+
+      setState(() => _eDate = picked);
+      _endController.text = dateFormat.format(_eDate);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(labelText: 'Start Date:'),
+            controller: _startController,
+            enabled: true,
+            cursorWidth: 0,
+            onTap: () => _selectSDate(context),
+          ),
+          TextField(
+            decoration: InputDecoration(labelText: 'End Date:'),
+            controller: _endController,
+            enabled: true,
+            cursorWidth: 0,
+            onTap: () => _selectEDate(context),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                    new Report_pages("custom", _sDate.millisecondsSinceEpoch, _eDate.millisecondsSinceEpoch))),
+                  child: Text('Get Report'),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

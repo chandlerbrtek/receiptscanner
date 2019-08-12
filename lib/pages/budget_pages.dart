@@ -78,11 +78,11 @@ class _BudgetListState extends State<Budgets> {
           new EditBudget(budget: budget), 
         )
       ),
+      color: Theme.of(context).backgroundColor,
       child: Container(
-        padding: EdgeInsets.all(15),
-        margin: EdgeInsets.all(15),
+        padding: EdgeInsets.all(32),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Theme.of(context).backgroundColor,
         ),
         child: Column(
           children: <Widget>[
@@ -332,6 +332,8 @@ class _AddBudgetState extends State<AddBudget> {
 
       databaseAPI.addBudget(widget.budget);
 
+      databaseAPI.updateBudgetProgress(widget.budget);
+
       Navigator.pop(context);
     } else {
       print('Not added...');
@@ -422,7 +424,7 @@ class _EditBudgetState extends State<EditBudget> {
                   onTap: () => _selectEndDate(context),
                 ),
                 TextFormField(
-                  initialValue: formatCurrency.format(widget.budget.amount / 100).replaceAll("\$", ""),
+                  initialValue: formatCurrency.format(widget.budget.amount / 100).replaceAll("\$", "").replaceAll(",", ""),
                   decoration: InputDecoration(labelText: 'Budget Amount'),
                   enabled: true,
                   validator: _validateAmount,
@@ -515,6 +517,8 @@ class _EditBudgetState extends State<EditBudget> {
       widget.budget.end = _endDate.millisecondsSinceEpoch;
       databaseAPI.updateBudget(widget.budget);
 
+      databaseAPI.updateBudgetProgress(widget.budget);
+
       Navigator.pop(context);
     } else {
       print('Not updated...');
@@ -525,6 +529,7 @@ class _EditBudgetState extends State<EditBudget> {
   /// database.
   void _delete() {
     databaseAPI.deleteBudget(widget.budget.id);
+    Navigator.pop(context);
   }
 
 }
