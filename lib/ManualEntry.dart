@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import 'package:receipt/ImagePickerModal.dart';
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
 import 'package:receipt/data/db.dart';
 
 class ManualEntryPage extends StatelessWidget {
@@ -47,13 +47,13 @@ class _DateFormState extends State<DateForm> {
   double _total;
   String selectedPrice;
   List<Widget> dropdownOptions;
+  String help;
 
   @override
   void initState() {
     super.initState();
 
     print('init:');
-    print(widget.date);
 
     if (widget.prices != null) {
       this.selectedPrice = widget.prices.last;
@@ -105,7 +105,7 @@ class _DateFormState extends State<DateForm> {
 
       print('Receipt generated:');
       print(receipt.toMap());
-      receiptAPI.addReceipt(receipt);
+      databaseAPI.addReceipt(receipt);
 
       Navigator.pop(context);
     } else {

@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import 'package:receipt/data/receipt.dart';
+import 'package:receipt/data/models.dart';
 import 'package:receipt/data/db.dart';
 
 class EditEntryPage extends StatelessWidget {
@@ -100,7 +100,7 @@ class _DateFormState extends State<DateForm> {
 
       print('Receipt generated:');
       print(receipt.toMap());
-      receiptAPI.updateReceipt(receipt);
+      databaseAPI.updateReceipt(receipt);
 
       Navigator.pop(context);
     } else {

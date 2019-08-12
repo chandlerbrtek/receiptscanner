@@ -28,6 +28,7 @@ dependencies:
   sqflite: ^1.1.5
   firebase_ml_vision: ^0.9.0+3
   intl: ^0.15.8
+  percent_indicator: "^2.1.1"
 
 dev_dependencies:
   flutter_test:
