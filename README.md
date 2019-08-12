@@ -2,7 +2,7 @@
 
 A mobile application for scanning receipts and storing financial data.
 
-Last Updated: July 16, 2019
+Last Updated: August 12, 2019
 
 ## Quick Start
 
@@ -49,6 +49,35 @@ Chandler Brtek - Lead QA Engineer and Developer
 Savon Philips - Lead Support Engineer and Developer
 
 ## Releases
+
+### Milestone 3
+
+Monday, August 12, 2019
+
+In Milestone 3, the Receipt Scanner Application team is proud to announce our final product!
+We've given the application it's own icon and improved the look and feel of the app. We also
+added some new features for you to enjoy. Custom Reports are now available! Just select two
+enclosing dates and you can now see all the receipts within that range. Sometimes the scanner
+doesn't always grab the correct total. Now you can choose from different values grabbed by
+the scanner rather than having to type in the total yourself just by clicking on the total
+box and browsing for the correct amount. Lastly, we have added budgets to the application.
+You can find the budgets under the Budgets tab. The application comes pre-loaded with a
+monthly and annual budget, but all the budgets are fully customizable. Feel free to play
+around with them!
+
+#### Release Notes
+
+[Issue #45](https://github.com/chandlerbrtek/receiptscanner/issues/45) - Added custom reports
+to the applications report section.
+
+[Issue #46](https://github.com/chandlerbrtek/receiptscanner/issues/46) - Added budgets for
+monthly and annual spending, as well as custom periods.
+
+[Issue #47](https://github.com/chandlerbrtek/receiptscanner/issues/47) - Added dropdowns for
+selecting a proper amount when the scanner has a discrepency.
+
+[Issue #48](https://github.com/chandlerbrtek/receiptscanner/issues/48) - Themed the application
+with new icon and a new, consistent look and feel.
 
 ### Milestone 2
 
