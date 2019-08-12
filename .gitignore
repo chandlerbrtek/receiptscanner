@@ -19,6 +19,7 @@
 .vscode/
 
 # Flutter/Dart/Pub related
+**/doc/
 .dart_tool/
 .flutter-plugins
 .packages
