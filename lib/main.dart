@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:receipt/DateRangeSelection.dart';
-import 'package:receipt/EditEntry.dart';
+
+import 'package:receipt/edit_receipt.dart';
+import 'package:receipt/scan_receipt.dart';
+import 'package:receipt/manual_receipt.dart';
 
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
-import 'package:receipt/ImagePickerModal.dart';
-import './pages/report_pages.dart';
-import 'package:receipt/ManualEntry.dart';
+
+import 'package:receipt/pages/report_pages.dart';
 import 'package:receipt/pages/budget_pages.dart';
 
+/// Entry endpoint for the application. Launches the
+/// app.
 void main() => runApp(MyApp());
 
+/// Entry class for the receipt scanner application.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Home Page class for the application.
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -41,6 +46,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+/// Default state for the home page on the app.
 class _MyHomePageState extends State<MyHomePage> {
   Future<List<Receipt>> _receipts;
 
@@ -137,16 +143,16 @@ class _MyHomePageState extends State<MyHomePage> {
               final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
               final formatCurrency = new NumberFormat.simpleCurrency();
 
-              return
-              InkWell(
-                onTap: () => Navigator.of(context).push(
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      new EditEntryPage(receipt: item))),
-                child:
-                Card(
+                return
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        new EditEntryPage(receipt: item))),
+                  child:
+                  Card(
                   child: Container(
-                    height: 55,
+                  height: 55,
                     padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 );
-              },
+            },
           );
         } else {
           return Center(child: CircularProgressIndicator());
