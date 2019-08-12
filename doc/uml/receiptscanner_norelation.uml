@@ -1,0 +1,280 @@
+@startuml
+set namespaceSeparator ::
+
+class "receipt::data::db.dart::DatabaseProvider" {
+  {static} +String id
+  {static} +String receiptTable
+  {static} +String receiptTotal
+  {static} +String receiptDate
+  {static} +String budgetTable
+  {static} +String budgetName
+  {static} +String budgetAmount
+  {static} +String budgetStart
+  {static} +String budgetEnd
+  {static} +String budgetProgress
+  {static} +DatabaseProvider db
+  -Database _database
+  +Future<Database> database
+  {static} +Future getDatabaseInstance()
+  {static} -dynamic _initDatabase()
+  +Future addReceipt()
+  +Future updateReceipt()
+  +Future getReceipt()
+  +Future getAllReceipts()
+  +Future getReceiptsInRange()
+  +Future deleteReceipt()
+  +Future deleteAllReceipts()
+  +Future addBudget()
+  +Future updateBudget()
+  +Future getAllBudgets()
+  +Future deleteBudget()
+  +dynamic updateBudgetsProgress()
+  +dynamic updateBudgetProgress()
+  +Future progressOfBudget()
+}
+
+class "receipt::data::models.dart::Receipt" {
+  +int id
+  +int total
+  +int receiptDate
+  +Map toMap()
+}
+
+class "receipt::data::models.dart::Budget" {
+  +int id
+  +String name
+  +int amount
+  +int progress
+  +int start
+  +int end
+  +Map toMap()
+}
+
+class "receipt::edit_receipt.dart::EditEntryPage" {
+  +Receipt receipt
+  +NumberFormat formatCurrency
+  +Widget build()
+}
+
+class "receipt::edit_receipt.dart::DateForm" {
+  +String total
+  +Receipt receipt
+  +DateTime date
+  +_DateFormState createState()
+}
+
+class "receipt::edit_receipt.dart::_DateFormState" {
+  -GlobalKey<FormState> _formKey
+  {static} +DateFormat dateFormat
+  -TextEditingController _controller
+  -DateTime _date
+  -double _total
+  +void initState()
+  -Future _selectDate()
+  -String _validateTotal()
+  -void _update()
+  +Widget build()
+}
+
+class "receipt::main.dart::MyApp" {
+  +Widget build()
+}
+
+class "receipt::main.dart::MyHomePage" {
+  +String title
+  +_MyHomePageState createState()
+}
+
+class "receipt::main.dart::_MyHomePageState" {
+  -Future<List<Receipt>> _receipts
+  +void initState()
+  -Future _fetch()
+  +Widget build()
+  -Drawer _drawer()
+  -ExpansionTile _reports()
+  -FutureBuilder _receiptList()
+  -FloatingActionButton _addButton()
+}
+
+class "receipt::manual_receipt.dart::ManualEntryPage" {
+  +Widget build()
+}
+
+class "receipt::manual_receipt.dart::DateForm" {
+  +List<String> prices
+  +DateTime date
+  +_DateFormState createState()
+}
+
+class "receipt::manual_receipt.dart::_DateFormState" {
+  -GlobalKey<FormState> _formKey
+  {static} +DateFormat dateFormat
+  -TextEditingController _controller
+  -DateTime _date
+  -double _total
+  +String selectedPrice
+  +List<Widget> dropdownOptions
+  +void initState()
+  -Future _selectDate()
+  -String _validateTotal()
+  -void _submit()
+  +Widget totalWidget()
+  +Widget build()
+}
+
+class "receipt::pages::budget_pages.dart::Budgets" {
+  {static} +String ROUTE
+  {static} +dynamic view()
+  +State createState()
+}
+
+class "receipt::pages::budget_pages.dart::_BudgetListState" {
+  +Widget build()
+  -Future _fetch()
+  -FutureBuilder _budgetList()
+  -Widget _budgetTile()
+  -FloatingActionButton _addButton()
+}
+
+class "receipt::pages::budget_pages.dart::AddBudget" {
+  +Budget budget
+  +State createState()
+}
+
+class "receipt::pages::budget_pages.dart::EditBudget" {
+  +Budget budget
+  +State createState()
+}
+
+class "receipt::pages::budget_pages.dart::_AddBudgetState" {
+  -GlobalKey<FormState> _formKey
+  {static} +DateFormat dateFormat
+  -TextEditingController _startController
+  -TextEditingController _endController
+  -DateTime _startDate
+  -DateTime _endDate
+  +void initState()
+  +Widget build()
+  -Future _selectStartDate()
+  -Future _selectEndDate()
+  -void _submit()
+}
+
+class "receipt::pages::budget_pages.dart::_EditBudgetState" {
+  -GlobalKey<FormState> _formKey
+  {static} +DateFormat dateFormat
+  -TextEditingController _startController
+  -TextEditingController _endController
+  +NumberFormat formatCurrency
+  -DateTime _startDate
+  -DateTime _endDate
+  +void initState()
+  +Widget build()
+  -String _validateAmount()
+  -Future _selectStartDate()
+  -Future _selectEndDate()
+  -void _update()
+  -void _delete()
+}
+
+class "receipt::pages::report_pages.dart::Report_pages" {
+  -double _smallFontSize
+  -double _valFontSize
+  -FontWeight _smallFontWeight
+  -FontWeight _valFontWeight
+  -Color _fontColor
+  -double _smallFontSpacing
+  -Color _backgroundColor
+  {static} -DateTime _dateTime
+  {static} +List<int> finalDayOfMonth
+  -int _beginYear
+  -int _endYear
+  -int _beginMonth
+  -int _endMonth
+  +TextStyle headerStyle
+  +String state
+  +int customStart
+  +int customEnd
+  +Widget build()
+}
+
+class "receipt::pages::report_pages.dart::RecentReceipts" {
+  +Widget build()
+}
+
+class "receipt::pages::report_pages.dart::ReceiptsInRange" {
+  -int _start
+  -int _end
+  +Widget build()
+}
+
+class "receipt::pages::report_pages.dart::_Receipt" {
+  +Receipt receipt
+  +TextStyle textStyle
+  +DateFormat dateFormat
+  +NumberFormat formatCurrency
+  +Widget build()
+}
+
+class "receipt::pages::report_pages.dart::GraphPainter" {
+  +Paint trackBarPaint
+  +Paint trackPaint
+  +void paint()
+  +bool shouldRepaint()
+}
+
+class "receipt::pages::report_pages.dart::DateRangeSelection" {
+  +Widget build()
+}
+
+class "receipt::pages::report_pages.dart::DateForm" {
+  +DateTime startDate
+  +DateTime endDate
+  +_DateFormState createState()
+}
+
+class "receipt::pages::report_pages.dart::_DateFormState" {
+  -GlobalKey<FormState> _formKey
+  {static} +DateFormat dateFormat
+  -TextEditingController _startController
+  -TextEditingController _endController
+  -DateTime _sDate
+  -DateTime _eDate
+  +void initState()
+  -Future _selectSDate()
+  -Future _selectEDate()
+  +Widget build()
+}
+
+class "receipt::scan_receipt.dart::ImagePickerModal" {
+  {static} +List<DateFormat> dateFormats
+  -Future _getImage()
+  -Future _parseImage()
+  -Future _takePhoto()
+  -Future _selectPhoto()
+  +Widget build()
+}
+
+class "receipt::scan_receipt.dart::ManualEntryArgs" {
+  +List<String> prices
+  +DateTime date
+  +dynamic setPrices()
+  +dynamic setDate()
+}
+
+class "receipt::scan_receipt.dart::ParsePreviewArguments" {
+  +String prices
+  +String text
+}
+
+class "receipt::scan_receipt.dart::ParsePreview" {
+  +Widget build()
+}
+
+class "receipt::scan_receipt.dart::PaddedCard" {
+  +String text
+  +MainAxisAlignment alignment
+  +Widget build()
+}
+
+@enduml
