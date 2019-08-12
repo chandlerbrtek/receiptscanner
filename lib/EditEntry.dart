@@ -12,7 +12,6 @@ class EditEntryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Entry"),
@@ -22,7 +21,8 @@ class EditEntryPage extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: DateForm(
             receipt: receipt,
-            total: formatCurrency.format(receipt.total / 100).replaceAll("\$", ""),
+            total:
+                formatCurrency.format(receipt.total / 100).replaceAll("\$", ""),
             date: DateTime.fromMillisecondsSinceEpoch(receipt.receiptDate),
           ),
         ),
@@ -116,7 +116,7 @@ class _DateFormState extends State<DateForm> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           TextFormField(
-            initialValue: widget.total,
+            initialValue: widget.total.replaceAll(',', ''),
             decoration: InputDecoration(labelText: 'Total:'),
             autovalidate: true,
             validator: _validateTotal,
