@@ -3,12 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
 
-/// The sum of the receipts.
-double _sum = 0;
-
-/// The number of receipts.
-int _count = 0;
-
 /// The Report_pages serve as the view model for reports. All
 /// report types are displayed using the this model.
 class Report_pages extends StatefulWidget {
@@ -78,11 +72,37 @@ class _ReportsState extends State<Report_pages> {
   /// The value for the report end range.
   final int customEnd;
 
+  /// The formatting for thie currency of this model.
+  final formatCurrency = new NumberFormat.simpleCurrency();
+
+  /// The sum of the receipts.
+  double _sum = 0;
+
+  /// The number of receipts.
+  int _count = 0;
+
+  final TextEditingController _totalController = TextEditingController();
+
+  final TextEditingController _countController = TextEditingController();
+
   /// Constructor for creating the report page.
   _ReportsState({this.state, this.customStart, this.customEnd});
 
   @override
+  void initState() {
+    super.initState();
+    _sum = 0;
+    _count = 0;
+    _totalController.text = "SUM";
+    _countController.text = "Number";
+    _totalController.addListener(_updateText);
+    _countController.addListener(_updateText);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _sum = 0;
+    _count = 0;
     return Material(
       type: MaterialType.transparency,
       child: new Container(
@@ -96,36 +116,69 @@ class _ReportsState extends State<Report_pages> {
               children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text("TOTAL",
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text("TOTAL",
                         style: TextStyle(
                           fontWeight: _smallFontWeight,
                           fontSize: _smallFontSize,
                           letterSpacing: _smallFontSpacing,
                           color: _fontColor,
-                        )),
-                    SizedBox(height: 10),
-                    Text(_sum.toString(),
-                        style: TextStyle(
-                          fontWeight: _valFontWeight,
-                          fontSize: _valFontSize,
-                          color: _fontColor,
-                        )),
-                    SizedBox(height: 30),
-                    Text("Count of entries",
+                        )
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 260,
+                        child: TextField(
+                          onChanged: _updateText(),
+                          decoration: InputDecoration(
+                            enabled: false,
+                            border: InputBorder.none,
+                          ),
+
+                          controller: _totalController,
+                          style: TextStyle(
+                              fontWeight: _valFontWeight,
+                              fontSize: _valFontSize,
+                              color: _fontColor,
+                            ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text("Count of entries",
                         style: TextStyle(
                           fontWeight: _smallFontWeight,
                           fontSize: _smallFontSize,
                           letterSpacing: _smallFontSpacing,
                           color: _fontColor,
-                        )),
-                    SizedBox(height: 10),
-                    Text(_count.toString(),
-                        style: TextStyle(
-                          fontWeight: _valFontWeight,
-                          fontSize: _valFontSize,
-                          color: _fontColor,
-                        )),
+                        )
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 260,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            enabled: true,
+                            border: InputBorder.none,
+                          ),
+                          controller: _countController,
+                          style: TextStyle(
+                              fontWeight: _valFontWeight,
+                              fontSize: _valFontSize,
+                              color: _fontColor,
+                            ),
+                          enabled: false,
+                          ),
+                        ),
+                    ),
                   ],
                 ),
                 Container(
@@ -183,7 +236,7 @@ class _ReportsState extends State<Report_pages> {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: RecentReceipts())],
+                    children: <Widget>[Expanded(child: _recentReceipts())],
                   ),
                 ],
               ),
@@ -199,7 +252,7 @@ class _ReportsState extends State<Report_pages> {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginMonth, end: _endMonth))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(_beginMonth, _endMonth))],
                   ),
                 ],
               ),
@@ -215,7 +268,7 @@ class _ReportsState extends State<Report_pages> {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginYear, end: _endYear))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(_beginYear, _endYear))],
                   ),
                 ],
               ),
@@ -231,7 +284,7 @@ class _ReportsState extends State<Report_pages> {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: customStart, end: customEnd))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(customStart, customEnd))],
                   ),
                 ],
               ),
@@ -240,17 +293,8 @@ class _ReportsState extends State<Report_pages> {
       ),
     );
   }
-}
 
-/// View model for the recent receipts body.
-class RecentReceipts extends StatelessWidget {
-  
-  const RecentReceipts({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  _recentReceipts() {
     return FutureBuilder<List<Receipt>>(
         future: databaseAPI.getAllReceipts(),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
@@ -260,34 +304,16 @@ class RecentReceipts extends StatelessWidget {
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    _Receipt(receipt: snapshot.data[index]));
+                    _buildReceipt(snapshot.data[index]));
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
   }
-}
 
-/// View model for a list of receipts within a report range.
-class ReceiptsInRange extends StatelessWidget {
-  const ReceiptsInRange({
-    Key key,
-    int start,
-    int end
-  }) : _start = start,
-        _end = end,
-        super(key: key);
-
-  /// Report range start date.
-  final int _start;
-
-  /// Report range end date.
-  final int _end;
-
-  @override
-  Widget build(BuildContext context) {
+  _receiptsInRange(int start, int end) {
     return FutureBuilder<List<Receipt>>(
-        future: databaseAPI.getReceiptsInRange(_start, _end),
+        future: databaseAPI.getReceiptsInRange(start, end),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -295,11 +321,31 @@ class ReceiptsInRange extends StatelessWidget {
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    _Receipt(receipt: snapshot.data[index]));
+                    _buildReceipt(snapshot.data[index]));
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
+  }
+
+  _buildReceipt(Receipt receipt) {
+    
+    _updateState(receipt.total);
+
+    _totalController.text = formatCurrency.format(_sum / 100.00);
+    _countController.text = _count.toString();
+
+    return _Receipt(receipt: receipt);
+  }
+
+  _updateState(int total) {
+    _sum += total;
+    _count++;
+  }
+
+  _updateText() {
+    print(_totalController.text);
+    print(_countController.text);
   }
 }
 
@@ -324,10 +370,7 @@ class _Receipt extends StatelessWidget {
 
   /// View model constructor. The receipt must be provided for
   /// the model.
-  _Receipt({Key key, @required this.receipt}) : super(key: key) {
-    _sum += receipt.total;
-    _count++;
-  }
+  _Receipt({Key key, @required this.receipt}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
