@@ -67,6 +67,10 @@
   <div id="dartdoc-main-content" class="col-xs-12 col-sm-9 col-md-8 main-content">
       <div><h1><span class="kind-class">Receipt</span> class </h1></div>
 
+    <section class="desc markdown">
+      <p>Receipt data object. This object represents a receipt within the
+application and matches the data definition of the receipt within the database.</p>
+    </section>
     
 
     <section class="summary offset-anchor" id="constructors">
@@ -77,13 +81,14 @@
           <span class="name"><a href="data_models/Receipt/Receipt.html">Receipt</a></span><span class="signature">({<span class="parameter" id="-param-id"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span> <span class="parameter" id="-param-total"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">total</span>, </span> <span class="parameter" id="-param-receiptDate"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">receiptDate</span></span> })</span>
         </dt>
         <dd>
-          
+          Constructor for the receipt data object.
         </dd>
         <dt id="Receipt.fromMap" class="callable">
           <span class="name"><a href="data_models/Receipt/Receipt.fromMap.html">Receipt.fromMap</a></span><span class="signature">(<span class="parameter" id="fromMap-param-json"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
         </dt>
         <dd>
-          
+          Method for creating a receipt from a Map&lt;String, dynamic&gt; representing
+this receipt's data.
           <div class="constructor-modifier features">factory</div>
         </dd>
       </dl>
@@ -98,7 +103,8 @@
           <span class="signature">&#8596; <a href="dart-core/int-class.html">int</a></span>         
         </dt>
         <dd>
-          
+          The primary identifier of the receipt within the database. The id should
+be created by the database automatically.
                   <div class="features">read / write</div>
 </dd>
         <dt id="receiptDate" class="property">
@@ -106,7 +112,8 @@
           <span class="signature">&#8596; <a href="dart-core/int-class.html">int</a></span>         
         </dt>
         <dd>
-          
+          The date of the receipt. This is the receipt's printed date, not the
+object's created on or modified on date.
                   <div class="features">read / write</div>
 </dd>
         <dt id="total" class="property">
@@ -114,7 +121,7 @@
           <span class="signature">&#8596; <a href="dart-core/int-class.html">int</a></span>         
         </dt>
         <dd>
-          
+          The total monetary value associated with the receipt.
                   <div class="features">read / write</div>
 </dd>
         <dt id="hashCode" class="property inherited">
@@ -145,7 +152,8 @@
           </span>
                   </dt>
         <dd>
-          
+          Method for creating a Map&lt;String, dynamic&gt; representing this receipt's
+data.
                   
 </dd>
         <dt id="noSuchMethod" class="callable inherited">
