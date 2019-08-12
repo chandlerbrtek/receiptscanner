@@ -134,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
               final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
               final formatCurrency = new NumberFormat.simpleCurrency();
 
+<<<<<<< HEAD
               return
               InkWell(
                 onTap: () => Navigator.of(context).push(
@@ -163,6 +164,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 );
               },
+=======
+                return
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        new EditEntryPage(receipt: item))
+                    ),
+                  child:
+                    Card(
+                      child: Container(
+                        height: 55,
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 18),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                      ),
+                  );
+              
+            },
+>>>>>>> 64c02f0183851099bd20a9623e7350bad2f14170
           );
         } else {
           return Center(child: CircularProgressIndicator());
