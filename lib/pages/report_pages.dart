@@ -4,7 +4,25 @@ import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
 import 'package:receipt/main.dart';
 
-class Report_pages extends StatelessWidget {
+/// The sum of the receipts.
+double _sum = 0;
+
+/// The number of receipts.
+int _count = 0;
+
+class Report_pages extends StatefulWidget {
+
+  final String state;
+  final int start;
+  final int end;
+
+  Report_pages({this.state, this.start, this.end});
+
+  createState() => _Reports_State(state: state, customStart: start, customEnd: end);
+  
+}
+
+class _Reports_State extends State<Report_pages> {
   final double _smallFontSize = 12;
   final double _valFontSize = 30;
   final FontWeight _smallFontWeight = FontWeight.w500;
@@ -21,11 +39,11 @@ class Report_pages extends StatelessWidget {
   final headerStyle = TextStyle(
       fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xffffffff));
 
-  final String state;
-  final int customStart;
-  final int customEnd;
+  String state;
+  int customStart;
+  int customEnd;
 
-  Report_pages(this.state, this.customStart, this.customEnd);
+  _Reports_State({this.state, this.customStart, this.customEnd});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +69,7 @@ class Report_pages extends StatelessWidget {
                           color: _fontColor,
                         )),
                     SizedBox(height: 10),
-                    Text("Sum",
+                    Text(_sum.toString(),
                         style: TextStyle(
                           fontWeight: _valFontWeight,
                           fontSize: _valFontSize,
@@ -66,7 +84,7 @@ class Report_pages extends StatelessWidget {
                           color: _fontColor,
                         )),
                     SizedBox(height: 10),
-                    Text("6.45h",
+                    Text(_count.toString(),
                         style: TextStyle(
                           fontWeight: _valFontWeight,
                           fontSize: _valFontSize,
@@ -321,7 +339,10 @@ class _Receipt extends StatelessWidget {
   final dateFormat = DateFormat("MM/dd/yyyy");
   final formatCurrency = new NumberFormat.simpleCurrency();
 
-  _Receipt({Key key, @required this.receipt}) : super(key: key);
+  _Receipt({Key key, @required this.receipt}) : super(key: key) {
+    _sum += receipt.total;
+    _count++;
+  }
 
   @override
   Widget build(BuildContext context) {
