@@ -26,7 +26,7 @@ class Report_pages extends StatelessWidget {
   final double _smallFontSpacing = 1.3;
 
   /// The backgrouind color for the report page.
-  final Color _backgroundColor = Color(0xff30303);
+  final Color _backgroundColor = Color(0xff303030);
 
   /// The current datetime.
   static final DateTime _dateTime = DateTime.now();
