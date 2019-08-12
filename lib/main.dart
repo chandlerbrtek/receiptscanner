@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:receipt/DateRangeSelection.dart';
 import 'package:receipt/EditEntry.dart';
 
 import 'package:receipt/data/db.dart';
@@ -137,16 +136,16 @@ class _MyHomePageState extends State<MyHomePage> {
               final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
               final formatCurrency = new NumberFormat.simpleCurrency();
 
-              return
-              InkWell(
-                onTap: () => Navigator.of(context).push(
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      new EditEntryPage(receipt: item))),
-                child:
-                Card(
+                return
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        new EditEntryPage(receipt: item))),
+                  child:
+                  Card(
                   child: Container(
-                    height: 55,
+                  height: 55,
                     padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 );
-              },
+            },
           );
         } else {
           return Center(child: CircularProgressIndicator());
