@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
 
+bool _first;
 /// The Report_pages serve as the view model for reports. All
 /// report types are displayed using the this model.
 class Report_pages extends StatefulWidget {
@@ -13,7 +14,9 @@ class Report_pages extends StatefulWidget {
   final int start;
   final int end;
 
-  Report_pages({this.state, this.start, this.end});
+  Report_pages({this.state, this.start, this.end}) {
+    _first = true;
+  }
 
   createState() => _ReportsState(state: state, customStart: start, customEnd: end);
   
@@ -21,7 +24,6 @@ class Report_pages extends StatefulWidget {
 /// The Report_pages serve as the view model for reports. All
 /// report types are displayed using the this model.
 class _ReportsState extends State<Report_pages> {
-
   /// The font size for small text.
   final double _smallFontSize = 12;
 
@@ -295,7 +297,7 @@ class _ReportsState extends State<Report_pages> {
         ),
       ),
     );
-    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    if (_first) SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
     return obj;
   }
 
@@ -345,6 +347,7 @@ class _ReportsState extends State<Report_pages> {
       _updateValues(receipt.total);
     }
     _updateText();
+    _first = false;
   }
 
   /// Builds a receipt object for the view.
