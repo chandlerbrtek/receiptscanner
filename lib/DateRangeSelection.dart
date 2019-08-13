@@ -120,7 +120,7 @@ class _DateFormState extends State<DateForm> {
                 child: RaisedButton(
                   onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
                     builder: (BuildContext context) =>
-                    new Report_pages("custom", _sDate.millisecondsSinceEpoch, _eDate.millisecondsSinceEpoch))),
+                    new Report_pages(state: "custom", start: _sDate.millisecondsSinceEpoch, end: _eDate.millisecondsSinceEpoch))),
                   child: Text('Get Report'),
                 ),
               )

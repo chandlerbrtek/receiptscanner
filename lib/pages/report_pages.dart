@@ -1,35 +1,117 @@
+import 'package:flutter/scheduler.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
-import 'package:receipt/main.dart';
 
-class Report_pages extends StatelessWidget {
+/// Flag for indicating first state reload.
+bool _first;
+
+/// The Report_pages serve as the view model for reports. All
+/// report types are displayed using the this model.
+class Report_pages extends StatefulWidget {
+
+  final String state;
+  final int start;
+  final int end;
+
+  Report_pages({this.state, this.start, this.end}) {
+    _first = true;
+  }
+
+  createState() => _ReportsState(state: state, customStart: start, customEnd: end);
+  
+}
+/// The Report_pages serve as the view model for reports. All
+/// report types are displayed using the this model.
+class _ReportsState extends State<Report_pages> {
+  /// The font size for small text.
   final double _smallFontSize = 12;
+
+  /// The font size for the value.
   final double _valFontSize = 30;
+
+  /// The font weight for the the small text.
   final FontWeight _smallFontWeight = FontWeight.w500;
+
+  /// The font weight for the value.
   final FontWeight _valFontWeight = FontWeight.w700;
+
+  /// The font color for the report.
   final Color _fontColor = Color(0xffffffff);
+
+  /// The spacing for the small text.
   final double _smallFontSpacing = 1.3;
+
+  /// The backgrouind color for the report page.
   final Color _backgroundColor = Color(0xff303030);
+
+  /// The current datetime.
   static final DateTime _dateTime = DateTime.now();
+
+  /// The last day of each month.
   static final List<int> finalDayOfMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  /// The first day of the  current year.
   final int _beginYear = DateTime(_dateTime.year, 1, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+
+  /// The last day of the current year.
   final int _endYear = DateTime(_dateTime.year + 1, 1, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+
+  /// The first day of the current month.
   final int _beginMonth = DateTime(_dateTime.year, _dateTime.month, 1, 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+
+  /// The last day of the current month.
   final int _endMonth = DateTime(_dateTime.year, _dateTime.month, finalDayOfMonth[_dateTime.month - 1], 0, 0, 0, 0, 0).millisecondsSinceEpoch;
+  
+  /// The style for the report page header.
   final headerStyle = TextStyle(
       fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xffffffff));
 
+  /// The name of the page state.
   final String state;
+
+  /// The value for the report start range.
   final int customStart;
+
+  /// The value for the report end range.
   final int customEnd;
 
-  Report_pages(this.state, this.customStart, this.customEnd);
+  /// The formatting for thie currency of this model.
+  final formatCurrency = new NumberFormat.simpleCurrency();
+
+  /// The sum of the receipts.
+  double _sum;
+
+  /// The number of receipts.
+  int _count;
+
+  /// Controller for displaying the report total value.
+  final TextEditingController _totalController = TextEditingController();
+
+  /// Controller for displaying the report receipt count.
+  final TextEditingController _countController = TextEditingController();
+
+  /// Constructor for creating the report page.
+  _ReportsState({this.state, this.customStart, this.customEnd});
+
+  @override
+  void initState() {
+    super.initState();
+    _sum = 0;
+    _count = 0;
+    _totalController.text = "SUM";
+    _countController.text = "Number";
+    // _totalController.addListener(_updateText);
+    // _countController.addListener(_updateText);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    _sum = 0;
+    _count = 0;
+    var obj = Material(
       type: MaterialType.transparency,
       child: new Container(
         decoration: new BoxDecoration(color: _backgroundColor),
@@ -42,36 +124,68 @@ class Report_pages extends StatelessWidget {
               children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text("TOTAL",
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text("TOTAL",
                         style: TextStyle(
                           fontWeight: _smallFontWeight,
                           fontSize: _smallFontSize,
                           letterSpacing: _smallFontSpacing,
                           color: _fontColor,
-                        )),
-                    SizedBox(height: 10),
-                    Text("Sum",
-                        style: TextStyle(
-                          fontWeight: _valFontWeight,
-                          fontSize: _valFontSize,
-                          color: _fontColor,
-                        )),
-                    SizedBox(height: 30),
-                    Text("Count of entries",
+                        )
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 260,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            enabled: false,
+                            border: InputBorder.none,
+                          ),
+
+                          controller: _totalController,
+                          style: TextStyle(
+                              fontWeight: _valFontWeight,
+                              fontSize: _valFontSize,
+                              color: _fontColor,
+                            ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text("Count of entries",
                         style: TextStyle(
                           fontWeight: _smallFontWeight,
                           fontSize: _smallFontSize,
                           letterSpacing: _smallFontSpacing,
                           color: _fontColor,
-                        )),
-                    SizedBox(height: 10),
-                    Text("6.45h",
-                        style: TextStyle(
-                          fontWeight: _valFontWeight,
-                          fontSize: _valFontSize,
-                          color: _fontColor,
-                        )),
+                        )
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 260,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            enabled: true,
+                            border: InputBorder.none,
+                          ),
+                          controller: _countController,
+                          style: TextStyle(
+                              fontWeight: _valFontWeight,
+                              fontSize: _valFontSize,
+                              color: _fontColor,
+                            ),
+                          enabled: false,
+                          ),
+                        ),
+                    ),
                   ],
                 ),
                 Container(
@@ -129,7 +243,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: RecentReceipts())],
+                    children: <Widget>[Expanded(child: _recentReceipts())],
                   ),
                 ],
               ),
@@ -145,7 +259,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginMonth, end: _endMonth))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(_beginMonth, _endMonth))],
                   ),
                 ],
               ),
@@ -161,7 +275,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginYear, end: _endYear))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(_beginYear, _endYear))],
                   ),
                 ],
               ),
@@ -177,7 +291,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: customStart, end: customEnd))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(customStart, customEnd))],
                   ),
                 ],
               ),
@@ -185,142 +299,104 @@ class Report_pages extends StatelessWidget {
         ),
       ),
     );
+    if (_first) SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    return obj;
   }
-}
 
-class RecentReceipts extends StatelessWidget {
-  const RecentReceipts({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  /// List of recent receipts in a widget format for the screen.
+  _recentReceipts() {
     return FutureBuilder<List<Receipt>>(
         future: databaseAPI.getAllReceipts(),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
+            _setValues(snapshot.data);
+            var obj = ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    _Receipt(receipt: snapshot.data[index]));
+                    _buildReceipt(snapshot.data[index]));
+            return obj;
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
   }
-}
 
-class ReceiptsInRange extends StatelessWidget {
-  const ReceiptsInRange({
-    Key key,
-    int start,
-    int end
-  }) : _start = start,
-        _end = end,
-        super(key: key);
-
-  final int _start;
-  final int _end;
-
-  @override
-  Widget build(BuildContext context) {
+  /// List of receipts within a range in a widget format for the screen.
+  _receiptsInRange(int start, int end) {
     return FutureBuilder<List<Receipt>>(
-        future: databaseAPI.getReceiptsInRange(_start, _end),
+        future: databaseAPI.getReceiptsInRange(start, end),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
+            _setValues(snapshot.data);
+            var obj = ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    _Receipt(receipt: snapshot.data[index]));
+                    _buildReceipt(snapshot.data[index]));
+            return obj;
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
   }
-}
 
-///Legacy code
-///
-class RecordItem extends StatelessWidget {
-  const RecordItem({
-    Key key,
-    @required Color fontColor,
-    @required double smallFontSpacing,
-    @required this.day,
-  })  : _fontColor = fontColor,
-        _smallFontSpacing = smallFontSpacing,
-        super(key: key);
+  /// Set the sum and count values for the report.
+  _setValues(List<Receipt> receipts) {
+    for (Receipt receipt in receipts) {
+      _updateValues(receipt.total);
+    }
+    _updateText();
+    _first = false;
+  }
 
-  final Color _fontColor;
-  final double _smallFontSpacing;
-  final String day;
+  /// Builds a receipt object for the view.
+  _buildReceipt(Receipt receipt) {
+    
+    // _updateValues(receipt.total);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-        color: Color(0xffdde9f7),
-        width: 1.5,
-      ))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            day,
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w700, color: _fontColor),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                "01/21/2019",
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: _smallFontSpacing,
-                    color: _fontColor),
-              ),
-              SizedBox(
-                width: 25,
-              ),
-              Expanded(
-                child: Text(
-                  "45.3 MINUTES",
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: _smallFontSpacing,
-                      color: _fontColor),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
+    return _Receipt(receipt: receipt);
+  }
+
+  /// Updates the values for total and count for a new given total from
+  /// a receipt.
+  _updateValues(int total) {
+    _sum += total;
+    _count++;
+  }
+
+  /// Force update of the text for sum and count.
+  _updateText() {
+    _totalController.text = formatCurrency.format(_sum / 100.00);
+    _countController.text = _count.toString();
+    print(_totalController.text);
+    print(_countController.text);
   }
 }
 
+/// View model for a receipt in the report body.
 class _Receipt extends StatelessWidget {
+
+  /// The receipt data for this model.
   final Receipt receipt;
+
+  /// The text style for this model.
   final textStyle = TextStyle(
       fontSize: 13,
       fontWeight: FontWeight.w400,
       letterSpacing: 1.3,
       color: Color(0xff5b6990));
+
+  /// The formatting for the date of this model.
   final dateFormat = DateFormat("MM/dd/yyyy");
+
+  /// The formatting for thie currency of this model.
   final formatCurrency = new NumberFormat.simpleCurrency();
 
+  /// View model constructor. The receipt must be provided for
+  /// the model.
   _Receipt({Key key, @required this.receipt}) : super(key: key);
 
   @override
@@ -359,6 +435,7 @@ class _Receipt extends StatelessWidget {
   }
 }
 
+/// Graph painter for the cutstom graph on the report page.
 class GraphPainter extends CustomPainter {
   //the one in the foreground
   Paint trackBarPaint = Paint()
@@ -406,5 +483,156 @@ class GraphPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     // TODO: implement shouldRepaint
     return false;
+  }
+}
+
+/// Range selector for custom reports. This class handles selecting
+/// the custom start and end date for the report and then building
+/// the report page for those dates.
+class DateRangeSelection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Custom Date Range"),
+      ),
+      body: Card(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: DateForm(
+            startDate: DateTime.parse(DateTime.now().toString().substring(0, 10)),
+            endDate: DateTime.parse(DateTime.now().toString().substring(0, 10))
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Object model for handling the start and end dates for a custom report.
+class DateForm extends StatefulWidget {
+
+  /// Standard constructor for the date form model.
+  DateForm({Key key, this.startDate, this.endDate}) : super(key: key);
+
+  /// The start date for the form.
+  final DateTime startDate;
+
+  /// The end date for the form.
+  final DateTime endDate;
+
+  @override
+  _DateFormState createState() => _DateFormState();
+}
+
+class _DateFormState extends State<DateForm> {
+
+  /// Key for addressing the state.
+  final _formKey = GlobalKey<FormState>();
+
+  /// Formatter for the date to display on the form.
+  static final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
+
+  /// Controller for handling updates to the start date field.
+  final TextEditingController _startController = TextEditingController();
+
+  /// Controller for handling updates to the end date field.
+  final TextEditingController _endController = TextEditingController();
+
+  /// The selected start date.
+  DateTime _sDate;
+
+  /// The selected end date.
+  DateTime _eDate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _sDate = widget.startDate ?? DateTime.now();
+    _eDate = widget.endDate ?? DateTime.now();
+
+    _startController.text = dateFormat.format(_sDate);
+    _endController.text = dateFormat.format(_eDate);
+  }
+
+  /// Function for the user selecting a start date.
+  Future<Null> _selectSDate(BuildContext context) async {
+    //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
+    //https://stackoverflow.com/a/44991969
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _sDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2020));
+
+    if (picked != null && picked != _sDate) {
+      print('date selected: $picked');
+
+      setState(() => _sDate = picked);
+      _startController.text = dateFormat.format(_sDate);
+    }
+  }
+
+  /// Function for the user selecting an end date.
+  Future<Null> _selectEDate(BuildContext context) async {
+    //https://github.com/flutter/flutter/issues/7247#issuecomment-348269522
+    //https://stackoverflow.com/a/44991969
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _eDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2020));
+
+    if (picked != null && picked != _eDate) {
+      print('date selected: $picked');
+
+      setState(() => _eDate = picked);
+      _endController.text = dateFormat.format(_eDate);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(labelText: 'Start Date:'),
+            controller: _startController,
+            enabled: true,
+            cursorWidth: 0,
+            onTap: () => _selectSDate(context),
+          ),
+          TextField(
+            decoration: InputDecoration(labelText: 'End Date:'),
+            controller: _endController,
+            enabled: true,
+            cursorWidth: 0,
+            onTap: () => _selectEDate(context),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                    new Report_pages(state: "custom", start: _sDate.millisecondsSinceEpoch, end: _eDate.millisecondsSinceEpoch))),
+                  child: Text('Get Report'),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

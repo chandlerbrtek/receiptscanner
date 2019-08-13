@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:receipt/DateRangeSelection.dart';
-import 'package:receipt/EditEntry.dart';
+
+import 'package:receipt/edit_receipt.dart';
+import 'package:receipt/scan_receipt.dart';
+import 'package:receipt/manual_receipt.dart';
+
 
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
-import 'package:receipt/ImagePickerModal.dart';
-import './pages/report_pages.dart';
-import 'package:receipt/ManualEntry.dart';
+
 import 'package:receipt/pages/budget_pages.dart';
+import 'package:receipt/pages/report_pages.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,9 +29,9 @@ class MyApp extends StatelessWidget {
         '/parsePreview': (context) => ParsePreview(),
         '/manualEntry': (context) => ManualEntryPage(),
         Budgets.ROUTE: (context) => Budgets(),
-        '/reports/recent': (context) => Report_pages("recent", 0, 0),
-        '/reports/month': (context) => Report_pages("month", 0, 0),
-        '/reports/year' : (context) => Report_pages("year", 0, 0),
+        '/reports/recent': (context) => Report_pages(state: "recent", start: 0, end: 0),
+        '/reports/month': (context) => Report_pages(state: "month", start: 0, end: 0),
+        '/reports/year' : (context) => Report_pages(state: "year", start: 0, end: 0),
         '/reports/custom' : (context) => DateRangeSelection(),
       },
     );
@@ -134,37 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
               final dateFormat = DateFormat("EEEE, MMMM d, yyyy");
               final formatCurrency = new NumberFormat.simpleCurrency();
 
-<<<<<<< HEAD
-              return
-              InkWell(
-                onTap: () => Navigator.of(context).push(
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      new EditEntryPage(receipt: item))),
-                child:
-                Card(
-                  child: Container(
-                    height: 55,
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 18),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-=======
                 return
                 InkWell(
                   onTap: () => Navigator.of(context).push(
@@ -196,7 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
               
             },
->>>>>>> 64c02f0183851099bd20a9623e7350bad2f14170
           );
         } else {
           return Center(child: CircularProgressIndicator());
