@@ -5,17 +5,15 @@ import 'package:receipt/edit_receipt.dart';
 import 'package:receipt/scan_receipt.dart';
 import 'package:receipt/manual_receipt.dart';
 
+
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
 
-import 'package:receipt/pages/report_pages.dart';
 import 'package:receipt/pages/budget_pages.dart';
+import 'package:receipt/pages/report_pages.dart';
 
-/// Entry endpoint for the application. Launches the
-/// app.
 void main() => runApp(MyApp());
 
-/// Entry class for the receipt scanner application.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,12 +29,15 @@ class MyApp extends StatelessWidget {
         '/parsePreview': (context) => ParsePreview(),
         '/manualEntry': (context) => ManualEntryPage(),
         Budgets.ROUTE: (context) => Budgets(),
+        '/reports/recent': (context) => Report_pages(state: "recent", start: 0, end: 0),
+        '/reports/month': (context) => Report_pages(state: "month", start: 0, end: 0),
+        '/reports/year' : (context) => Report_pages(state: "year", start: 0, end: 0),
+        '/reports/custom' : (context) => DateRangeSelection(),
       },
     );
   }
 }
 
-/// Home Page class for the application.
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -46,7 +47,6 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-/// Default state for the home page on the app.
 class _MyHomePageState extends State<MyHomePage> {
   Future<List<Receipt>> _receipts;
 
@@ -97,30 +97,23 @@ class _MyHomePageState extends State<MyHomePage> {
         ListTile(
             title: Text("Recent Receipts"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages(state: "recent", start: 0, end: 0)))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/reports/recent'),
+        ),
         ListTile(
             title: Text("This Month"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages(state: "month", start: 0, end: 0)))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/reports/month'),
+        ),
         ListTile(
             title: Text("This Year"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new Report_pages(state: "year", start: 0, end: 0)))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/reports/year'),
+        ),
         ListTile(
             title: Text("Custom Range"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                    builder: (context) => DateRangeSelection()))),
+            onTap: () => Navigator.of(context).popAndPushNamed('/repots/custom')
+          ),
       ],
     );
   }
@@ -148,29 +141,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () => Navigator.of(context).push(
                     new MaterialPageRoute(
                         builder: (BuildContext context) =>
-                        new EditEntryPage(receipt: item))),
-                  child:
-                  Card(
-                  child: Container(
-                  height: 55,
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            '${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 18),
-                            ),
-                          )
-                        ],
-                      ),
+                        new EditEntryPage(receipt: item))
                     ),
-                  ),
-                );
+                  child:
+                    Card(
+                      child: Container(
+                        height: 55,
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 18),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                      ),
+                  );
+              
             },
           );
         } else {
