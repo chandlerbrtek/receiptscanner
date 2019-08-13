@@ -67,7 +67,7 @@ around with them!
 
 View the [release](https://github.com/chandlerbrtek/receiptscanner/releases/tag/milestone_3)
 
-View the [demo]()
+View the [demo](https://use.vg/R0rEi9)
 
 #### Release Notes
 
