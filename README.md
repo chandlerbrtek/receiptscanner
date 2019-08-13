@@ -65,6 +65,10 @@ You can find the budgets under the Budgets tab. The application comes pre-loaded
 monthly and annual budget, but all the budgets are fully customizable. Feel free to play
 around with them!
 
+View the [release](https://github.com/chandlerbrtek/receiptscanner/releases/tag/milestone_3)
+
+View the [demo]()
+
 #### Release Notes
 
 [Issue #45](https://github.com/chandlerbrtek/receiptscanner/issues/45) - Added custom reports
