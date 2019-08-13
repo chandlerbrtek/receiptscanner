@@ -55,8 +55,6 @@
       <li><a href="pages_report_pages/DateForm-class.html">DateForm</a></li>
       <li><a href="pages_report_pages/DateRangeSelection-class.html">DateRangeSelection</a></li>
       <li><a href="pages_report_pages/GraphPainter-class.html">GraphPainter</a></li>
-      <li><a href="pages_report_pages/ReceiptsInRange-class.html">ReceiptsInRange</a></li>
-      <li><a href="pages_report_pages/RecentReceipts-class.html">RecentReceipts</a></li>
       <li><a href="pages_report_pages/Report_pages-class.html">Report_pages</a></li>
     
     
@@ -82,10 +80,10 @@ report types are displayed using the this model.</p>
 
       <dl class="constructor-summary-list">
         <dt id="Report_pages" class="callable">
-          <span class="name"><a href="pages_report_pages/Report_pages/Report_pages.html">Report_pages</a></span><span class="signature">(<span class="parameter" id="-param-state"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">state</span>, </span> <span class="parameter" id="-param-customStart"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">customStart</span>, </span> <span class="parameter" id="-param-customEnd"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">customEnd</span></span>)</span>
+          <span class="name"><a href="pages_report_pages/Report_pages/Report_pages.html">Report_pages</a></span><span class="signature">({<span class="parameter" id="-param-state"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">state</span>, </span> <span class="parameter" id="-param-start"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">start</span>, </span> <span class="parameter" id="-param-end"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">end</span></span> })</span>
         </dt>
         <dd>
-          Constructor for creating the report page.
+          
         </dd>
       </dl>
     </section>
@@ -94,28 +92,20 @@ report types are displayed using the this model.</p>
       <h2>Properties</h2>
 
       <dl class="properties">
-        <dt id="customEnd" class="property">
-          <span class="name"><a href="pages_report_pages/Report_pages/customEnd.html">customEnd</a></span>
+        <dt id="end" class="property">
+          <span class="name"><a href="pages_report_pages/Report_pages/end.html">end</a></span>
           <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>         
         </dt>
         <dd>
-          The value for the report end range.
+          
                   <div class="features">final</div>
 </dd>
-        <dt id="customStart" class="property">
-          <span class="name"><a href="pages_report_pages/Report_pages/customStart.html">customStart</a></span>
+        <dt id="start" class="property">
+          <span class="name"><a href="pages_report_pages/Report_pages/start.html">start</a></span>
           <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>         
         </dt>
         <dd>
-          The value for the report start range.
-                  <div class="features">final</div>
-</dd>
-        <dt id="headerStyle" class="property">
-          <span class="name"><a href="pages_report_pages/Report_pages/headerStyle.html">headerStyle</a></span>
-          <span class="signature">&#8594; TextStyle</span>         
-        </dt>
-        <dd>
-          The style for the report page header.
+          
                   <div class="features">final</div>
 </dd>
         <dt id="state" class="property">
@@ -123,7 +113,7 @@ report types are displayed using the this model.</p>
           <span class="signature">&#8594; <a href="dart-core/String-class.html">String</a></span>         
         </dt>
         <dd>
-          The name of the page state.
+          
                   <div class="features">final</div>
 </dd>
         <dt id="hashCode" class="property inherited">
@@ -156,22 +146,22 @@ report types are displayed using the this model.</p>
     <section class="summary offset-anchor" id="instance-methods">
       <h2>Methods</h2>
       <dl class="callables">
-        <dt id="build" class="callable">
-          <span class="name"><a href="pages_report_pages/Report_pages/build.html">build</a></span><span class="signature">(<wbr><span class="parameter" id="build-param-context"><span class="type-annotation">BuildContext</span> <span class="parameter-name">context</span></span>)
-            <span class="returntype parameter">&#8594; Widget</span>
+        <dt id="createState" class="callable">
+          <span class="name"><a href="pages_report_pages/Report_pages/createState.html">createState</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; State<span class="signature">&lt;<wbr><span class="type-parameter">StatefulWidget</span>&gt;</span></span>
           </span>
                   </dt>
         <dd>
-          Describes the part of the user interface represented by this widget. <a href="pages_report_pages/Report_pages/build.html">[...]</a>
+          Creates the mutable state for this widget at a given location in the tree. <a href="pages_report_pages/Report_pages/createState.html">[...]</a>
                   
 </dd>
         <dt id="createElement" class="callable inherited">
           <span class="name"><a href="pages_report_pages/Report_pages/createElement.html">createElement</a></span><span class="signature">(<wbr>)
-            <span class="returntype parameter">&#8594; StatelessElement</span>
+            <span class="returntype parameter">&#8594; StatefulElement</span>
           </span>
                   </dt>
         <dd class="inherited">
-          Creates a <code>StatelessElement</code> to manage this widget's location in the tree. <a href="pages_report_pages/Report_pages/createElement.html">[...]</a>
+          Creates a <code>StatefulElement</code> to manage this widget's location in the tree. <a href="pages_report_pages/Report_pages/createElement.html">[...]</a>
                   <div class="features">inherited</div>
 </dd>
         <dt id="debugDescribeChildren" class="callable inherited">
@@ -266,20 +256,6 @@ tools and by <code>DiagnosticsNode.toStringDeep</code>. <a href="pages_report_pa
       </dl>
     </section>
 
-    <section class="summary offset-anchor" id="static-properties">
-      <h2>Static Properties</h2>
-
-      <dl class="properties">
-        <dt id="finalDayOfMonth" class="property">
-          <span class="name"><a href="pages_report_pages/Report_pages/finalDayOfMonth.html">finalDayOfMonth</a></span>
-          <span class="signature">&#8594; <a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span>         
-        </dt>
-        <dd>
-          The last day of each month.
-                  <div class="features">final</div>
-</dd>
-      </dl>
-    </section>
 
 
 
@@ -293,16 +269,15 @@ tools and by <code>DiagnosticsNode.toStringDeep</code>. <a href="pages_report_pa
       <li class="section-title">
         <a href="pages_report_pages/Report_pages-class.html#instance-properties">Properties</a>
       </li>
-      <li><a href="pages_report_pages/Report_pages/customEnd.html">customEnd</a></li>
-      <li><a href="pages_report_pages/Report_pages/customStart.html">customStart</a></li>
-      <li><a href="pages_report_pages/Report_pages/headerStyle.html">headerStyle</a></li>
+      <li><a href="pages_report_pages/Report_pages/end.html">end</a></li>
+      <li><a href="pages_report_pages/Report_pages/start.html">start</a></li>
       <li><a href="pages_report_pages/Report_pages/state.html">state</a></li>
       <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
       <li class="inherited"><a href="pages_report_pages/Report_pages/key.html">key</a></li>
       <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
     
       <li class="section-title"><a href="pages_report_pages/Report_pages-class.html#instance-methods">Methods</a></li>
-      <li><a href="pages_report_pages/Report_pages/build.html">build</a></li>
+      <li><a href="pages_report_pages/Report_pages/createState.html">createState</a></li>
       <li class="inherited"><a href="pages_report_pages/Report_pages/createElement.html">createElement</a></li>
       <li class="inherited"><a href="pages_report_pages/Report_pages/debugDescribeChildren.html">debugDescribeChildren</a></li>
       <li class="inherited"><a href="pages_report_pages/Report_pages/debugFillProperties.html">debugFillProperties</a></li>
@@ -316,8 +291,6 @@ tools and by <code>DiagnosticsNode.toStringDeep</code>. <a href="pages_report_pa
       <li class="section-title inherited"><a href="pages_report_pages/Report_pages-class.html#operators">Operators</a></li>
       <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
     
-      <li class="section-title"><a href="pages_report_pages/Report_pages-class.html#static-properties">Static properties</a></li>
-      <li><a href="pages_report_pages/Report_pages/finalDayOfMonth.html">finalDayOfMonth</a></li>
     
     
     </ol>
