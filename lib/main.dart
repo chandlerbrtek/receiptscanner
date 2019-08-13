@@ -160,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: <Widget>[
                         Flexible(
                           child: Text(
-                            '${item.id}: ${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
+                            '${formatCurrency.format(item.total / 100)} - ${dateFormat.format(date)}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 18),
