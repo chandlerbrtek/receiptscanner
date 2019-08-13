@@ -1,12 +1,31 @@
+import 'package:flutter/scheduler.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
 
+/// Flag for indicating first state reload.
+bool _first;
+
 /// The Report_pages serve as the view model for reports. All
 /// report types are displayed using the this model.
-class Report_pages extends StatelessWidget {
+class Report_pages extends StatefulWidget {
 
+  final String state;
+  final int start;
+  final int end;
+
+  Report_pages({this.state, this.start, this.end}) {
+    _first = true;
+  }
+
+  createState() => _ReportsState(state: state, customStart: start, customEnd: end);
+  
+}
+/// The Report_pages serve as the view model for reports. All
+/// report types are displayed using the this model.
+class _ReportsState extends State<Report_pages> {
   /// The font size for small text.
   final double _smallFontSize = 12;
 
@@ -59,12 +78,40 @@ class Report_pages extends StatelessWidget {
   /// The value for the report end range.
   final int customEnd;
 
+  /// The formatting for thie currency of this model.
+  final formatCurrency = new NumberFormat.simpleCurrency();
+
+  /// The sum of the receipts.
+  double _sum;
+
+  /// The number of receipts.
+  int _count;
+
+  /// Controller for displaying the report total value.
+  final TextEditingController _totalController = TextEditingController();
+
+  /// Controller for displaying the report receipt count.
+  final TextEditingController _countController = TextEditingController();
+
   /// Constructor for creating the report page.
-  Report_pages(this.state, this.customStart, this.customEnd);
+  _ReportsState({this.state, this.customStart, this.customEnd});
+
+  @override
+  void initState() {
+    super.initState();
+    _sum = 0;
+    _count = 0;
+    _totalController.text = "SUM";
+    _countController.text = "Number";
+    // _totalController.addListener(_updateText);
+    // _countController.addListener(_updateText);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    _sum = 0;
+    _count = 0;
+    var obj = Material(
       type: MaterialType.transparency,
       child: new Container(
         decoration: new BoxDecoration(color: _backgroundColor),
@@ -77,36 +124,68 @@ class Report_pages extends StatelessWidget {
               children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text("TOTAL",
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text("TOTAL",
                         style: TextStyle(
                           fontWeight: _smallFontWeight,
                           fontSize: _smallFontSize,
                           letterSpacing: _smallFontSpacing,
                           color: _fontColor,
-                        )),
-                    SizedBox(height: 10),
-                    Text("Sum",
-                        style: TextStyle(
-                          fontWeight: _valFontWeight,
-                          fontSize: _valFontSize,
-                          color: _fontColor,
-                        )),
-                    SizedBox(height: 30),
-                    Text("Count of entries",
+                        )
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 260,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            enabled: false,
+                            border: InputBorder.none,
+                          ),
+
+                          controller: _totalController,
+                          style: TextStyle(
+                              fontWeight: _valFontWeight,
+                              fontSize: _valFontSize,
+                              color: _fontColor,
+                            ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text("Count of entries",
                         style: TextStyle(
                           fontWeight: _smallFontWeight,
                           fontSize: _smallFontSize,
                           letterSpacing: _smallFontSpacing,
                           color: _fontColor,
-                        )),
-                    SizedBox(height: 10),
-                    Text("6.45h",
-                        style: TextStyle(
-                          fontWeight: _valFontWeight,
-                          fontSize: _valFontSize,
-                          color: _fontColor,
-                        )),
+                        )
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 260,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            enabled: true,
+                            border: InputBorder.none,
+                          ),
+                          controller: _countController,
+                          style: TextStyle(
+                              fontWeight: _valFontWeight,
+                              fontSize: _valFontSize,
+                              color: _fontColor,
+                            ),
+                          enabled: false,
+                          ),
+                        ),
+                    ),
                   ],
                 ),
                 Container(
@@ -164,7 +243,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: RecentReceipts())],
+                    children: <Widget>[Expanded(child: _recentReceipts())],
                   ),
                 ],
               ),
@@ -180,7 +259,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginMonth, end: _endMonth))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(_beginMonth, _endMonth))],
                   ),
                 ],
               ),
@@ -196,7 +275,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: _beginYear, end: _endYear))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(_beginYear, _endYear))],
                   ),
                 ],
               ),
@@ -212,7 +291,7 @@ class Report_pages extends StatelessWidget {
                     height: 5,
                   ),
                   Row(
-                    children: <Widget>[Expanded(child: ReceiptsInRange(start: customStart, end: customEnd))],
+                    children: <Widget>[Expanded(child: _receiptsInRange(customStart, customEnd))],
                   ),
                 ],
               ),
@@ -220,67 +299,80 @@ class Report_pages extends StatelessWidget {
         ),
       ),
     );
+    if (_first) SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    return obj;
   }
-}
 
-/// View model for the recent receipts body.
-class RecentReceipts extends StatelessWidget {
-  
-  const RecentReceipts({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  /// List of recent receipts in a widget format for the screen.
+  _recentReceipts() {
     return FutureBuilder<List<Receipt>>(
         future: databaseAPI.getAllReceipts(),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
+            _setValues(snapshot.data);
+            var obj = ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    _Receipt(receipt: snapshot.data[index]));
+                    _buildReceipt(snapshot.data[index]));
+            return obj;
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
   }
-}
 
-/// View model for a list of receipts within a report range.
-class ReceiptsInRange extends StatelessWidget {
-  const ReceiptsInRange({
-    Key key,
-    int start,
-    int end
-  }) : _start = start,
-        _end = end,
-        super(key: key);
-
-  /// Report range start date.
-  final int _start;
-
-  /// Report range end date.
-  final int _end;
-
-  @override
-  Widget build(BuildContext context) {
+  /// List of receipts within a range in a widget format for the screen.
+  _receiptsInRange(int start, int end) {
     return FutureBuilder<List<Receipt>>(
-        future: databaseAPI.getReceiptsInRange(_start, _end),
+        future: databaseAPI.getReceiptsInRange(start, end),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
+            _setValues(snapshot.data);
+            var obj = ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    _Receipt(receipt: snapshot.data[index]));
+                    _buildReceipt(snapshot.data[index]));
+            return obj;
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
+  }
+
+  /// Set the sum and count values for the report.
+  _setValues(List<Receipt> receipts) {
+    for (Receipt receipt in receipts) {
+      _updateValues(receipt.total);
+    }
+    _updateText();
+    _first = false;
+  }
+
+  /// Builds a receipt object for the view.
+  _buildReceipt(Receipt receipt) {
+    
+    // _updateValues(receipt.total);
+
+    return _Receipt(receipt: receipt);
+  }
+
+  /// Updates the values for total and count for a new given total from
+  /// a receipt.
+  _updateValues(int total) {
+    _sum += total;
+    _count++;
+  }
+
+  /// Force update of the text for sum and count.
+  _updateText() {
+    _totalController.text = formatCurrency.format(_sum / 100.00);
+    _countController.text = _count.toString();
+    print(_totalController.text);
+    print(_countController.text);
   }
 }
 
@@ -533,7 +625,7 @@ class _DateFormState extends State<DateForm> {
                 child: RaisedButton(
                   onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
                     builder: (BuildContext context) =>
-                    new Report_pages("custom", _sDate.millisecondsSinceEpoch, _eDate.millisecondsSinceEpoch))),
+                    new Report_pages(state: "custom", start: _sDate.millisecondsSinceEpoch, end: _eDate.millisecondsSinceEpoch))),
                   child: Text('Get Report'),
                 ),
               )
