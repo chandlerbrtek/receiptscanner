@@ -1,3 +1,5 @@
+import 'package:flutter/scheduler.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
@@ -81,8 +83,10 @@ class _ReportsState extends State<Report_pages> {
   /// The number of receipts.
   int _count;
 
+  /// Controller for displaying the report total value.
   final TextEditingController _totalController = TextEditingController();
 
+  /// Controller for displaying the report receipt count.
   final TextEditingController _countController = TextEditingController();
 
   /// Constructor for creating the report page.
@@ -291,9 +295,11 @@ class _ReportsState extends State<Report_pages> {
         ),
       ),
     );
+    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
     return obj;
   }
 
+  /// List of recent receipts in a widget format for the screen.
   _recentReceipts() {
     return FutureBuilder<List<Receipt>>(
         future: databaseAPI.getAllReceipts(),
@@ -313,6 +319,7 @@ class _ReportsState extends State<Report_pages> {
         });
   }
 
+  /// List of receipts within a range in a widget format for the screen.
   _receiptsInRange(int start, int end) {
     return FutureBuilder<List<Receipt>>(
         future: databaseAPI.getReceiptsInRange(start, end),
@@ -332,6 +339,7 @@ class _ReportsState extends State<Report_pages> {
         });
   }
 
+  /// Set the sum and count values for the report.
   _setValues(List<Receipt> receipts) {
     for (Receipt receipt in receipts) {
       _updateValues(receipt.total);
@@ -339,23 +347,27 @@ class _ReportsState extends State<Report_pages> {
     _updateText();
   }
 
+  /// Builds a receipt object for the view.
   _buildReceipt(Receipt receipt) {
     
-    _updateValues(receipt.total);
+    // _updateValues(receipt.total);
 
     return _Receipt(receipt: receipt);
   }
 
+  /// Updates the values for total and count for a new given total from
+  /// a receipt.
   _updateValues(int total) {
     _sum += total;
     _count++;
   }
 
+  /// Force update of the text for sum and count.
   _updateText() {
     _totalController.text = formatCurrency.format(_sum / 100.00);
     _countController.text = _count.toString();
-    // print(_totalController.text);
-    // print(_countController.text);
+    print(_totalController.text);
+    print(_countController.text);
   }
 }
 
