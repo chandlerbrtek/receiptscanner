@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ListTile(
             title: Text("Custom Range"),
             trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).popAndPushNamed('/repots/custom')
+            onTap: () => Navigator.of(context).popAndPushNamed('/reports/custom')
           ),
       ],
     );
