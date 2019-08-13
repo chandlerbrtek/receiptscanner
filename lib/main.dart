@@ -100,21 +100,21 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () => Navigator.of(context).push(
                 new MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        new Report_pages("recent", 0, 0)))),
+                        new Report_pages(state: "recent", start: 0, end: 0)))),
         ListTile(
             title: Text("This Month"),
             trailing: Icon(Icons.arrow_forward),
             onTap: () => Navigator.of(context).push(
                 new MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        new Report_pages("month", 0, 0)))),
+                        new Report_pages(state: "month", start: 0, end: 0)))),
         ListTile(
             title: Text("This Year"),
             trailing: Icon(Icons.arrow_forward),
             onTap: () => Navigator.of(context).push(
                 new MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        new Report_pages("year", 0, 0)))),
+                        new Report_pages(state: "year", start: 0, end: 0)))),
         ListTile(
             title: Text("Custom Range"),
             trailing: Icon(Icons.arrow_forward),
