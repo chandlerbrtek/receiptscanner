@@ -348,15 +348,14 @@ class _ReportsState extends State<Report_pages> {
     for (Receipt receipt in receipts) {
       _updateValues(receipt.total);
     }
-    _updateText();
+
+    if (_first) _updateText();
+    
     _first = false;
   }
 
   /// Builds a receipt object for the view.
   _buildReceipt(Receipt receipt) {
-    
-    // _updateValues(receipt.total);
-
     return _Receipt(receipt: receipt);
   }
 
