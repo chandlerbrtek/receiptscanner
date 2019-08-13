@@ -76,10 +76,10 @@ class _ReportsState extends State<Report_pages> {
   final formatCurrency = new NumberFormat.simpleCurrency();
 
   /// The sum of the receipts.
-  double _sum = 0;
+  double _sum;
 
   /// The number of receipts.
-  int _count = 0;
+  int _count;
 
   final TextEditingController _totalController = TextEditingController();
 
@@ -95,15 +95,15 @@ class _ReportsState extends State<Report_pages> {
     _count = 0;
     _totalController.text = "SUM";
     _countController.text = "Number";
-    _totalController.addListener(_updateText);
-    _countController.addListener(_updateText);
+    // _totalController.addListener(_updateText);
+    // _countController.addListener(_updateText);
   }
 
   @override
   Widget build(BuildContext context) {
     _sum = 0;
     _count = 0;
-    return Material(
+    var obj = Material(
       type: MaterialType.transparency,
       child: new Container(
         decoration: new BoxDecoration(color: _backgroundColor),
@@ -134,7 +134,6 @@ class _ReportsState extends State<Report_pages> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width - 260,
                         child: TextField(
-                          onChanged: _updateText(),
                           decoration: InputDecoration(
                             enabled: false,
                             border: InputBorder.none,
@@ -292,6 +291,7 @@ class _ReportsState extends State<Report_pages> {
         ),
       ),
     );
+    return obj;
   }
 
   _recentReceipts() {
@@ -299,12 +299,14 @@ class _ReportsState extends State<Report_pages> {
         future: databaseAPI.getAllReceipts(),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
+            _setValues(snapshot.data);
+            var obj = ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
                     _buildReceipt(snapshot.data[index]));
+            return obj;
           } else {
             return Center(child: CircularProgressIndicator());
           }
@@ -316,36 +318,44 @@ class _ReportsState extends State<Report_pages> {
         future: databaseAPI.getReceiptsInRange(start, end),
         builder: (BuildContext context, AsyncSnapshot<List<Receipt>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
+            _setValues(snapshot.data);
+            var obj = ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) =>
                     _buildReceipt(snapshot.data[index]));
+            return obj;
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
   }
 
+  _setValues(List<Receipt> receipts) {
+    for (Receipt receipt in receipts) {
+      _updateValues(receipt.total);
+    }
+    _updateText();
+  }
+
   _buildReceipt(Receipt receipt) {
     
-    _updateState(receipt.total);
-
-    _totalController.text = formatCurrency.format(_sum / 100.00);
-    _countController.text = _count.toString();
+    _updateValues(receipt.total);
 
     return _Receipt(receipt: receipt);
   }
 
-  _updateState(int total) {
+  _updateValues(int total) {
     _sum += total;
     _count++;
   }
 
   _updateText() {
-    print(_totalController.text);
-    print(_countController.text);
+    _totalController.text = formatCurrency.format(_sum / 100.00);
+    _countController.text = _count.toString();
+    // print(_totalController.text);
+    // print(_countController.text);
   }
 }
 
