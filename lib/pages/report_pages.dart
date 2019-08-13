@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:receipt/data/db.dart';
 import 'package:receipt/data/models.dart';
 
+/// Flag for indicating first state reload.
 bool _first;
+
 /// The Report_pages serve as the view model for reports. All
 /// report types are displayed using the this model.
 class Report_pages extends StatefulWidget {
